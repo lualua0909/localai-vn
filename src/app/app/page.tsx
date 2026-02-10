@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "@/lib/i18n";
@@ -8,6 +9,8 @@ import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { parseReviews } from "@/util";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 const ThreeDMarquee = dynamic(
   () => import("@/components/ui/3d-marquee").then((m) => m.ThreeDMarquee),
@@ -56,42 +59,6 @@ type AppItem = {
   reviews: string;
 };
 
-function AppRow({
-  app,
-  rank,
-  buttonLabel
-}: {
-  app: AppItem;
-  rank: number;
-  buttonLabel: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{ y: -1 }}
-      whileTap={{ scale: 0.99 }}
-      className="flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--color-text)]/[0.03]"
-    >
-      <span className="w-5 text-center text-[15px] font-bold text-[var(--color-text-secondary)]">
-        {rank}
-      </span>
-      <img
-        className="h-12 w-12 shrink-0 rounded-xl object-cover"
-        src="https://placehold.co/60x60/eee/white"
-        alt={app.name}
-      />
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-tight">{app.name}</p>
-        <p className="mt-0.5 truncate text-[12px] text-[var(--color-text-secondary)]">
-          {app.desc}
-        </p>
-      </div>
-      <button className="shrink-0 rounded-full bg-[var(--color-text)]/10 px-4 py-1 text-[13px] font-semibold text-accent">
-        {buttonLabel}
-      </button>
-    </motion.div>
-  );
-}
-
 function AppCard({ app }: { app: AppItem }) {
   return (
     <motion.div
@@ -120,26 +87,87 @@ function AppCard({ app }: { app: AppItem }) {
   );
 }
 
-export default function ExplorePage() {
+function ExploreContent() {
   const t = useTranslations("explore");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [sortBy, setSortBy] = useState<"newest" | "rating" | "interaction">(
+    "newest"
+  );
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const isMobile = useIsMobile();
 
-  const filteredApps = t.apps.filter((app) => {
-    const matchCategory = !activeCategory || app.category === activeCategory;
-    const matchSearch =
-      !search ||
-      app.name.toLowerCase().includes(search.toLowerCase()) ||
-      app.desc.toLowerCase().includes(search.toLowerCase());
-    return matchCategory && matchSearch;
-  });
+  const placeholders = [
+    "Search for AI chatbots...",
+    "Find image generation tools...",
+    "Discover education apps...",
+    "Look for finance assistants...",
+    "Explore creative tools..."
+  ];
+
+  const handleVanishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleVanishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Optional: Log or specific action on submit
+    console.log("submitted");
+  };
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const itemsPerPage = 12;
+
+  const filteredApps = t.apps
+    .filter((app: AppItem) => {
+      const matchCategory = !activeCategory || app.category === activeCategory;
+      const matchSearch =
+        !search ||
+        app.name.toLowerCase().includes(search.toLowerCase()) ||
+        app.desc.toLowerCase().includes(search.toLowerCase());
+      return matchCategory && matchSearch;
+    })
+    .sort((a: AppItem, b: AppItem) => {
+      if (sortBy === "rating") {
+        return parseFloat(b.rating) - parseFloat(a.rating);
+      }
+      if (sortBy === "interaction") {
+        return parseReviews(b.reviews) - parseReviews(a.reviews);
+      }
+      return 0;
+    });
+
+  const totalPages = Math.ceil(filteredApps.length / itemsPerPage);
+  const paginatedApps = filteredApps.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
+    // Optional: Scroll to top of grid or page
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSortChange = (newSort: "newest" | "rating" | "interaction") => {
+    setSortBy(newSort);
+    handlePageChange(1);
+  };
+
+  const handleCategoryChange = (newCat: string | null) => {
+    setActiveCategory(newCat);
+    handlePageChange(1);
+  };
 
   return (
     <>
       <Header />
       <main className="min-h-screen pt-12 pb-10">
-        {/* 3D Marquee Hero */}
         <div className="relative">
           {isMobile === false ? (
             <ThreeDMarquee
@@ -147,83 +175,88 @@ export default function ExplorePage() {
               className="h-[400px] max-[640px]:h-[320px]"
             />
           ) : null}
-          {/* <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              {t.title}
-            </h1>
-            <p className="mt-3 max-w-md text-base text-[var(--color-text-secondary)]">
-              {t.subtitle}
-            </p>
-          </div> */}
         </div>
 
         <div className="container-main">
-          {/* Search */}
-          <div className="relative my-8">
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]"
-            />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t.searchPlaceholder}
-              className="focus-ring w-full rounded-xl border border-[var(--color-border)] bg-transparent py-3 pl-11 pr-4 text-sm outline-none transition-all hover:border-black/20 dark:hover:border-white/20 placeholder:text-[var(--color-text-secondary)]/50"
+          <div className="relative my-8 flex justify-center">
+            <PlaceholdersAndVanishInput
+              placeholders={placeholders}
+              onChange={handleVanishChange}
+              onSubmit={handleVanishSubmit}
             />
           </div>
 
-          {/* Top Free + Top Paid */}
-          <div className="mb-10 grid gap-6 lg:grid-cols-2">
-            {/* Top Free */}
-            {/* <div>
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-bold">{t.topFree.title}</h2>
-                <button className="flex items-center gap-0.5 text-sm font-medium text-accent">
-                  {t.topFree.seeAll}
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-              <div className="glass-card divide-y divide-[var(--color-border)] rounded-2xl">
-                {t.apps.slice(0, 5).map((app, idx) => (
-                  <AppRow
-                    key={app.name}
-                    app={app}
-                    rank={idx + 1}
-                    buttonLabel={t.getButton}
-                  />
-                ))}
-              </div>
-            </div> */}
-
-            {/* Top Paid */}
-            {/* <div>
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-bold">{t.topPaid.title}</h2>
-                <button className="flex items-center gap-0.5 text-sm font-medium text-accent">
-                  {t.topPaid.seeAll}
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-              <div className="glass-card divide-y divide-[var(--color-border)] rounded-2xl">
-                {t.apps.slice(5, 10).map((app, idx) => (
-                  <AppRow
-                    key={app.name}
-                    app={app}
-                    rank={idx + 1}
-                    buttonLabel={t.getButton}
-                  />
-                ))}
-              </div>
-            </div> */}
-          </div>
-
-          {/* Discover section */}
           <div className="mb-10">
+            {/* Control Bar: Sort & Category Dropdown */}
+            <div className="mb-6 flex flex-wrap gap-4">
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value as any)}
+                  className="appearance-none rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 pr-8 text-sm font-medium outline-none transition-colors hover:bg-[var(--color-text)]/5 focus:border-[var(--color-text)] cursor-pointer"
+                >
+                  <option value="newest">{t.sortOptions.newest}</option>
+                  <option value="rating">{t.sortOptions.rating}</option>
+                  <option value="interaction">
+                    {t.sortOptions.interaction}
+                  </option>
+                </select>
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]">
+                  <svg
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 1L5 5L9 1"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div className="relative sm:hidden">
+                <select
+                  value={activeCategory || ""}
+                  onChange={(e) => handleCategoryChange(e.target.value || null)}
+                  className="appearance-none rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 pr-8 text-sm font-medium outline-none transition-colors hover:bg-[var(--color-text)]/5 focus:border-[var(--color-text)] cursor-pointer"
+                >
+                  <option value="">{t.filterAll}</option>
+                  {t.categories.map((cat: string) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]">
+                  <svg
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 1L5 5L9 1"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
             {/* Category pills */}
             <div className="scrollbar-hide mb-6 flex gap-2 overflow-x-auto">
               <button
-                onClick={() => setActiveCategory(null)}
+                onClick={() => handleCategoryChange(null)}
                 className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                   !activeCategory
                     ? "bg-[var(--color-text)] text-[var(--color-bg)]"
@@ -232,11 +265,11 @@ export default function ExplorePage() {
               >
                 {t.filterAll}
               </button>
-              {t.categories.map((cat) => (
+              {t.categories.map((cat: string) => (
                 <button
                   key={cat}
                   onClick={() =>
-                    setActiveCategory(activeCategory === cat ? null : cat)
+                    handleCategoryChange(activeCategory === cat ? null : cat)
                   }
                   className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                     activeCategory === cat
@@ -251,15 +284,52 @@ export default function ExplorePage() {
 
             {/* App grid */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {filteredApps.map((app) => (
+              {paginatedApps.map((app: AppItem) => (
                 <AppCard key={app.name} app={app} />
               ))}
             </div>
 
-            {filteredApps.length === 0 && (
+            {paginatedApps.length === 0 && (
               <p className="py-12 text-center text-sm text-[var(--color-text-secondary)]">
                 {t.noResults}
               </p>
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-10 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Prev
+                </button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
+                          currentPage === page
+                            ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                            : "hover:bg-[var(--color-text)]/5 text-[var(--color-text-secondary)]"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+                </div>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -267,4 +337,8 @@ export default function ExplorePage() {
       <Footer />
     </>
   );
+}
+
+export default function ExplorePage() {
+  return <ExploreContent />;
 }

@@ -4,6 +4,13 @@
   "searchPlaceholder": "Tìm kiếm ứng dụng...",
   "getButton": "Xem",
   "filterAll": "Tất cả",
+  "sortBy": "Sắp xếp",
+  "sortOptions": {
+    "newest": "Mới nhất",
+    "rating": "Đánh giá cao",
+    "interaction": "Tương tác cao"
+  },
+  "categoryFilter": "Danh mục",
   "noResults": "Không tìm thấy ứng dụng phù hợp",
   "featured": [
     {
