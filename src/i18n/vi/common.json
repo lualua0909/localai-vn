@@ -1,0 +1,67 @@
+{
+  "header": {
+    "logo": "LocalAI",
+    "navLinks": [
+      { "label": "Khám phá", "href": "#overview" },
+      { "label": "Danh mục", "href": "#categories" },
+      { "label": "Cộng đồng", "href": "#community" },
+      { "label": "Bảng giá", "href": "/bang-gia" },
+      { "label": "Blog", "href": "/blog" }
+    ],
+    "signin": "Đăng nhập"
+  },
+  "subnav": [
+    { "label": "Tổng quan", "id": "overview" },
+    { "label": "Danh mục", "id": "categories" },
+    { "label": "Nổi bật", "id": "featured" },
+    { "label": "Cách hoạt động", "id": "how-it-works" },
+    { "label": "Khách hàng", "id": "customers" }
+  ],
+  "footer": {
+    "columns": [
+      {
+        "title": "Nền tảng",
+        "links": [
+          { "label": "Khám phá sản phẩm", "href": "#overview" },
+          { "label": "Danh mục AI", "href": "#categories" },
+          { "label": "Sản phẩm nổi bật", "href": "#featured" },
+          { "label": "Đăng sản phẩm", "href": "#" },
+          { "label": "Bảng giá", "href": "#pricing" }
+        ]
+      },
+      {
+        "title": "Cộng đồng",
+        "links": [
+          { "label": "Blog", "href": "#" },
+          { "label": "Sự kiện", "href": "#" },
+          { "label": "Discord", "href": "#" },
+          { "label": "Newsletter", "href": "#" }
+        ]
+      },
+      {
+        "title": "Tài nguyên",
+        "links": [
+          { "label": "Tài liệu API", "href": "#" },
+          { "label": "Hướng dẫn", "href": "#" },
+          { "label": "Status", "href": "#" },
+          { "label": "Changelog", "href": "#" }
+        ]
+      },
+      {
+        "title": "Pháp lý",
+        "links": [
+          { "label": "Điều khoản", "href": "#" },
+          { "label": "Quyền riêng tư", "href": "#" },
+          { "label": "Bảo mật", "href": "#" },
+          { "label": "Cookie", "href": "#" }
+        ]
+      }
+    ],
+    "copyright": "© {year} LocalAI. Tất cả quyền được bảo lưu.",
+    "languageLabel": "Ngôn ngữ",
+    "languageOptions": [
+      { "value": "vi", "label": "Tiếng Việt (VN)" },
+      { "value": "en", "label": "English" }
+    ]
+  }
+}

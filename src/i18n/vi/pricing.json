@@ -1,0 +1,64 @@
+{
+  "header": {
+    "eyebrow": "Bảng giá",
+    "title": "Chọn gói phù hợp với bạn",
+    "description": "Miễn phí cho người khám phá. Gói Pro cho nhà phát triển muốn nổi bật."
+  },
+  "popularBadge": "Phổ biến nhất",
+  "plans": [
+    {
+      "name": "Khám phá",
+      "price": "Miễn phí",
+      "period": "",
+      "description": "Cho người dùng muốn tìm kiếm sản phẩm AI.",
+      "features": [
+        "Duyệt tất cả sản phẩm",
+        "Vote & review sản phẩm",
+        "Tạo bộ sưu tập cá nhân",
+        "Nhận newsletter hàng tuần",
+        "Tham gia cộng đồng"
+      ],
+      "cta": "Bắt đầu ngay",
+      "popular": false
+    },
+    {
+      "name": "Nhà phát triển",
+      "price": "199K",
+      "period": "/tháng",
+      "description": "Cho founder muốn quảng bá sản phẩm AI.",
+      "features": [
+        "Đăng không giới hạn sản phẩm",
+        "Badge \"Verified Developer\"",
+        "Featured listing 2 lần/tháng",
+        "Analytics chi tiết",
+        "Priority review 12h",
+        "Hỗ trợ ưu tiên"
+      ],
+      "cta": "Dùng thử 14 ngày",
+      "popular": true,
+      "footnote": 1
+    },
+    {
+      "name": "Doanh nghiệp",
+      "price": "Tuỳ chỉnh",
+      "period": "",
+      "description": "Cho tổ chức muốn hợp tác chiến lược.",
+      "features": [
+        "Tất cả tính năng Pro",
+        "Sponsored placement",
+        "Co-marketing campaigns",
+        "API truy cập dữ liệu",
+        "Account manager riêng",
+        "Báo cáo thị trường AI"
+      ],
+      "cta": "Liên hệ",
+      "popular": false,
+      "footnote": 2
+    }
+  ],
+  "footnotes": [
+    "Gói Nhà phát triển được dùng thử miễn phí 14 ngày. Sau thời gian dùng thử, tài khoản sẽ tự động chuyển sang gói trả phí trừ khi bạn huỷ trước.",
+    "Gói Doanh nghiệp yêu cầu hợp đồng tối thiểu 6 tháng. Giá tuỳ chỉnh dựa trên nhu cầu và quy mô. Liên hệ đội ngũ để nhận báo giá."
+  ],
+  "footnoteTitle": "Chú thích"
+}

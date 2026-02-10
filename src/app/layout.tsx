@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { Providers } from "@/components/Providers";
+import viMeta from "@/i18n/vi/meta.json";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -10,25 +11,22 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "LocalAI — Khám phá sản phẩm AI Việt Nam",
-  description:
-    "Nền tảng khám phá và giới thiệu sản phẩm AI do người Việt xây dựng. Tìm kiếm, ủng hộ, và kết nối với cộng đồng AI Việt Nam.",
+  title: viMeta.title,
+  description: viMeta.description,
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
   openGraph: {
-    title: "LocalAI — Khám phá sản phẩm AI Việt Nam",
-    description:
-      "Nền tảng khám phá và giới thiệu sản phẩm AI do người Việt xây dựng.",
+    title: viMeta.ogTitle,
+    description: viMeta.ogDescription,
     siteName: "LocalAI",
-    locale: "vi_VN",
+    locale: viMeta.locale,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LocalAI — Khám phá sản phẩm AI Việt Nam",
-    description:
-      "Nền tảng khám phá và giới thiệu sản phẩm AI do người Việt xây dựng.",
+    title: viMeta.title,
+    description: viMeta.description,
   },
   robots: { index: true, follow: true },
 };
@@ -41,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning className={figtree.variable}>
       <body className="min-h-screen bg-[var(--color-bg)] font-sans text-[var(--color-text)] antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

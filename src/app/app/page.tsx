@@ -5,9 +5,11 @@ import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { useAuth } from "@/lib/useAuth";
 import { Button } from "@/components/ui/Button";
 import { LogOut, User } from "lucide-react";
+import { useTranslations } from "@/lib/i18n";
 
 function AppContent() {
   const { user, signOut } = useAuth();
+  const appCopy = useTranslations("app");
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
@@ -15,7 +17,7 @@ function AppContent() {
       <header className="border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
         <div className="container-main flex h-14 items-center justify-between">
           <span className="text-lg font-semibold tracking-tight">
-            Astra AI
+            {appCopy.topbar.appName}
           </span>
           <div className="flex items-center gap-4">
             <span className="text-sm text-[var(--color-text-secondary)]">
@@ -26,7 +28,7 @@ function AppContent() {
               className="focus-ring flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-text)]/5 hover:text-[var(--color-text)]"
             >
               <LogOut size={14} />
-              Đăng xuất
+              {appCopy.topbar.signOut}
             </button>
           </div>
         </div>
@@ -50,7 +52,7 @@ function AppContent() {
               )}
               <div>
                 <h1 className="text-xl font-bold">
-                  {user?.displayName || "Người dùng"}
+                  {user?.displayName || appCopy.profile.fallbackName}
                 </h1>
                 <p className="text-sm text-[var(--color-text-secondary)]">
                   {user?.email}
@@ -59,11 +61,7 @@ function AppContent() {
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-4">
-              {[
-                { label: "Gói hiện tại", value: "Starter" },
-                { label: "Requests hôm nay", value: "0" },
-                { label: "Models truy cập", value: "1" },
-              ].map((stat) => (
+              {appCopy.profile.stats.map((stat) => (
                 <div
                   key={stat.label}
                   className="rounded-xl border border-[var(--color-border)] p-4"
@@ -78,16 +76,18 @@ function AppContent() {
 
             <div className="mt-6">
               <Button href="#" variant="primary" size="sm">
-                Nâng cấp gói
+                {appCopy.profile.upgrade}
               </Button>
             </div>
           </div>
 
           {/* Feedback */}
           <div className="glass-card rounded-3xl p-8">
-            <h2 className="mb-1 text-lg font-semibold">Gửi phản hồi</h2>
+            <h2 className="mb-1 text-lg font-semibold">
+              {appCopy.feedback.title}
+            </h2>
             <p className="mb-6 text-sm text-[var(--color-text-secondary)]">
-              Giúp chúng tôi cải thiện Astra AI.
+              {appCopy.feedback.description}
             </p>
             <FeedbackForm uid={user?.uid} />
           </div>

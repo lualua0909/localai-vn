@@ -1,0 +1,64 @@
+{
+  "header": {
+    "eyebrow": "Pricing",
+    "title": "Choose the plan that fits you",
+    "description": "Free for explorers. Pro plan for builders who want to stand out."
+  },
+  "popularBadge": "Most popular",
+  "plans": [
+    {
+      "name": "Discover",
+      "price": "Free",
+      "period": "",
+      "description": "For people looking for AI products.",
+      "features": [
+        "Browse all products",
+        "Vote & review listings",
+        "Create personal collections",
+        "Receive weekly newsletter",
+        "Join the community"
+      ],
+      "cta": "Get started",
+      "popular": false
+    },
+    {
+      "name": "Builder",
+      "price": "199K",
+      "period": "/month",
+      "description": "For founders promoting their AI products.",
+      "features": [
+        "Unlimited product submissions",
+        "\"Verified Developer\" badge",
+        "Featured listing twice/month",
+        "Detailed analytics",
+        "Priority review within 12h",
+        "Priority support"
+      ],
+      "cta": "Start 14-day trial",
+      "popular": true,
+      "footnote": 1
+    },
+    {
+      "name": "Enterprise",
+      "price": "Custom",
+      "period": "",
+      "description": "For organizations seeking strategic partnership.",
+      "features": [
+        "All Pro features",
+        "Sponsored placement",
+        "Co-marketing campaigns",
+        "Data API access",
+        "Dedicated account manager",
+        "AI market reports"
+      ],
+      "cta": "Contact us",
+      "popular": false,
+      "footnote": 2
+    }
+  ],
+  "footnotes": [
+    "Builder plan includes a 14-day free trial. After the trial, billing starts automatically unless you cancel beforehand.",
+    "Enterprise plan requires a minimum 6-month contract. Pricing is customized to your needs. Contact the team for a quote."
+  ],
+  "footnoteTitle": "Notes"
+}

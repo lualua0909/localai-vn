@@ -1,0 +1,11 @@
+{
+  "notFound": {
+    "title": "Không tìm thấy bài viết",
+    "description": "Bài viết bạn đang tìm kiếm không tồn tại.",
+    "back": "Quay lại Blog"
+  },
+  "back": "Quay lại Blog",
+  "authorBy": "Viết bởi {author}",
+  "authorBio": "Thành viên cộng đồng LocalAI. Đam mê công nghệ AI và chia sẻ kiến thức với cộng đồng developer Việt Nam.",
+  "relatedTitle": "Bài viết liên quan"
+}

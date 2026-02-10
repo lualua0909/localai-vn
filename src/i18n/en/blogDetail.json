@@ -1,0 +1,11 @@
+{
+  "notFound": {
+    "title": "Post not found",
+    "description": "The article you're looking for doesn't exist.",
+    "back": "Back to Blog"
+  },
+  "back": "Back to Blog",
+  "authorBy": "Written by {author}",
+  "authorBio": "LocalAI community member. Passionate about AI and sharing knowledge with Vietnamese developers.",
+  "relatedTitle": "Related posts"
+}

@@ -1,31 +1,28 @@
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+"use client";
 
-const notes = [
-  {
-    id: 1,
-    text: "Gói Nhà phát triển được dùng thử miễn phí 14 ngày. Sau thời gian dùng thử, tài khoản sẽ tự động chuyển sang gói trả phí trừ khi bạn huỷ trước.",
-  },
-  {
-    id: 2,
-    text: "Gói Doanh nghiệp yêu cầu hợp đồng tối thiểu 6 tháng. Giá tuỳ chỉnh dựa trên nhu cầu và quy mô. Liên hệ đội ngũ để nhận báo giá.",
-  },
-];
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useTranslations } from "@/lib/i18n";
 
 export function Footnotes() {
+  const pricing = useTranslations("pricing");
+  const notes = pricing.footnotes;
+
   return (
     <section className="border-t border-[var(--color-border)] section-padding">
       <div className="container-main">
         <ScrollReveal>
-          <h3 className="mb-8 text-lg font-semibold">Chú thích</h3>
+          <h3 className="mb-8 text-lg font-semibold">
+            {pricing.footnoteTitle}
+          </h3>
         </ScrollReveal>
         <div className="space-y-4">
-          {notes.map((note) => (
-            <ScrollReveal key={note.id} delay={note.id * 0.04}>
+          {notes.map((text, idx) => (
+            <ScrollReveal key={idx} delay={(idx + 1) * 0.04}>
               <p className="text-xs leading-relaxed text-[var(--color-text-secondary)]">
                 <sup className="mr-1 font-semibold text-[var(--color-text)]">
-                  ({note.id})
+                  ({idx + 1})
                 </sup>
-                {note.text}
+                {text}
               </p>
             </ScrollReveal>
           ))}

@@ -1,0 +1,30 @@
+{
+  "back": "\u2190 Back to home",
+  "titles": {
+    "signin": "Sign in",
+    "signup": "Create account"
+  },
+  "subtitles": {
+    "signin": "Welcome back. Sign in to continue.",
+    "signup": "Start your free Astra AI trial."
+  },
+  "google": "Continue with Google",
+  "divider": "or",
+  "form": {
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "At least 6 characters",
+    "submit": {
+      "loading": "Processing...",
+      "signin": "Sign in",
+      "signup": "Create account"
+    }
+  },
+  "toggle": {
+    "signinQuestion": "Already have an account?",
+    "signupQuestion": "Don't have an account?",
+    "signinAction": "Sign in",
+    "signupAction": "Create account"
+  },
+  "errorDefault": "Something went wrong. Please try again."
+}

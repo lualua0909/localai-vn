@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "@/lib/i18n";
 
 interface Logo {
   name: string;
@@ -8,6 +9,7 @@ interface Logo {
 }
 
 export function LogosWithBlurFlip({ logoSets }: { logoSets?: Logo[][] }) {
+  const home = useTranslations("home");
   const defaultLogos: Logo[][] = [
     [
       { name: "FPT AI", src: "/logos/fpt.svg" },
@@ -48,10 +50,10 @@ export function LogosWithBlurFlip({ logoSets }: { logoSets?: Logo[][] }) {
       <div className="container-main">
         <div className="relative z-20 px-4 py-10 md:px-8 md:py-20">
           <h2 className="text-center text-section-title font-bold text-[var(--color-text)]">
-            Được tin tưởng bởi các công ty hàng đầu
+            {home.integrations.title}
           </h2>
           <p className="mt-4 text-center text-base text-[var(--color-text-secondary)]">
-            Những đối tác đã đồng hành cùng LocalAI từ những ngày đầu.
+            {home.integrations.description}
           </p>
           <div className="relative mt-20 flex h-full w-full flex-wrap justify-center gap-10 md:gap-10">
             <AnimatePresence

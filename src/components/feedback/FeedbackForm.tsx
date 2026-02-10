@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import { addFeedback } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Star } from "lucide-react";
+import { useTranslations } from "@/lib/i18n";
 
 interface FeedbackFormProps {
   uid?: string;
@@ -16,6 +17,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
+  const copy = useTranslations("feedback");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,13 +43,13 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
     return (
       <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 text-center">
         <p className="font-medium text-emerald-600 dark:text-emerald-400">
-          Cảm ơn bạn đã gửi phản hồi!
+          {copy.success.message}
         </p>
         <button
           onClick={() => setStatus("idle")}
           className="mt-3 text-sm text-accent hover:underline"
         >
-          Gửi thêm phản hồi
+          {copy.success.cta}
         </button>
       </div>
     );
@@ -58,7 +60,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
       {/* Star rating */}
       <div>
         <label className="mb-2 block text-sm font-medium">
-          Đánh giá trải nghiệm
+          {copy.form.ratingLabel}
         </label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -69,7 +71,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
               onMouseEnter={() => setHoverRating(star)}
               onMouseLeave={() => setHoverRating(0)}
               className="focus-ring rounded-md p-0.5 transition-transform hover:scale-110"
-              aria-label={`${star} sao`}
+              aria-label={copy.form.starAria.replace("{count}", String(star))}
             >
               <Star
                 size={22}
@@ -87,7 +89,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
       {/* Message */}
       <div>
         <label htmlFor="feedback-msg" className="mb-2 block text-sm font-medium">
-          Phản hồi của bạn
+          {copy.form.messageLabel}
         </label>
         <textarea
           id="feedback-msg"
@@ -95,14 +97,14 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Chia sẻ trải nghiệm, góp ý, hoặc báo lỗi..."
+          placeholder={copy.form.placeholder}
           className="focus-ring w-full resize-none rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[var(--color-text-secondary)]/50"
         />
       </div>
 
       {status === "error" && (
         <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-500">
-          Gửi thất bại. Vui lòng thử lại.
+          {copy.form.error}
         </p>
       )}
 
@@ -112,7 +114,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
         size="md"
         disabled={status === "sending"}
       >
-        {status === "sending" ? "Đang gửi..." : "Gửi phản hồi"}
+        {status === "sending" ? copy.form.submit.sending : copy.form.submit.idle}
       </Button>
     </form>
   );

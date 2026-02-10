@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MotionValue, motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/lib/i18n";
 import {
   IconBrightnessDown,
   IconBrightnessUp,
@@ -35,6 +36,7 @@ export const MacbookScroll = ({
   title?: string | React.ReactNode;
   badge?: React.ReactNode;
 }) => {
+  const home = useTranslations("home");
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -82,7 +84,7 @@ export const MacbookScroll = ({
       >
         {title || (
           <span>
-            Khám phá sản phẩm AI <br /> do người Việt xây dựng.
+            {home.macbook.defaultTitle}
           </span>
         )}
       </motion.h2>
@@ -93,6 +95,7 @@ export const MacbookScroll = ({
         scaleY={scaleY}
         rotate={rotate}
         translate={translate}
+        fallbackTitle={home.macbook.fallback}
       />
       {/* Base area */}
       <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
@@ -128,12 +131,14 @@ export const Lid = ({
   rotate,
   translate,
   src,
+  fallbackTitle,
 }: {
   scaleX: MotionValue<number>;
   scaleY: MotionValue<number>;
   rotate: MotionValue<number>;
   translate: MotionValue<number>;
   src?: string;
+  fallbackTitle?: string;
 }) => {
   return (
     <div className="relative [perspective:800px]">
@@ -176,7 +181,9 @@ export const Lid = ({
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#0a84ff]/20 to-[#8b5cf6]/20">
-            <span className="text-lg font-bold text-white/60">LocalAI.vn</span>
+            <span className="text-lg font-bold text-white/60">
+              {fallbackTitle}
+            </span>
           </div>
         )}
       </motion.div>

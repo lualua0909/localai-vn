@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
 import { Button } from "@/components/ui/Button";
+import { useTranslations } from "@/lib/i18n";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const copy = useTranslations("signin");
 
   // Redirect if already signed in
   if (!loading && user) {
@@ -35,7 +37,7 @@ export default function SignInPage() {
       router.push("/app");
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Đã xảy ra lỗi. Vui lòng thử lại.";
+        err instanceof Error ? err.message : copy.errorDefault;
       setError(message);
     } finally {
       setSubmitting(false);
@@ -49,7 +51,7 @@ export default function SignInPage() {
       router.push("/app");
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Đã xảy ra lỗi. Vui lòng thử lại.";
+        err instanceof Error ? err.message : copy.errorDefault;
       setError(message);
     }
   };
@@ -62,17 +64,15 @@ export default function SignInPage() {
           href="/"
           className="mb-8 inline-block text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
         >
-          &larr; Về trang chủ
+          {copy.back}
         </Link>
 
         {/* Header */}
         <h1 className="text-2xl font-bold tracking-tight">
-          {isSignUp ? "Tạo tài khoản" : "Đăng nhập"}
+          {isSignUp ? copy.titles.signup : copy.titles.signin}
         </h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          {isSignUp
-            ? "Bắt đầu dùng thử Astra AI miễn phí."
-            : "Chào mừng trở lại. Đăng nhập để tiếp tục."}
+          {isSignUp ? copy.subtitles.signup : copy.subtitles.signin}
         </p>
 
         {/* Google */}
@@ -98,14 +98,14 @@ export default function SignInPage() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          Tiếp tục với Google
+          {copy.google}
         </button>
 
         {/* Divider */}
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[var(--color-border)]" />
           <span className="text-xs text-[var(--color-text-secondary)]">
-            hoặc
+            {copy.divider}
           </span>
           <div className="h-px flex-1 bg-[var(--color-border)]" />
         </div>
@@ -117,7 +117,7 @@ export default function SignInPage() {
               htmlFor="email"
               className="mb-1.5 block text-xs font-medium text-[var(--color-text-secondary)]"
             >
-              Email
+              {copy.form.emailLabel}
             </label>
             <input
               id="email"
@@ -134,7 +134,7 @@ export default function SignInPage() {
               htmlFor="password"
               className="mb-1.5 block text-xs font-medium text-[var(--color-text-secondary)]"
             >
-              Mật khẩu
+              {copy.form.passwordLabel}
             </label>
             <input
               id="password"
@@ -143,7 +143,7 @@ export default function SignInPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Tối thiểu 6 ký tự"
+              placeholder={copy.form.passwordPlaceholder}
               className="focus-ring w-full rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[var(--color-text-secondary)]/50"
             />
           </div>
@@ -162,16 +162,18 @@ export default function SignInPage() {
             disabled={submitting}
           >
             {submitting
-              ? "Đang xử lý..."
+              ? copy.form.submit.loading
               : isSignUp
-              ? "Tạo tài khoản"
-              : "Đăng nhập"}
+              ? copy.form.submit.signup
+              : copy.form.submit.signin}
           </Button>
         </form>
 
         {/* Toggle */}
         <p className="mt-6 text-center text-sm text-[var(--color-text-secondary)]">
-          {isSignUp ? "Đã có tài khoản?" : "Chưa có tài khoản?"}{" "}
+          {isSignUp
+            ? copy.toggle.signinQuestion
+            : copy.toggle.signupQuestion}{" "}
           <button
             onClick={() => {
               setIsSignUp(!isSignUp);
@@ -179,7 +181,7 @@ export default function SignInPage() {
             }}
             className="font-medium text-accent hover:underline"
           >
-            {isSignUp ? "Đăng nhập" : "Tạo tài khoản"}
+            {isSignUp ? copy.toggle.signinAction : copy.toggle.signupAction}
           </button>
         </p>
       </div>

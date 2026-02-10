@@ -1,0 +1,17 @@
+{
+  "success": {
+    "message": "Cảm ơn bạn đã gửi phản hồi!",
+    "cta": "Gửi thêm phản hồi"
+  },
+  "form": {
+    "ratingLabel": "Đánh giá trải nghiệm",
+    "messageLabel": "Phản hồi của bạn",
+    "placeholder": "Chia sẻ trải nghiệm, góp ý, hoặc báo lỗi...",
+    "error": "Gửi thất bại. Vui lòng thử lại.",
+    "submit": {
+      "sending": "Đang gửi...",
+      "idle": "Gửi phản hồi"
+    },
+    "starAria": "{count} sao"
+  }
+}

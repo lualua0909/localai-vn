@@ -1,27 +1,24 @@
 "use client";
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-
-const stats = [
-  { value: "500+", label: "Sản phẩm AI", desc: "được đăng tải trên nền tảng" },
-  { value: "10K+", label: "Người dùng", desc: "khám phá sản phẩm mỗi tháng" },
-  { value: "200+", label: "Nhà phát triển", desc: "đang xây dựng sản phẩm AI" },
-  { value: "50+", label: "Đối tác", desc: "công ty công nghệ hợp tác" },
-];
+import { useTranslations } from "@/lib/i18n";
 
 export function AstraAnalytics() {
+  const analytics = useTranslations("home").analytics;
+  const stats = analytics.stats;
+
   return (
     <section id="stats" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
-            Con số
+            {analytics.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
-            LocalAI trong con số
+            {analytics.title}
           </h2>
           <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            Cộng đồng AI Việt Nam đang phát triển mỗi ngày.
+            {analytics.description}
           </p>
         </ScrollReveal>
 

@@ -2,47 +2,33 @@
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { Zap, Users, Globe, Eye } from "lucide-react";
-
-const benefits = [
-  {
-    icon: <Zap size={24} />,
-    title: "Hoàn toàn miễn phí",
-    desc: "Khám phá và đăng sản phẩm không mất phí. Chúng tôi tin vào sự phát triển của cộng đồng AI Việt.",
-    color: "bg-amber-500/10 text-amber-500",
-  },
-  {
-    icon: <Users size={24} />,
-    title: "Cộng đồng mạnh mẽ",
-    desc: "Kết nối với hàng ngàn nhà phát triển, founder, và người dùng AI tại Việt Nam.",
-    color: "bg-blue-500/10 text-blue-500",
-  },
-  {
-    icon: <Eye size={24} />,
-    title: "Tăng visibility",
-    desc: "Sản phẩm của bạn được giới thiệu đến đúng đối tượng — người dùng đang tìm kiếm giải pháp AI.",
-    color: "bg-purple-500/10 text-purple-500",
-  },
-  {
-    icon: <Globe size={24} />,
-    title: "Made in Vietnam",
-    desc: "Tự hào giới thiệu sản phẩm AI Việt Nam ra thế giới. Hỗ trợ song ngữ Việt-Anh.",
-    color: "bg-emerald-500/10 text-emerald-500",
-  },
-];
+import { useTranslations } from "@/lib/i18n";
 
 export function AstraSecurity() {
+  const security = useTranslations("home").security;
+  const iconMap = {
+    zap: <Zap size={24} />,
+    users: <Users size={24} />,
+    eye: <Eye size={24} />,
+    globe: <Globe size={24} />,
+  };
+  const benefits = security.benefits.map((benefit) => ({
+    ...benefit,
+    icon: iconMap[benefit.icon as keyof typeof iconMap] || <Zap size={24} />,
+  }));
+
   return (
     <section id="community" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
-            Lợi ích
+            {security.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
-            Vì sao chọn LocalAI?
+            {security.title}
           </h2>
           <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            Nền tảng được xây dựng bởi cộng đồng, cho cộng đồng AI Việt Nam.
+            {security.description}
           </p>
         </ScrollReveal>
 

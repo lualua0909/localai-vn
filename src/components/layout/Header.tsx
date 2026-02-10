@@ -5,19 +5,14 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Menu, X, Sun, Moon, Monitor } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navLinks = [
-  { label: "Khám phá", href: "#overview" },
-  { label: "Danh mục", href: "#categories" },
-  { label: "Cộng đồng", href: "#community" },
-  { label: "Bảng giá", href: "/bang-gia" },
-  { label: "Blog", href: "/blog" },
-];
+import { useTranslations } from "@/lib/i18n";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const common = useTranslations("common");
+  const navLinks = common.header.navLinks;
 
   useEffect(() => setMounted(true), []);
 
@@ -45,7 +40,7 @@ export function Header() {
           href="/"
           className="focus-ring rounded-md text-lg font-semibold tracking-tight"
         >
-          LocalAI
+          {common.header.logo}
         </Link>
 
         {/* Desktop Nav */}
@@ -72,7 +67,7 @@ export function Header() {
             href="/signin"
             className="focus-ring rounded-full bg-[var(--color-text)] px-4 py-1.5 text-xs font-medium text-[var(--color-bg)] transition-opacity hover:opacity-80"
           >
-            Đăng nhập
+            {common.header.signin}
           </Link>
         </nav>
 
@@ -121,7 +116,7 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 className="focus-ring mt-2 rounded-full bg-[var(--color-text)] px-4 py-2.5 text-center text-sm font-medium text-[var(--color-bg)]"
               >
-                Đăng nhập
+                {common.header.signin}
               </Link>
             </nav>
           </motion.div>

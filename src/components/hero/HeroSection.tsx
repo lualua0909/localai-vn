@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { useTranslations } from "@/lib/i18n";
 
 const MacbookScroll = dynamic(
   () =>
@@ -13,6 +14,9 @@ const MacbookScroll = dynamic(
 );
 
 export function HeroSection() {
+  const home = useTranslations("home");
+  const [taglineLine1, taglineLine2] = home.hero.tagline;
+
   return (
     <section
       id="overview"
@@ -23,11 +27,12 @@ export function HeroSection() {
       {/* Text Hover Effect Title */}
       <div className="container-main relative z-10 pt-32">
         <div className="mx-auto flex h-[12rem] max-w-4xl items-center justify-center">
-          <TextHoverEffect text="LocalAI" duration={0.3} />
+          <TextHoverEffect text={home.hero.title} duration={0.3} />
         </div>
         <p className="mx-auto mt-2 max-w-xl text-center text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
-          Mỗi ngày, người Việt đang biến ý tưởng thành sản phẩm AI.
-          Đây là nơi để bạn khám phá, ủng hộ, hoặc trở thành một trong số họ.
+          {taglineLine1}
+          <br />
+          {taglineLine2}
         </p>
       </div>
 
@@ -36,9 +41,9 @@ export function HeroSection() {
         <MacbookScroll
           title={
             <span className="text-[var(--color-text)]">
-              Nền tảng khám phá sản phẩm AI
+              {home.macbook.titleLine1}
               <br />
-              <span className="text-gradient">do người Việt xây dựng.</span>
+              <span className="text-gradient">{home.macbook.titleHighlight}</span>
             </span>
           }
           showGradient={true}

@@ -1,0 +1,110 @@
+{
+  "hero": {
+    "title": "LocalAI",
+    "tagline": [
+      "Mỗi ngày, người Việt đang biến ý tưởng thành sản phẩm AI.",
+      "Đây là nơi để bạn khám phá, ủng hộ, hoặc trở thành một trong số họ."
+    ]
+  },
+  "macbook": {
+    "titleLine1": "Nền tảng khám phá sản phẩm AI",
+    "titleHighlight": "do người Việt xây dựng.",
+    "fallback": "LocalAI.vn",
+    "defaultTitle": "Khám phá sản phẩm AI do người Việt xây dựng."
+  },
+  "models": {
+    "eyebrow": "Danh mục",
+    "title": "Khám phá theo lĩnh vực",
+    "description": "Tìm sản phẩm AI phù hợp với nhu cầu của bạn từ 8 danh mục được phân loại rõ ràng.",
+    "categories": [
+      { "title": "Chatbot & Trợ lý", "desc": "Hội thoại AI, hỗ trợ khách hàng, trợ lý ảo", "icon": "bot" },
+      { "title": "Tạo ảnh & Video", "desc": "Sinh ảnh, chỉnh sửa, tạo video bằng AI", "icon": "image" },
+      { "title": "Code Assistant", "desc": "Hỗ trợ lập trình, review code, debug", "icon": "code" },
+      { "title": "Giáo dục", "desc": "Học tập, gia sư AI, luyện thi", "icon": "education" },
+      { "title": "Tài chính", "desc": "Phân tích tài chính, kế toán, đầu tư", "icon": "finance" },
+      { "title": "Y tế & Sức khoẻ", "desc": "Chẩn đoán, tư vấn sức khoẻ, nghiên cứu", "icon": "health" },
+      { "title": "Tiện ích", "desc": "Công cụ năng suất, tự động hoá, OCR", "icon": "utility" },
+      { "title": "Sáng tạo nội dung", "desc": "Viết blog, marketing, social media", "icon": "content" }
+    ]
+  },
+  "topApps": {
+    "title": "Ứng dụng AI hàng đầu",
+    "button": "Xem",
+    "left": {
+      "eyebrow": "Yêu thích",
+      "title": "Top tuần này",
+      "description": "Những ứng dụng AI được cộng đồng yêu thích nhất tuần.",
+      "items": [
+        { "name": "VietGPT", "desc": "Chatbot AI tiếng Việt thông minh", "color": "bg-blue-500", "initial": "V" },
+        { "name": "PixelAI Studio", "desc": "Tạo ảnh sản phẩm bằng AI", "color": "bg-purple-500", "initial": "P" },
+        { "name": "CodeBuddy VN", "desc": "Trợ lý lập trình AI", "color": "bg-emerald-500", "initial": "C" },
+        { "name": "EduMentor", "desc": "Gia sư AI cá nhân hoá", "color": "bg-amber-500", "initial": "E" },
+        { "name": "DataSense", "desc": "Phân tích dữ liệu tự động", "color": "bg-rose-500", "initial": "D" }
+      ]
+    },
+    "right": {
+      "eyebrow": "Thiết yếu",
+      "title": "Yêu thích tại Việt Nam",
+      "description": "Các sản phẩm AI phổ biến nhất được người Việt tin dùng.",
+      "items": [
+        { "name": "VoiceAI Việt", "desc": "Chuyển giọng nói thành văn bản", "color": "bg-cyan-500", "initial": "V" },
+        { "name": "DocuScan AI", "desc": "OCR thông minh cho tiếng Việt", "color": "bg-orange-500", "initial": "D" },
+        { "name": "MarketBot", "desc": "Tự động hoá marketing bằng AI", "color": "bg-pink-500", "initial": "M" },
+        { "name": "HealthCheck AI", "desc": "Tư vấn sức khoẻ bằng AI", "color": "bg-teal-500", "initial": "H" },
+        { "name": "FinBot", "desc": "Trợ lý tài chính thông minh", "color": "bg-indigo-500", "initial": "F" }
+      ]
+    }
+  },
+  "studio": {
+    "eyebrow": "Mới ra mắt",
+    "title": "Sản phẩm mới",
+    "description": "Những sản phẩm AI Việt Nam mới nhất vừa được cộng đồng đăng tải.",
+    "trending": "Trending",
+    "products": [
+      { "name": "VietGPT", "desc": "Chatbot AI tiếng Việt thông minh, hỗ trợ đa ngữ cảnh", "category": "Chatbot", "stars": 342, "trending": true, "color": "bg-blue-500" },
+      { "name": "PixelAI Studio", "desc": "Tạo ảnh sản phẩm chuyên nghiệp bằng AI trong 30 giây", "category": "Tạo ảnh", "stars": 218, "trending": true, "color": "bg-purple-500" },
+      { "name": "CodeBuddy VN", "desc": "Trợ lý lập trình AI hiểu tiếng Việt, hỗ trợ 20+ ngôn ngữ", "category": "Code Assistant", "stars": 185, "trending": false, "color": "bg-emerald-500" },
+      { "name": "EduMentor", "desc": "Gia sư AI cá nhân hoá, luyện thi đại học và IELTS", "category": "Giáo dục", "stars": 156, "trending": true, "color": "bg-amber-500" },
+      { "name": "VoiceAI Việt", "desc": "Chuyển giọng nói thành văn bản chính xác đến 98%", "category": "Giọng nói", "stars": 127, "trending": false, "color": "bg-cyan-500" },
+      { "name": "DocuScan AI", "desc": "OCR thông minh cho tiếng Việt, nhận diện chữ viết tay", "category": "Tiện ích", "stars": 98, "trending": true, "color": "bg-orange-500" },
+      { "name": "FinBot", "desc": "Trợ lý tài chính thông minh, phân tích đầu tư cá nhân", "category": "Tài chính", "stars": 89, "trending": false, "color": "bg-indigo-500" },
+      { "name": "HealthCheck AI", "desc": "Tư vấn sức khoẻ bằng AI, theo dõi chỉ số hàng ngày", "category": "Y tế", "stars": 76, "trending": false, "color": "bg-rose-500" }
+    ]
+  },
+  "automations": {
+    "eyebrow": "Đơn giản",
+    "title": "Cách hoạt động",
+    "description": "Chỉ 3 bước để sản phẩm AI của bạn tiếp cận hàng ngàn người dùng Việt Nam.",
+    "steps": [
+      { "title": "Đăng ký tài khoản", "desc": "Tạo tài khoản miễn phí trong 30 giây. Hỗ trợ đăng nhập bằng Google, GitHub.", "color": "bg-blue-500/10 text-blue-500", "icon": "user" },
+      { "title": "Đăng sản phẩm AI", "desc": "Điền thông tin sản phẩm, thêm ảnh demo, liên kết. Đội ngũ LocalAI sẽ review trong 24h.", "color": "bg-purple-500/10 text-purple-500", "icon": "upload" },
+      { "title": "Được cộng đồng khám phá", "desc": "Sản phẩm xuất hiện trên trang chủ, được vote, review và chia sẻ bởi cộng đồng AI Việt.", "color": "bg-emerald-500/10 text-emerald-500", "icon": "rocket" }
+    ]
+  },
+  "security": {
+    "eyebrow": "Lợi ích",
+    "title": "Vì sao chọn LocalAI?",
+    "description": "Nền tảng được xây dựng bởi cộng đồng, cho cộng đồng AI Việt Nam.",
+    "benefits": [
+      { "title": "Hoàn toàn miễn phí", "desc": "Khám phá và đăng sản phẩm không mất phí. Chúng tôi tin vào sự phát triển của cộng đồng AI Việt.", "color": "bg-amber-500/10 text-amber-500", "icon": "zap" },
+      { "title": "Cộng đồng mạnh mẽ", "desc": "Kết nối với hàng ngàn nhà phát triển, founder, và người dùng AI tại Việt Nam.", "color": "bg-blue-500/10 text-blue-500", "icon": "users" },
+      { "title": "Tăng visibility", "desc": "Sản phẩm của bạn được giới thiệu đến đúng đối tượng — người dùng đang tìm kiếm giải pháp AI.", "color": "bg-purple-500/10 text-purple-500", "icon": "eye" },
+      { "title": "Made in Vietnam", "desc": "Tự hào giới thiệu sản phẩm AI Việt Nam ra thế giới. Hỗ trợ song ngữ Việt-Anh.", "color": "bg-emerald-500/10 text-emerald-500", "icon": "globe" }
+    ]
+  },
+  "analytics": {
+    "eyebrow": "Con số",
+    "title": "LocalAI trong con số",
+    "description": "Cộng đồng AI Việt Nam đang phát triển mỗi ngày.",
+    "stats": [
+      { "value": "500+", "label": "Sản phẩm AI", "desc": "được đăng tải trên nền tảng" },
+      { "value": "10K+", "label": "Người dùng", "desc": "khám phá sản phẩm mỗi tháng" },
+      { "value": "200+", "label": "Nhà phát triển", "desc": "đang xây dựng sản phẩm AI" },
+      { "value": "50+", "label": "Đối tác", "desc": "công ty công nghệ hợp tác" }
+    ]
+  },
+  "integrations": {
+    "title": "Được tin tưởng bởi các công ty hàng đầu",
+    "description": "Những đối tác đã đồng hành cùng LocalAI từ những ngày đầu."
+  }
+}

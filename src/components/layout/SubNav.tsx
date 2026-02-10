@@ -2,19 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
-const pills = [
-  { label: "Tổng quan", id: "overview" },
-  { label: "Danh mục", id: "categories" },
-  { label: "Nổi bật", id: "featured" },
-  { label: "Cách hoạt động", id: "how-it-works" },
-  { label: "Khách hàng", id: "customers" },
-];
+import { useTranslations } from "@/lib/i18n";
 
 const HEADER_H = 48;
 
 export function SubNav() {
   const [active, setActive] = useState("overview");
+  const pills = useTranslations("common").subnav;
 
   useEffect(() => {
     const handleScroll = () => {

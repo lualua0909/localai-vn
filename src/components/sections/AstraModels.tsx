@@ -3,31 +3,40 @@
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { BentoGrid, BentoItem } from "@/components/ui/BentoGrid";
 import { Bot, Image, Code2, GraduationCap, Banknote, HeartPulse, Wrench, Sparkles } from "lucide-react";
-
-const categories = [
-  { icon: <Bot size={18} />, title: "Chatbot & Trợ lý", desc: "Hội thoại AI, hỗ trợ khách hàng, trợ lý ảo" },
-  { icon: <Image size={18} />, title: "Tạo ảnh & Video", desc: "Sinh ảnh, chỉnh sửa, tạo video bằng AI" },
-  { icon: <Code2 size={18} />, title: "Code Assistant", desc: "Hỗ trợ lập trình, review code, debug" },
-  { icon: <GraduationCap size={18} />, title: "Giáo dục", desc: "Học tập, gia sư AI, luyện thi" },
-  { icon: <Banknote size={18} />, title: "Tài chính", desc: "Phân tích tài chính, kế toán, đầu tư" },
-  { icon: <HeartPulse size={18} />, title: "Y tế & Sức khoẻ", desc: "Chẩn đoán, tư vấn sức khoẻ, nghiên cứu" },
-  { icon: <Wrench size={18} />, title: "Tiện ích", desc: "Công cụ năng suất, tự động hoá, OCR" },
-  { icon: <Sparkles size={18} />, title: "Sáng tạo nội dung", desc: "Viết blog, marketing, social media" },
-];
+import { useTranslations } from "@/lib/i18n";
 
 export function AstraModels() {
+  const models = useTranslations("home").models;
+  const categories = models.categories.map((cat) => {
+    const iconMap: Record<string, JSX.Element> = {
+      bot: <Bot size={18} />,
+      image: <Image size={18} />,
+      code: <Code2 size={18} />,
+      education: <GraduationCap size={18} />,
+      finance: <Banknote size={18} />,
+      health: <HeartPulse size={18} />,
+      utility: <Wrench size={18} />,
+      content: <Sparkles size={18} />,
+    };
+
+    return {
+      ...cat,
+      icon: iconMap[cat.icon as keyof typeof iconMap] ?? <Sparkles size={18} />,
+    };
+  });
+
   return (
     <section id="categories" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
-            Danh mục
+            {models.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
-            Khám phá theo lĩnh vực
+            {models.title}
           </h2>
           <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            Tìm sản phẩm AI phù hợp với nhu cầu của bạn từ 8 danh mục được phân loại rõ ràng.
+            {models.description}
           </p>
         </ScrollReveal>
 

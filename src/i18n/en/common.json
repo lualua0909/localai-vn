@@ -1,0 +1,67 @@
+{
+  "header": {
+    "logo": "LocalAI",
+    "navLinks": [
+      { "label": "Discover", "href": "#overview" },
+      { "label": "Categories", "href": "#categories" },
+      { "label": "Community", "href": "#community" },
+      { "label": "Pricing", "href": "/bang-gia" },
+      { "label": "Blog", "href": "/blog" }
+    ],
+    "signin": "Sign in"
+  },
+  "subnav": [
+    { "label": "Overview", "id": "overview" },
+    { "label": "Categories", "id": "categories" },
+    { "label": "Featured", "id": "featured" },
+    { "label": "How it works", "id": "how-it-works" },
+    { "label": "Customers", "id": "customers" }
+  ],
+  "footer": {
+    "columns": [
+      {
+        "title": "Platform",
+        "links": [
+          { "label": "Discover products", "href": "#overview" },
+          { "label": "AI catalog", "href": "#categories" },
+          { "label": "Featured products", "href": "#featured" },
+          { "label": "Submit a product", "href": "#" },
+          { "label": "Pricing", "href": "#pricing" }
+        ]
+      },
+      {
+        "title": "Community",
+        "links": [
+          { "label": "Blog", "href": "#" },
+          { "label": "Events", "href": "#" },
+          { "label": "Discord", "href": "#" },
+          { "label": "Newsletter", "href": "#" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "label": "API docs", "href": "#" },
+          { "label": "Guides", "href": "#" },
+          { "label": "Status", "href": "#" },
+          { "label": "Changelog", "href": "#" }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          { "label": "Terms", "href": "#" },
+          { "label": "Privacy", "href": "#" },
+          { "label": "Security", "href": "#" },
+          { "label": "Cookie", "href": "#" }
+        ]
+      }
+    ],
+    "copyright": "© {year} LocalAI. All rights reserved.",
+    "languageLabel": "Language",
+    "languageOptions": [
+      { "value": "vi", "label": "Tiếng Việt (VN)" },
+      { "value": "en", "label": "English" }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "back": "\u2190 Về trang chủ",
+  "titles": {
+    "signin": "Đăng nhập",
+    "signup": "Tạo tài khoản"
+  },
+  "subtitles": {
+    "signin": "Chào mừng trở lại. Đăng nhập để tiếp tục.",
+    "signup": "Bắt đầu dùng thử Astra AI miễn phí."
+  },
+  "google": "Tiếp tục với Google",
+  "divider": "hoặc",
+  "form": {
+    "emailLabel": "Email",
+    "passwordLabel": "Mật khẩu",
+    "passwordPlaceholder": "Tối thiểu 6 ký tự",
+    "submit": {
+      "loading": "Đang xử lý...",
+      "signin": "Đăng nhập",
+      "signup": "Tạo tài khoản"
+    }
+  },
+  "toggle": {
+    "signinQuestion": "Đã có tài khoản?",
+    "signupQuestion": "Chưa có tài khoản?",
+    "signinAction": "Đăng nhập",
+    "signupAction": "Tạo tài khoản"
+  },
+  "errorDefault": "Đã xảy ra lỗi. Vui lòng thử lại."
+}

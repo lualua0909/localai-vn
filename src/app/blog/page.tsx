@@ -5,8 +5,11 @@ import { Footer } from "@/components/layout/Footer";
 import { blogPosts } from "@/lib/blog-data";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "@/lib/i18n";
 
 export default function BlogPage() {
+  const blog = useTranslations("blog");
+
   return (
     <>
       <Header />
@@ -15,14 +18,13 @@ export default function BlogPage() {
         <div className="container-main section-padding pb-0">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
-              Blog
+              {blog.hero.eyebrow}
             </p>
             <h1 className="text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
-              Tin tức & Kiến thức
+              {blog.hero.title}
             </h1>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
-              Khám phá những bài viết chuyên sâu về AI, công nghệ và cộng đồng
-              startup Việt Nam từ đội ngũ LocalAI.
+              {blog.hero.description}
             </p>
           </div>
         </div>

@@ -2,41 +2,32 @@
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ArrowRight, UserPlus, Upload, Rocket } from "lucide-react";
-
-const steps = [
-  {
-    icon: <UserPlus size={24} />,
-    title: "Đăng ký tài khoản",
-    desc: "Tạo tài khoản miễn phí trong 30 giây. Hỗ trợ đăng nhập bằng Google, GitHub.",
-    color: "bg-blue-500/10 text-blue-500",
-  },
-  {
-    icon: <Upload size={24} />,
-    title: "Đăng sản phẩm AI",
-    desc: "Điền thông tin sản phẩm, thêm ảnh demo, liên kết. Đội ngũ LocalAI sẽ review trong 24h.",
-    color: "bg-purple-500/10 text-purple-500",
-  },
-  {
-    icon: <Rocket size={24} />,
-    title: "Được cộng đồng khám phá",
-    desc: "Sản phẩm xuất hiện trên trang chủ, được vote, review và chia sẻ bởi cộng đồng AI Việt.",
-    color: "bg-emerald-500/10 text-emerald-500",
-  },
-];
+import { useTranslations } from "@/lib/i18n";
 
 export function AstraAutomations() {
+  const automations = useTranslations("home").automations;
+  const iconMap = {
+    user: <UserPlus size={24} />,
+    upload: <Upload size={24} />,
+    rocket: <Rocket size={24} />,
+  };
+  const steps = automations.steps.map((step) => ({
+    ...step,
+    icon: iconMap[step.icon as keyof typeof iconMap] || <UserPlus size={24} />,
+  }));
+
   return (
     <section id="how-it-works" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
-            Đơn giản
+            {automations.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
-            Cách hoạt động
+            {automations.title}
           </h2>
           <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            Chỉ 3 bước để sản phẩm AI của bạn tiếp cận hàng ngàn người dùng Việt Nam.
+            {automations.description}
           </p>
         </ScrollReveal>
 

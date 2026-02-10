@@ -1,0 +1,17 @@
+{
+  "success": {
+    "message": "Thanks for the feedback!",
+    "cta": "Send another"
+  },
+  "form": {
+    "ratingLabel": "Rate your experience",
+    "messageLabel": "Your feedback",
+    "placeholder": "Share your experience, suggestions, or bugs...",
+    "error": "Submission failed. Please try again.",
+    "submit": {
+      "sending": "Sending...",
+      "idle": "Send feedback"
+    },
+    "starAria": "{count} stars"
+  }
+}

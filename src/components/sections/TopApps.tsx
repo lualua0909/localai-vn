@@ -2,6 +2,7 @@
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslations } from "@/lib/i18n";
 
 interface AppItem {
   name: string;
@@ -10,23 +11,7 @@ interface AppItem {
   initial: string;
 }
 
-const topThisWeek: AppItem[] = [
-  { name: "VietGPT", desc: "Chatbot AI tiếng Việt thông minh", color: "bg-blue-500", initial: "V" },
-  { name: "PixelAI Studio", desc: "Tạo ảnh sản phẩm bằng AI", color: "bg-purple-500", initial: "P" },
-  { name: "CodeBuddy VN", desc: "Trợ lý lập trình AI", color: "bg-emerald-500", initial: "C" },
-  { name: "EduMentor", desc: "Gia sư AI cá nhân hoá", color: "bg-amber-500", initial: "E" },
-  { name: "DataSense", desc: "Phân tích dữ liệu tự động", color: "bg-rose-500", initial: "D" },
-];
-
-const vnFavourites: AppItem[] = [
-  { name: "VoiceAI Việt", desc: "Chuyển giọng nói thành văn bản", color: "bg-cyan-500", initial: "V" },
-  { name: "DocuScan AI", desc: "OCR thông minh cho tiếng Việt", color: "bg-orange-500", initial: "D" },
-  { name: "MarketBot", desc: "Tự động hoá marketing bằng AI", color: "bg-pink-500", initial: "M" },
-  { name: "HealthCheck AI", desc: "Tư vấn sức khoẻ bằng AI", color: "bg-teal-500", initial: "H" },
-  { name: "FinBot", desc: "Trợ lý tài chính thông minh", color: "bg-indigo-500", initial: "F" },
-];
-
-function AppList({ items }: { items: AppItem[] }) {
+function AppList({ items, cta }: { items: AppItem[]; cta: string }) {
   return (
     <div className="divide-y divide-[var(--color-border)]">
       {items.map((app) => (
@@ -46,7 +31,7 @@ function AppList({ items }: { items: AppItem[] }) {
             </p>
           </div>
           <button className="shrink-0 rounded-full bg-accent/10 px-3.5 py-1.5 text-[11px] font-semibold text-accent transition-colors hover:bg-accent/20">
-            Xem
+            {cta}
           </button>
         </div>
       ))}
@@ -55,12 +40,14 @@ function AppList({ items }: { items: AppItem[] }) {
 }
 
 export function TopApps() {
+  const topApps = useTranslations("home").topApps;
+
   return (
     <section id="top-apps" className="section-padding">
       <div className="container-main">
         <ScrollReveal>
           <h2 className="mb-8 text-section-title font-bold tracking-tight">
-            Ứng dụng AI hàng đầu
+            {topApps.title}
           </h2>
         </ScrollReveal>
 
@@ -69,14 +56,14 @@ export function TopApps() {
           <ScrollReveal delay={0}>
             <div className="glass-card h-full rounded-3xl p-6">
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-                Yêu thích
+                {topApps.left.eyebrow}
               </p>
-              <h3 className="mt-1 text-xl font-bold">Top tuần này</h3>
+              <h3 className="mt-1 text-xl font-bold">{topApps.left.title}</h3>
               <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                Những ứng dụng AI được cộng đồng yêu thích nhất tuần.
+                {topApps.left.description}
               </p>
               <div className="mt-4">
-                <AppList items={topThisWeek} />
+                <AppList items={topApps.left.items} cta={topApps.button} />
               </div>
             </div>
           </ScrollReveal>
@@ -85,14 +72,16 @@ export function TopApps() {
           <ScrollReveal delay={0.1}>
             <div className="glass-card h-full rounded-3xl p-6">
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-                Thiết yếu
+                {topApps.right.eyebrow}
               </p>
-              <h3 className="mt-1 text-xl font-bold">Yêu thích tại Việt Nam</h3>
+              <h3 className="mt-1 text-xl font-bold">
+                {topApps.right.title}
+              </h3>
               <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                Các sản phẩm AI phổ biến nhất được người Việt tin dùng.
+                {topApps.right.description}
               </p>
               <div className="mt-4">
-                <AppList items={vnFavourites} />
+                <AppList items={topApps.right.items} cta={topApps.button} />
               </div>
             </div>
           </ScrollReveal>

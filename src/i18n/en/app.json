@@ -1,0 +1,19 @@
+{
+  "topbar": {
+    "appName": "Astra AI",
+    "signOut": "Sign out"
+  },
+  "profile": {
+    "fallbackName": "User",
+    "stats": [
+      { "label": "Current plan", "value": "Starter" },
+      { "label": "Requests today", "value": "0" },
+      { "label": "Models accessed", "value": "1" }
+    ],
+    "upgrade": "Upgrade plan"
+  },
+  "feedback": {
+    "title": "Send feedback",
+    "description": "Help us improve Astra AI."
+  }
+}

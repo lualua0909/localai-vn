@@ -1,0 +1,110 @@
+{
+  "hero": {
+    "title": "LocalAI",
+    "tagline": [
+      "Every day, Vietnamese builders turn ideas into AI products.",
+      "This is where you discover, support, or become one of them."
+    ]
+  },
+  "macbook": {
+    "titleLine1": "A discovery hub for AI products",
+    "titleHighlight": "built by Vietnamese teams.",
+    "fallback": "LocalAI.vn",
+    "defaultTitle": "Discover AI products crafted by Vietnamese builders."
+  },
+  "models": {
+    "eyebrow": "Categories",
+    "title": "Explore by use case",
+    "description": "Find the right AI product across eight clearly organized categories.",
+    "categories": [
+      { "title": "Chatbots & Assistants", "desc": "AI conversations, customer support, virtual agents", "icon": "bot" },
+      { "title": "Image & Video", "desc": "Generate, edit, and create visuals with AI", "icon": "image" },
+      { "title": "Code Assistant", "desc": "Pair programming, code review, debugging", "icon": "code" },
+      { "title": "Education", "desc": "Tutoring, learning tools, exam prep", "icon": "education" },
+      { "title": "Finance", "desc": "Financial analysis, accounting, investing", "icon": "finance" },
+      { "title": "Health", "desc": "Diagnostics, health advice, research", "icon": "health" },
+      { "title": "Utilities", "desc": "Productivity tools, automation, OCR", "icon": "utility" },
+      { "title": "Content creation", "desc": "Blogging, marketing, social content", "icon": "content" }
+    ]
+  },
+  "topApps": {
+    "title": "Top AI apps",
+    "button": "View",
+    "left": {
+      "eyebrow": "Trending",
+      "title": "Top this week",
+      "description": "Community favorites from the past 7 days.",
+      "items": [
+        { "name": "VietGPT", "desc": "Smart Vietnamese-language chatbot", "color": "bg-blue-500", "initial": "V" },
+        { "name": "PixelAI Studio", "desc": "Create product images with AI", "color": "bg-purple-500", "initial": "P" },
+        { "name": "CodeBuddy VN", "desc": "AI coding assistant", "color": "bg-emerald-500", "initial": "C" },
+        { "name": "EduMentor", "desc": "Personalized AI tutoring", "color": "bg-amber-500", "initial": "E" },
+        { "name": "DataSense", "desc": "Automated data insights", "color": "bg-rose-500", "initial": "D" }
+      ]
+    },
+    "right": {
+      "eyebrow": "Essentials",
+      "title": "Vietnam's favorites",
+      "description": "Popular AI products Vietnamese users rely on.",
+      "items": [
+        { "name": "VoiceAI Việt", "desc": "Speech-to-text for Vietnamese", "color": "bg-cyan-500", "initial": "V" },
+        { "name": "DocuScan AI", "desc": "OCR tailored for Vietnamese", "color": "bg-orange-500", "initial": "D" },
+        { "name": "MarketBot", "desc": "Automated AI marketing", "color": "bg-pink-500", "initial": "M" },
+        { "name": "HealthCheck AI", "desc": "AI-powered health advice", "color": "bg-teal-500", "initial": "H" },
+        { "name": "FinBot", "desc": "Smart finance assistant", "color": "bg-indigo-500", "initial": "F" }
+      ]
+    }
+  },
+  "studio": {
+    "eyebrow": "Just launched",
+    "title": "New products",
+    "description": "The newest Vietnamese AI products uploaded by the community.",
+    "trending": "Trending",
+    "products": [
+      { "name": "VietGPT", "desc": "Vietnamese-first AI chatbot with multi-context support", "category": "Chatbot", "stars": 342, "trending": true, "color": "bg-blue-500" },
+      { "name": "PixelAI Studio", "desc": "Create professional product shots in 30 seconds", "category": "Image", "stars": 218, "trending": true, "color": "bg-purple-500" },
+      { "name": "CodeBuddy VN", "desc": "Code assistant fluent in Vietnamese and 20+ languages", "category": "Code Assistant", "stars": 185, "trending": false, "color": "bg-emerald-500" },
+      { "name": "EduMentor", "desc": "Personalized AI tutor for university entrance and IELTS", "category": "Education", "stars": 156, "trending": true, "color": "bg-amber-500" },
+      { "name": "VoiceAI Việt", "desc": "Accurate Vietnamese speech-to-text (98%)", "category": "Voice", "stars": 127, "trending": false, "color": "bg-cyan-500" },
+      { "name": "DocuScan AI", "desc": "OCR for Vietnamese documents and handwriting", "category": "Utilities", "stars": 98, "trending": true, "color": "bg-orange-500" },
+      { "name": "FinBot", "desc": "AI finance coach for personal investing", "category": "Finance", "stars": 89, "trending": false, "color": "bg-indigo-500" },
+      { "name": "HealthCheck AI", "desc": "AI wellness coach tracking daily vitals", "category": "Health", "stars": 76, "trending": false, "color": "bg-rose-500" }
+    ]
+  },
+  "automations": {
+    "eyebrow": "Simple",
+    "title": "How it works",
+    "description": "Just 3 steps to get your AI product in front of thousands of Vietnamese users.",
+    "steps": [
+      { "title": "Create an account", "desc": "Sign up free in 30 seconds. Google and GitHub supported.", "color": "bg-blue-500/10 text-blue-500", "icon": "user" },
+      { "title": "Publish your AI product", "desc": "Add details, demo images, and links. The LocalAI team reviews within 24h.", "color": "bg-purple-500/10 text-purple-500", "icon": "upload" },
+      { "title": "Get discovered", "desc": "Show up on the homepage for votes, reviews, and shares from the AI community.", "color": "bg-emerald-500/10 text-emerald-500", "icon": "rocket" }
+    ]
+  },
+  "security": {
+    "eyebrow": "Benefits",
+    "title": "Why choose LocalAI?",
+    "description": "Built by the community, for the Vietnamese AI community.",
+    "benefits": [
+      { "title": "Free forever", "desc": "Explore and list products at no cost. We believe in growing the AI VN community.", "color": "bg-amber-500/10 text-amber-500", "icon": "zap" },
+      { "title": "Strong community", "desc": "Connect with thousands of developers, founders, and AI users in Vietnam.", "color": "bg-blue-500/10 text-blue-500", "icon": "users" },
+      { "title": "More visibility", "desc": "Your product reaches the right audience—people actively seeking AI solutions.", "color": "bg-purple-500/10 text-purple-500", "icon": "eye" },
+      { "title": "Made in Vietnam", "desc": "Proudly showcasing Vietnamese AI to the world. Bilingual Vietnamese-English.", "color": "bg-emerald-500/10 text-emerald-500", "icon": "globe" }
+    ]
+  },
+  "analytics": {
+    "eyebrow": "Metrics",
+    "title": "LocalAI by the numbers",
+    "description": "Vietnam's AI community grows every day.",
+    "stats": [
+      { "value": "500+", "label": "AI products", "desc": "listed on the platform" },
+      { "value": "10K+", "label": "Users", "desc": "discover products each month" },
+      { "value": "200+", "label": "Builders", "desc": "creating AI products" },
+      { "value": "50+", "label": "Partners", "desc": "tech companies collaborating" }
+    ]
+  },
+  "integrations": {
+    "title": "Trusted by leading companies",
+    "description": "Partners who have been with LocalAI from the start."
+  }
+}

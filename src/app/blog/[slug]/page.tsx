@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import { useTranslations } from "@/lib/i18n";
 
 function renderMarkdown(content: string) {
   const lines = content.split("\n");
@@ -152,6 +153,7 @@ export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
   const post = getBlogPost(slug);
+  const blogCopy = useTranslations("blogDetail");
 
   if (!post) {
     return (
@@ -159,16 +161,16 @@ export default function BlogPostPage() {
         <Header />
         <main className="flex min-h-[60vh] items-center justify-center pt-20">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Không tìm thấy bài viết</h1>
+            <h1 className="text-2xl font-bold">{blogCopy.notFound.title}</h1>
             <p className="mt-2 text-[var(--color-text-secondary)]">
-              Bài viết bạn đang tìm kiếm không tồn tại.
+              {blogCopy.notFound.description}
             </p>
             <Link
               href="/blog"
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
             >
               <ArrowLeft size={14} />
-              Quay lại Blog
+              {blogCopy.notFound.back}
             </Link>
           </div>
         </main>
@@ -194,7 +196,7 @@ export default function BlogPostPage() {
               className="inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
             >
               <ArrowLeft size={14} />
-              Quay lại Blog
+              {blogCopy.back}
             </Link>
           </div>
 
@@ -253,28 +255,27 @@ export default function BlogPostPage() {
             <div className="mt-10">
               <div className="glass-card flex items-center gap-5 rounded-2xl p-6">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent/10">
-                  <span className="text-lg font-bold text-accent">
-                    {post.author.charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">
-                    Viết bởi {post.author}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-                    Thành viên cộng đồng LocalAI. Đam mê công nghệ AI và chia sẻ
-                    kiến thức với cộng đồng developer Việt Nam.
-                  </p>
-                </div>
+                <span className="text-lg font-bold text-accent">
+                  {post.author.charAt(0)}
+                </span>
+              </div>
+              <div>
+                <p className="text-sm font-semibold">
+                  {blogCopy.authorBy.replace("{author}", post.author)}
+                </p>
+                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                  {blogCopy.authorBio}
+                </p>
               </div>
             </div>
+          </div>
           </TracingBeam>
         </article>
 
         {/* Related Posts */}
         <section className="container-main section-padding">
           <h2 className="mb-8 text-center text-xl font-bold">
-            Bài viết liên quan
+            {blogCopy.relatedTitle}
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((rp) => (

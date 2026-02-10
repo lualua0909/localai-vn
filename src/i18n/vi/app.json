@@ -1,0 +1,19 @@
+{
+  "topbar": {
+    "appName": "Astra AI",
+    "signOut": "Đăng xuất"
+  },
+  "profile": {
+    "fallbackName": "Người dùng",
+    "stats": [
+      { "label": "Gói hiện tại", "value": "Starter" },
+      { "label": "Requests hôm nay", "value": "0" },
+      { "label": "Models truy cập", "value": "1" }
+    ],
+    "upgrade": "Nâng cấp gói"
+  },
+  "feedback": {
+    "title": "Gửi phản hồi",
+    "description": "Giúp chúng tôi cải thiện Astra AI."
+  }
+}
