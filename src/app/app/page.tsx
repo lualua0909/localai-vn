@@ -3,10 +3,16 @@
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
-import { Search, Star, ChevronRight } from "lucide-react";
+import { Search, Star } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useIsMobile } from "@/hooks/useIsMobile";
+
+const ThreeDMarquee = dynamic(
+  () => import("@/components/ui/3d-marquee").then((m) => m.ThreeDMarquee),
+  { ssr: false }
+);
 
 const marqueeImages = [
   "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
@@ -39,7 +45,7 @@ const marqueeImages = [
   "https://assets.aceternity.com/multi-step-loader.png",
   "https://assets.aceternity.com/vortex.png",
   "https://assets.aceternity.com/wobble-card.png",
-  "https://assets.aceternity.com/world-map.webp",
+  "https://assets.aceternity.com/world-map.webp"
 ];
 
 type AppItem = {
@@ -53,7 +59,7 @@ type AppItem = {
 function AppRow({
   app,
   rank,
-  buttonLabel,
+  buttonLabel
 }: {
   app: AppItem;
   rank: number;
@@ -86,13 +92,7 @@ function AppRow({
   );
 }
 
-function AppCard({
-  app,
-  buttonLabel,
-}: {
-  app: AppItem;
-  buttonLabel: string;
-}) {
+function AppCard({ app }: { app: AppItem }) {
   return (
     <motion.div
       whileHover={{ y: -2, boxShadow: "0 0 24px rgba(0,0,0,0.12)" }}
@@ -116,9 +116,6 @@ function AppCard({
           </span>
         </div>
       </div>
-      <button className="shrink-0 rounded-full bg-[var(--color-text)]/10 px-3 py-1 text-[12px] font-semibold text-accent">
-        {buttonLabel}
-      </button>
     </motion.div>
   );
 }
@@ -127,6 +124,7 @@ export default function ExplorePage() {
   const t = useTranslations("explore");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const isMobile = useIsMobile();
 
   const filteredApps = t.apps.filter((app) => {
     const matchCategory = !activeCategory || app.category === activeCategory;
@@ -143,18 +141,20 @@ export default function ExplorePage() {
       <main className="min-h-screen pt-12 pb-10">
         {/* 3D Marquee Hero */}
         <div className="relative">
-          <ThreeDMarquee
-            images={marqueeImages}
-            className="h-[400px] max-[640px]:h-[320px]"
-          />
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+          {isMobile === false ? (
+            <ThreeDMarquee
+              images={marqueeImages}
+              className="h-[400px] max-[640px]:h-[320px]"
+            />
+          ) : null}
+          {/* <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               {t.title}
             </h1>
             <p className="mt-3 max-w-md text-base text-[var(--color-text-secondary)]">
               {t.subtitle}
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="container-main">
@@ -176,7 +176,7 @@ export default function ExplorePage() {
           {/* Top Free + Top Paid */}
           <div className="mb-10 grid gap-6 lg:grid-cols-2">
             {/* Top Free */}
-            <div>
+            {/* <div>
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-bold">{t.topFree.title}</h2>
                 <button className="flex items-center gap-0.5 text-sm font-medium text-accent">
@@ -194,10 +194,10 @@ export default function ExplorePage() {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Top Paid */}
-            <div>
+            {/* <div>
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-bold">{t.topPaid.title}</h2>
                 <button className="flex items-center gap-0.5 text-sm font-medium text-accent">
@@ -215,21 +215,20 @@ export default function ExplorePage() {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Discover section */}
           <div className="mb-10">
-            <h2 className="mb-4 text-lg font-bold">{t.discover.title}</h2>
-
             {/* Category pills */}
             <div className="scrollbar-hide mb-6 flex gap-2 overflow-x-auto">
               <button
                 onClick={() => setActiveCategory(null)}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${!activeCategory
-                  ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                  : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
-                  }`}
+                className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                  !activeCategory
+                    ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                    : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
+                }`}
               >
                 {t.filterAll}
               </button>
@@ -239,10 +238,11 @@ export default function ExplorePage() {
                   onClick={() =>
                     setActiveCategory(activeCategory === cat ? null : cat)
                   }
-                  className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${activeCategory === cat
-                    ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                    : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
-                    }`}
+                  className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                    activeCategory === cat
+                      ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                      : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
+                  }`}
                 >
                   {cat}
                 </button>
@@ -252,11 +252,7 @@ export default function ExplorePage() {
             {/* App grid */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {filteredApps.map((app) => (
-                <AppCard
-                  key={app.name}
-                  app={app}
-                  buttonLabel={t.getButton}
-                />
+                <AppCard key={app.name} app={app} />
               ))}
             </div>
 
