@@ -1,0 +1,74 @@
+{
+  "title": "AI Apps",
+  "subtitle": "Discover the best AI products built by Vietnamese teams",
+  "searchPlaceholder": "Search apps...",
+  "getButton": "Get",
+  "filterAll": "All",
+  "noResults": "No matching apps found",
+  "featured": [
+    {
+      "eyebrow": "NEW APP",
+      "name": "VietGPT",
+      "tagline": "Vietnam's #1 AI Chatbot",
+      "desc": "Experience the smartest Vietnamese AI chatbot with multi-context support.",
+      "gradient": "from-blue-600 to-cyan-500"
+    },
+    {
+      "eyebrow": "FEATURED",
+      "name": "PixelAI Studio",
+      "tagline": "Unlimited Image Creation",
+      "desc": "Create professional product images with AI in 30 seconds.",
+      "gradient": "from-purple-600 to-pink-500"
+    },
+    {
+      "eyebrow": "TRENDING",
+      "name": "EduMentor",
+      "tagline": "AI Tutoring Reimagined",
+      "desc": "Personalized learning paths with AI. 3x more effective.",
+      "gradient": "from-amber-500 to-orange-600"
+    }
+  ],
+  "topFree": {
+    "title": "Top Free",
+    "seeAll": "See All"
+  },
+  "topPaid": {
+    "title": "Top Paid",
+    "seeAll": "See All"
+  },
+  "discover": {
+    "title": "Discover More"
+  },
+  "categories": [
+    "Chatbot",
+    "Image",
+    "Code Assistant",
+    "Education",
+    "Finance",
+    "Health",
+    "Utilities",
+    "Creative"
+  ],
+  "apps": [
+    { "name": "VietGPT", "desc": "Smart Vietnamese AI chatbot", "category": "Chatbot", "rating": "4.8", "reviews": "2.1K" },
+    { "name": "PixelAI Studio", "desc": "Create product images with AI", "category": "Image", "rating": "4.7", "reviews": "1.5K" },
+    { "name": "CodeBuddy VN", "desc": "AI coding assistant", "category": "Code Assistant", "rating": "4.6", "reviews": "980" },
+    { "name": "EduMentor", "desc": "Personalized AI tutoring", "category": "Education", "rating": "4.9", "reviews": "3.2K" },
+    { "name": "VoiceAI Việt", "desc": "Vietnamese speech-to-text", "category": "Utilities", "rating": "4.5", "reviews": "870" },
+    { "name": "DocuScan AI", "desc": "Smart OCR for Vietnamese", "category": "Utilities", "rating": "4.4", "reviews": "650" },
+    { "name": "MarketBot", "desc": "AI-powered marketing automation", "category": "Creative", "rating": "4.3", "reviews": "520" },
+    { "name": "HealthCheck AI", "desc": "AI health advisor", "category": "Health", "rating": "4.6", "reviews": "1.1K" },
+    { "name": "FinBot", "desc": "Smart finance assistant", "category": "Finance", "rating": "4.5", "reviews": "780" },
+    { "name": "DataSense", "desc": "Automated data insights", "category": "Utilities", "rating": "4.4", "reviews": "430" },
+    { "name": "TranslateVN", "desc": "Accurate Vietnamese-English AI translation", "category": "Utilities", "rating": "4.7", "reviews": "2.5K" },
+    { "name": "StoryAI", "desc": "AI creative content generator", "category": "Creative", "rating": "4.3", "reviews": "380" },
+    { "name": "LegalAI VN", "desc": "AI legal advisor in Vietnamese", "category": "Utilities", "rating": "4.2", "reviews": "290" },
+    { "name": "FarmSmart", "desc": "Smart agriculture AI assistant", "category": "Utilities", "rating": "4.1", "reviews": "210" },
+    { "name": "TutorMath", "desc": "AI math solver and tutor", "category": "Education", "rating": "4.8", "reviews": "1.8K" },
+    { "name": "PhotoFix AI", "desc": "AI photo editing and restoration", "category": "Image", "rating": "4.5", "reviews": "920" },
+    { "name": "ChatDoc", "desc": "Chat with PDF documents using AI", "category": "Chatbot", "rating": "4.6", "reviews": "1.3K" },
+    { "name": "MusicGen VN", "desc": "AI music composition", "category": "Creative", "rating": "4.0", "reviews": "180" },
+    { "name": "ResumeAI", "desc": "Professional AI resume builder", "category": "Utilities", "rating": "4.4", "reviews": "560" },
+    { "name": "SpeechCoach", "desc": "AI English pronunciation coach", "category": "Education", "rating": "4.7", "reviews": "1.4K" }
+  ]
+}

@@ -54,12 +54,9 @@ export function AstraStudio() {
                     <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <img
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl object-cover"
-                          src={
-                            product?.photoURL ||
-                            "https://placehold.co/60x60#eee/white"
-                          }
-                          alt="Product avatar"
+                          className="h-10 w-10 shrink-0 rounded-xl object-cover"
+                          src={(product as any).photoURL || "https://placehold.co/60x60/eee/white"}
+                          alt={product.name}
                         />
                         <div>
                           <h3 className="text-sm font-semibold">{product.name}</h3>

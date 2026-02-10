@@ -1,0 +1,74 @@
+{
+  "title": "Ứng dụng AI",
+  "subtitle": "Khám phá các sản phẩm AI tốt nhất do người Việt xây dựng",
+  "searchPlaceholder": "Tìm kiếm ứng dụng...",
+  "getButton": "Xem",
+  "filterAll": "Tất cả",
+  "noResults": "Không tìm thấy ứng dụng phù hợp",
+  "featured": [
+    {
+      "eyebrow": "ỨNG DỤNG MỚI",
+      "name": "VietGPT",
+      "tagline": "Chatbot AI #1 Việt Nam",
+      "desc": "Trải nghiệm chatbot AI tiếng Việt thông minh nhất, hỗ trợ đa ngữ cảnh.",
+      "gradient": "from-blue-600 to-cyan-500"
+    },
+    {
+      "eyebrow": "NỔI BẬT",
+      "name": "PixelAI Studio",
+      "tagline": "Sáng tạo hình ảnh không giới hạn",
+      "desc": "Tạo ảnh sản phẩm chuyên nghiệp bằng AI trong 30 giây.",
+      "gradient": "from-purple-600 to-pink-500"
+    },
+    {
+      "eyebrow": "XU HƯỚNG",
+      "name": "EduMentor",
+      "tagline": "Gia sư AI thời đại mới",
+      "desc": "Cá nhân hoá lộ trình học tập với AI. Hiệu quả gấp 3 lần.",
+      "gradient": "from-amber-500 to-orange-600"
+    }
+  ],
+  "topFree": {
+    "title": "Top miễn phí",
+    "seeAll": "Xem tất cả"
+  },
+  "topPaid": {
+    "title": "Top trả phí",
+    "seeAll": "Xem tất cả"
+  },
+  "discover": {
+    "title": "Khám phá thêm"
+  },
+  "categories": [
+    "Chatbot",
+    "Tạo ảnh",
+    "Code Assistant",
+    "Giáo dục",
+    "Tài chính",
+    "Y tế",
+    "Tiện ích",
+    "Sáng tạo"
+  ],
+  "apps": [
+    { "name": "VietGPT", "desc": "Chatbot AI tiếng Việt thông minh", "category": "Chatbot", "rating": "4.8", "reviews": "2.1K" },
+    { "name": "PixelAI Studio", "desc": "Tạo ảnh sản phẩm bằng AI", "category": "Tạo ảnh", "rating": "4.7", "reviews": "1.5K" },
+    { "name": "CodeBuddy VN", "desc": "Trợ lý lập trình AI", "category": "Code Assistant", "rating": "4.6", "reviews": "980" },
+    { "name": "EduMentor", "desc": "Gia sư AI cá nhân hoá", "category": "Giáo dục", "rating": "4.9", "reviews": "3.2K" },
+    { "name": "VoiceAI Việt", "desc": "Chuyển giọng nói thành văn bản", "category": "Tiện ích", "rating": "4.5", "reviews": "870" },
+    { "name": "DocuScan AI", "desc": "OCR thông minh cho tiếng Việt", "category": "Tiện ích", "rating": "4.4", "reviews": "650" },
+    { "name": "MarketBot", "desc": "Tự động hoá marketing bằng AI", "category": "Sáng tạo", "rating": "4.3", "reviews": "520" },
+    { "name": "HealthCheck AI", "desc": "Tư vấn sức khoẻ bằng AI", "category": "Y tế", "rating": "4.6", "reviews": "1.1K" },
+    { "name": "FinBot", "desc": "Trợ lý tài chính thông minh", "category": "Tài chính", "rating": "4.5", "reviews": "780" },
+    { "name": "DataSense", "desc": "Phân tích dữ liệu tự động", "category": "Tiện ích", "rating": "4.4", "reviews": "430" },
+    { "name": "TranslateVN", "desc": "Dịch thuật AI Việt-Anh chính xác", "category": "Tiện ích", "rating": "4.7", "reviews": "2.5K" },
+    { "name": "StoryAI", "desc": "Tạo nội dung sáng tạo bằng AI", "category": "Sáng tạo", "rating": "4.3", "reviews": "380" },
+    { "name": "LegalAI VN", "desc": "Tư vấn pháp luật AI tiếng Việt", "category": "Tiện ích", "rating": "4.2", "reviews": "290" },
+    { "name": "FarmSmart", "desc": "AI hỗ trợ nông nghiệp thông minh", "category": "Tiện ích", "rating": "4.1", "reviews": "210" },
+    { "name": "TutorMath", "desc": "Giải toán và giảng dạy bằng AI", "category": "Giáo dục", "rating": "4.8", "reviews": "1.8K" },
+    { "name": "PhotoFix AI", "desc": "Chỉnh sửa và phục hồi ảnh bằng AI", "category": "Tạo ảnh", "rating": "4.5", "reviews": "920" },
+    { "name": "ChatDoc", "desc": "Chat với tài liệu PDF bằng AI", "category": "Chatbot", "rating": "4.6", "reviews": "1.3K" },
+    { "name": "MusicGen VN", "desc": "Sáng tác nhạc bằng AI", "category": "Sáng tạo", "rating": "4.0", "reviews": "180" },
+    { "name": "ResumeAI", "desc": "Tạo CV chuyên nghiệp với AI", "category": "Tiện ích", "rating": "4.4", "reviews": "560" },
+    { "name": "SpeechCoach", "desc": "Luyện phát âm tiếng Anh với AI", "category": "Giáo dục", "rating": "4.7", "reviews": "1.4K" }
+  ]
+}

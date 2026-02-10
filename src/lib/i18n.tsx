@@ -9,6 +9,7 @@ import enBlog from "@/i18n/en/blog.json";
 import enBlogDetail from "@/i18n/en/blogDetail.json";
 import enSignin from "@/i18n/en/signin.json";
 import enApp from "@/i18n/en/app.json";
+import enExplore from "@/i18n/en/explore.json";
 import enFeedback from "@/i18n/en/feedback.json";
 import enMeta from "@/i18n/en/meta.json";
 
@@ -19,6 +20,7 @@ import viBlog from "@/i18n/vi/blog.json";
 import viBlogDetail from "@/i18n/vi/blogDetail.json";
 import viSignin from "@/i18n/vi/signin.json";
 import viApp from "@/i18n/vi/app.json";
+import viExplore from "@/i18n/vi/explore.json";
 import viFeedback from "@/i18n/vi/feedback.json";
 import viMeta from "@/i18n/vi/meta.json";
 
@@ -33,6 +35,7 @@ const translations = {
     blogDetail: enBlogDetail,
     signin: enSignin,
     app: enApp,
+    explore: enExplore,
     feedback: enFeedback,
     meta: enMeta,
   },
@@ -44,6 +47,7 @@ const translations = {
     blogDetail: viBlogDetail,
     signin: viSignin,
     app: viApp,
+    explore: viExplore,
     feedback: viFeedback,
     meta: viMeta,
   },

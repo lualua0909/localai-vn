@@ -7,6 +7,10 @@
         "href": "/"
       },
       {
+        "label": "Ứng dụng",
+        "href": "/app"
+      },
+      {
         "label": "Bảng giá",
         "href": "/bang-gia"
       },

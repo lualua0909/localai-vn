@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--color-border)] bg-[var(--color-bg-alt)]">
+    <footer className="bg-[var(--color-bg-alt)]">
       <div className="container-main section-padding">
         {/* Columns */}
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
@@ -36,7 +36,7 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-border)] pt-8 sm:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 pb-8 sm:flex-row">
           <p className="text-[13px] text-[var(--color-text-secondary)]">
             {footer.copyright.replace("{year}", String(year))}
           </p>

@@ -18,43 +18,40 @@ function AppList({
   items: AppItem[];
   onItemClick?: (item: AppItem) => void;
 }) {
-  return (
-    <div className="divide-y divide-[var(--color-border)]">
-      {items.map((app) => (
-        <motion.div
-          key={app.name}
-          whileHover={{
-            y: -2,
-            scale: 1.01,
-            boxShadow: "0 18px 40px -18px rgba(0,0,0,0.30)",
-          }}
-          whileTap={{ scale: 0.99 }}
-          className="flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 transition-colors hover:bg-[var(--color-text)]/[0.04]"
-          onClick={() => onItemClick?.(app)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onItemClick?.(app);
-            }
-          }}
-        >
-          <img
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl object-cover"
-            src={app.photoURL || "https://placehold.co/60x60#eee/white"}
-            alt="User avatar"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold leading-tight">{app.name}</p>
-            <p className="mt-0.5 text-[13px] text-[var(--color-text-secondary)]">
-              {app.desc}
-            </p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
+  return items.map((app) => (
+    <motion.div
+      key={app.name}
+      whileHover={{
+        y: -2,
+        scale: 1.01,
+        boxShadow: "0 0 24px rgba(0,0,0,0.12)",
+      }}
+      whileTap={{ scale: 0.99 }}
+      className="flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 transition-colors hover:bg-[var(--color-text)]/[0.04]"
+      onClick={() => onItemClick?.(app)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onItemClick?.(app);
+        }
+      }}
+    >
+      <img
+        className="h-11 w-11 shrink-0 rounded-xl object-cover"
+        src={app.photoURL || "https://placehold.co/60x60/eee/white"}
+        alt={app.name}
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold leading-tight">{app.name}</p>
+        <p className="mt-0.5 text-[13px] text-[var(--color-text-secondary)]">
+          {app.desc}
+        </p>
+      </div>
+    </motion.div>
+  ))
+
 }
 
 export function TopApps() {

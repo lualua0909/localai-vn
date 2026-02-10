@@ -12,4 +12,4 @@ fi
 
 # Fallback: standard next start
 echo "Running next start..."
-exec npx next start
+exec npx next dev

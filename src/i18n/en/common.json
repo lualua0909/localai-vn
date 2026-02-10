@@ -2,9 +2,8 @@
   "header": {
     "logo": "LocalAI",
     "navLinks": [
-      { "label": "Discover", "href": "#overview" },
-      { "label": "Categories", "href": "#categories" },
-      { "label": "Community", "href": "#community" },
+      { "label": "Home", "href": "/" },
+      { "label": "Apps", "href": "/app" },
       { "label": "Pricing", "href": "/bang-gia" },
       { "label": "Blog", "href": "/blog" }
     ],
