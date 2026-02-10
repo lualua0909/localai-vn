@@ -2,18 +2,19 @@
 
 import { ReactNode } from "react";
 import { ScrollReveal } from "./ScrollReveal";
+import { DottedGlowBackground } from "./dotted-glow-background";
+import { GlareCard } from "./glare-card";
 
 interface BentoItemProps {
   title: string;
   description: string;
-  icon?: ReactNode;
   className?: string;
   children?: ReactNode;
 }
 
 export function BentoGrid({
   children,
-  className = "",
+  className = ""
 }: {
   children: ReactNode;
   className?: string;
@@ -30,26 +31,20 @@ export function BentoGrid({
 export function BentoItem({
   title,
   description,
-  icon,
   className = "",
-  children,
+  children
 }: BentoItemProps) {
   return (
     <ScrollReveal>
-      <div
-        className={`glass-card group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${className}`}
+      <GlareCard
+        className={`glass-card relative overflow-hidden p-6 bg-white/85 text-[var(--color-text)] dark:bg-slate-900 border-[#fff] dark:border-slate-800 ${className}`}
       >
-        {icon && (
-          <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent">
-            {icon}
-          </div>
-        )}
         <h3 className="mb-2 text-base font-semibold">{title}</h3>
         <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
           {description}
         </p>
         {children}
-      </div>
+      </GlareCard>
     </ScrollReveal>
   );
 }

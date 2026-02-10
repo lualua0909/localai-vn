@@ -10,7 +10,7 @@ export function PricingSection() {
   const plans = pricing.plans;
 
   return (
-    <section id="pricing" className="section-padding">
+    <section id="pricing" className="section-padding mt-10">
       <div className="container-main">
         {/* Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center">
@@ -30,10 +30,11 @@ export function PricingSection() {
           {plans.map((plan, idx) => (
             <ScrollReveal key={plan.name} delay={idx * 0.1}>
               <div
-                className={`glass-card relative flex h-full flex-col rounded-3xl p-8 ${plan.popular
-                  ? "ring-2 ring-accent shadow-lg shadow-accent/10"
-                  : ""
-                  }`}
+                className={`glass-card relative flex h-full flex-col rounded-3xl p-8 ${
+                  plan.popular
+                    ? "ring-2 ring-accent shadow-lg shadow-accent/10"
+                    : ""
+                }`}
               >
                 {plan.popular && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-[13px] font-semibold text-white">

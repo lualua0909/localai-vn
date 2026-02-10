@@ -11,6 +11,9 @@ import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { parseReviews } from "@/util";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+
+import Link from "next/link";
 
 const ThreeDMarquee = dynamic(
   () => import("@/components/ui/3d-marquee").then((m) => m.ThreeDMarquee),
@@ -51,6 +54,8 @@ const marqueeImages = [
   "https://assets.aceternity.com/world-map.webp"
 ];
 
+import { AppCard } from "@/components/app/AppCard";
+
 type AppItem = {
   name: string;
   desc: string;
@@ -58,34 +63,6 @@ type AppItem = {
   rating: string;
   reviews: string;
 };
-
-function AppCard({ app }: { app: AppItem }) {
-  return (
-    <motion.div
-      whileHover={{ y: -2, boxShadow: "0 0 24px rgba(0,0,0,0.12)" }}
-      whileTap={{ scale: 0.99 }}
-      className="glass-card flex cursor-pointer items-start gap-3 rounded-2xl p-4"
-    >
-      <img
-        className="h-14 w-14 shrink-0 rounded-xl object-cover"
-        src="https://placehold.co/60x60/eee/white"
-        alt={app.name}
-      />
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-tight">{app.name}</p>
-        <p className="mt-0.5 text-[12px] text-[var(--color-text-secondary)]">
-          {app.category}
-        </p>
-        <div className="mt-1.5 flex items-center gap-1">
-          <Star size={10} className="text-amber-500" />
-          <span className="text-[11px] text-[var(--color-text-secondary)]">
-            {app.rating} ({app.reviews})
-          </span>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 function ExploreContent() {
   const t = useTranslations("explore");

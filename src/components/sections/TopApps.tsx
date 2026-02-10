@@ -3,6 +3,7 @@
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
+import { GlowingEffect } from "../ui/glowing-effect";
 
 interface AppItem {
   name: string;
@@ -13,7 +14,7 @@ interface AppItem {
 
 function AppList({
   items,
-  onItemClick,
+  onItemClick
 }: {
   items: AppItem[];
   onItemClick?: (item: AppItem) => void;
@@ -23,11 +24,10 @@ function AppList({
       key={app.name}
       whileHover={{
         y: -2,
-        scale: 1.01,
-        boxShadow: "0 0 24px rgba(0,0,0,0.12)",
+        scale: 1.01
       }}
       whileTap={{ scale: 0.99 }}
-      className="flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 transition-colors hover:bg-[var(--color-text)]/[0.04]"
+      className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5"
       onClick={() => onItemClick?.(app)}
       role="button"
       tabIndex={0}
@@ -38,6 +38,13 @@ function AppList({
         }
       }}
     >
+      <GlowingEffect
+        spread={40}
+        glow={true}
+        disabled={false}
+        proximity={64}
+        inactiveZone={0.01}
+      />
       <img
         className="h-11 w-11 shrink-0 rounded-xl object-cover"
         src={app.photoURL || "https://placehold.co/60x60/eee/white"}
@@ -50,8 +57,7 @@ function AppList({
         </p>
       </div>
     </motion.div>
-  ))
-
+  ));
 }
 
 export function TopApps() {
@@ -96,9 +102,7 @@ export function TopApps() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
                 {topApps.right.eyebrow}
               </p>
-              <h3 className="mt-1 text-xl font-bold">
-                {topApps.right.title}
-              </h3>
+              <h3 className="mt-1 text-xl font-bold">{topApps.right.title}</h3>
               <p className="mt-1 text-[13px] text-[var(--color-text-secondary)]">
                 {topApps.right.description}
               </p>

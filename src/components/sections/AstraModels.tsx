@@ -2,7 +2,16 @@
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { BentoGrid, BentoItem } from "@/components/ui/BentoGrid";
-import { Bot, Image, Code2, GraduationCap, Banknote, HeartPulse, Wrench, Sparkles } from "lucide-react";
+import {
+  Bot,
+  Image,
+  Code2,
+  GraduationCap,
+  Banknote,
+  HeartPulse,
+  Wrench,
+  Sparkles
+} from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 
 export function AstraModels() {
@@ -16,12 +25,12 @@ export function AstraModels() {
       finance: <Banknote size={18} />,
       health: <HeartPulse size={18} />,
       utility: <Wrench size={18} />,
-      content: <Sparkles size={18} />,
+      content: <Sparkles size={18} />
     };
 
     return {
       ...cat,
-      icon: iconMap[cat.icon as keyof typeof iconMap] ?? <Sparkles size={18} />,
+      icon: iconMap[cat.icon as keyof typeof iconMap] ?? <Sparkles size={18} />
     };
   });
 
@@ -45,7 +54,6 @@ export function AstraModels() {
             {categories.map((cat, idx) => (
               <ScrollReveal key={cat.title} delay={idx * 0.05}>
                 <BentoItem
-                  icon={cat.icon}
                   title={cat.title}
                   description={cat.desc}
                   className="cursor-pointer"

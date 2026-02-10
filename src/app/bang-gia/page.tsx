@@ -9,10 +9,8 @@ export default function BangGiaPage() {
   return (
     <>
       <Header />
-      <main className="pt-20">
-        <PricingSection />
-        <Footnotes />
-      </main>
+      <PricingSection />
+      <Footnotes />
       <Footer />
     </>
   );

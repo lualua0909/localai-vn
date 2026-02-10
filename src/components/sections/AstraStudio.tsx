@@ -5,6 +5,7 @@ import { Spotlight } from "@/components/ui/Spotlight";
 import { ArrowUpRight, Star, TrendingUp } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
+import { GlowingEffect } from "../ui/glowing-effect";
 
 export function AstraStudio() {
   const studio = useTranslations("home").studio;
@@ -34,8 +35,7 @@ export function AstraStudio() {
               <motion.div
                 whileHover={{
                   y: -2,
-                  scale: 1.01,
-                  boxShadow: "0 20px 50px -20px rgba(0,0,0,0.32)",
+                  scale: 1.01
                 }}
                 whileTap={{ scale: 0.99 }}
                 className="h-full cursor-pointer"
@@ -49,45 +49,61 @@ export function AstraStudio() {
                   }
                 }}
               >
-                <Spotlight className="h-full rounded-3xl">
-                  <div className="glass-card flex h-full flex-col rounded-3xl p-6">
-                    <div className="mb-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <img
-                          className="h-10 w-10 shrink-0 rounded-xl object-cover"
-                          src={(product as any).photoURL || "https://placehold.co/60x60/eee/white"}
-                          alt={product.name}
-                        />
-                        <div>
-                          <h3 className="text-sm font-semibold">{product.name}</h3>
-                          <span className="text-[10px] text-[var(--color-text-secondary)]">
-                            {product.category}
-                          </span>
-                        </div>
+                <div className="glass-card flex h-full flex-col rounded-3xl p-6">
+                  <GlowingEffect
+                    spread={40}
+                    glow={true}
+                    disabled={false}
+                    proximity={64}
+                    inactiveZone={0.01}
+                    borderWidth={2}
+                  />
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img
+                        className="h-10 w-10 shrink-0 rounded-xl object-cover"
+                        src={
+                          (product as any).photoURL ||
+                          "https://placehold.co/60x60/eee/white"
+                        }
+                        alt={product.name}
+                      />
+                      <div>
+                        <h3 className="text-sm font-semibold">
+                          {product.name}
+                        </h3>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">
+                          {product.category}
+                        </span>
                       </div>
-                      <ArrowUpRight size={16} className="text-[var(--color-text-secondary)]" />
                     </div>
-
-                    <p className="flex-1 text-sm text-[var(--color-text-secondary)]">
-                      {product.desc}
-                    </p>
-
-                    <div className="mt-4 flex items-center gap-3">
-                      <div className="flex items-center gap-1">
-                        <Star size={12} className="text-amber-500" />
-                        <span className="text-[13px] font-medium">{product.stars}</span>
-                      </div>
-                      {product.trending && (
-                        <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5">
-                          <TrendingUp size={10} className="text-emerald-500" />
-                          <span className="text-[10px] font-medium text-emerald-500">
-                            {studio.trending}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    <ArrowUpRight
+                      size={16}
+                      className="text-[var(--color-text-secondary)]"
+                    />
                   </div>
-                </Spotlight>
+
+                  <p className="flex-1 text-sm text-[var(--color-text-secondary)]">
+                    {product.desc}
+                  </p>
+
+                  <div className="mt-4 flex items-center gap-3">
+                    <div className="flex items-center gap-1">
+                      <Star size={12} className="text-amber-500" />
+                      <span className="text-[13px] font-medium">
+                        {product.stars}
+                      </span>
+                    </div>
+                    {product.trending && (
+                      <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5">
+                        <TrendingUp size={10} className="text-emerald-500" />
+                        <span className="text-[10px] font-medium text-emerald-500">
+                          {studio.trending}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             </ScrollReveal>
           ))}

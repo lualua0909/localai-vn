@@ -22,17 +22,15 @@ import {
   IconWorld,
   IconCommand,
   IconCaretLeftFilled,
-  IconCaretDownFilled,
+  IconCaretDownFilled
 } from "@tabler/icons-react";
 
 export const MacbookScroll = ({
   src,
-  showGradient,
   title,
-  badge,
+  badge
 }: {
   src?: string;
-  showGradient?: boolean;
   title?: string | React.ReactNode;
   badge?: React.ReactNode;
 }) => {
@@ -40,7 +38,7 @@ export const MacbookScroll = ({
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end start"]
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -62,11 +60,7 @@ export const MacbookScroll = ({
     [0.6, isMobile ? 1 : 1.5]
   );
   const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
-  const rotate = useTransform(
-    scrollYProgress,
-    [0.1, 0.12, 0.3],
-    [-28, -28, 0]
-  );
+  const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
@@ -78,15 +72,11 @@ export const MacbookScroll = ({
       <motion.h2
         style={{
           translateY: textTransform,
-          opacity: textOpacity,
+          opacity: textOpacity
         }}
         className="mb-20 text-center text-3xl font-bold text-[var(--color-text)]"
       >
-        {title || (
-          <span>
-            {home.macbook.defaultTitle}
-          </span>
-        )}
+        {title || <span>{home.macbook.defaultTitle}</span>}
       </motion.h2>
       {/* Lid */}
       <Lid
@@ -116,9 +106,6 @@ export const MacbookScroll = ({
         </div>
         <Trackpad />
         <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
-        {showGradient && (
-          <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
-        )}
         {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
       </div>
     </div>
@@ -131,7 +118,7 @@ export const Lid = ({
   rotate,
   translate,
   src,
-  fallbackTitle,
+  fallbackTitle
 }: {
   scaleX: MotionValue<number>;
   scaleY: MotionValue<number>;
@@ -146,13 +133,13 @@ export const Lid = ({
         style={{
           transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
           transformOrigin: "bottom",
-          transformStyle: "preserve-3d",
+          transformStyle: "preserve-3d"
         }}
         className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div
           style={{
-            boxShadow: "0px 2px 0px 2px #171717 inset",
+            boxShadow: "0px 2px 0px 2px #171717 inset"
           }}
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
@@ -168,7 +155,7 @@ export const Lid = ({
           rotateX: rotate,
           translateY: translate,
           transformStyle: "preserve-3d",
-          transformOrigin: "top",
+          transformOrigin: "top"
         }}
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
@@ -196,7 +183,7 @@ export const Trackpad = () => {
     <div
       className="mx-auto my-1 h-32 w-[40%] rounded-xl"
       style={{
-        boxShadow: "0px 0px 1px 1px #00000020 inset",
+        boxShadow: "0px 0px 1px 1px #00000020 inset"
       }}
     ></div>
   );
@@ -338,16 +325,36 @@ export const Keypad = () => {
         >
           tab
         </KBtn>
-        <KBtn><span className="block">Q</span></KBtn>
-        <KBtn><span className="block">W</span></KBtn>
-        <KBtn><span className="block">E</span></KBtn>
-        <KBtn><span className="block">R</span></KBtn>
-        <KBtn><span className="block">T</span></KBtn>
-        <KBtn><span className="block">Y</span></KBtn>
-        <KBtn><span className="block">U</span></KBtn>
-        <KBtn><span className="block">I</span></KBtn>
-        <KBtn><span className="block">O</span></KBtn>
-        <KBtn><span className="block">P</span></KBtn>
+        <KBtn>
+          <span className="block">Q</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">W</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">E</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">R</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">T</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">Y</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">U</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">I</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">O</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">P</span>
+        </KBtn>
         <KBtn>
           <span className="block">{`{`}</span>
           <span className="block">{`[`}</span>
@@ -370,15 +377,33 @@ export const Keypad = () => {
         >
           caps lock
         </KBtn>
-        <KBtn><span className="block">A</span></KBtn>
-        <KBtn><span className="block">S</span></KBtn>
-        <KBtn><span className="block">D</span></KBtn>
-        <KBtn><span className="block">F</span></KBtn>
-        <KBtn><span className="block">G</span></KBtn>
-        <KBtn><span className="block">H</span></KBtn>
-        <KBtn><span className="block">J</span></KBtn>
-        <KBtn><span className="block">K</span></KBtn>
-        <KBtn><span className="block">L</span></KBtn>
+        <KBtn>
+          <span className="block">A</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">S</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">D</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">F</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">G</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">H</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">J</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">K</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">L</span>
+        </KBtn>
         <KBtn>
           <span className="block">{`:`}</span>
           <span className="block">{`;`}</span>
@@ -403,13 +428,27 @@ export const Keypad = () => {
         >
           shift
         </KBtn>
-        <KBtn><span className="block">Z</span></KBtn>
-        <KBtn><span className="block">X</span></KBtn>
-        <KBtn><span className="block">C</span></KBtn>
-        <KBtn><span className="block">V</span></KBtn>
-        <KBtn><span className="block">B</span></KBtn>
-        <KBtn><span className="block">N</span></KBtn>
-        <KBtn><span className="block">M</span></KBtn>
+        <KBtn>
+          <span className="block">Z</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">X</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">C</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">V</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">B</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">N</span>
+        </KBtn>
+        <KBtn>
+          <span className="block">M</span>
+        </KBtn>
         <KBtn>
           <span className="block">{`<`}</span>
           <span className="block">{`,`}</span>
@@ -512,7 +551,7 @@ export const KBtn = ({
   className,
   children,
   childrenClassName,
-  backlit = true,
+  backlit = true
 }: {
   className?: string;
   children?: React.ReactNode;
@@ -533,7 +572,7 @@ export const KBtn = ({
         )}
         style={{
           boxShadow:
-            "0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset",
+            "0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset"
         }}
       >
         <div
@@ -557,7 +596,7 @@ export const SpeakerGrid = () => {
       style={{
         backgroundImage:
           "radial-gradient(circle, #08080A 0.5px, transparent 0.5px)",
-        backgroundSize: "3px 3px",
+        backgroundSize: "3px 3px"
       }}
     ></div>
   );

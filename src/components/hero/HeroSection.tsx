@@ -8,7 +8,7 @@ import { useTranslations } from "@/lib/i18n";
 const MacbookScroll = dynamic(
   () =>
     import("@/components/ui/macbook-scroll").then((m) => ({
-      default: m.MacbookScroll,
+      default: m.MacbookScroll
     })),
   { ssr: false }
 );
@@ -18,10 +18,7 @@ export function HeroSection() {
   const [taglineLine1, taglineLine2] = home.hero.tagline;
 
   return (
-    <section
-      id="overview"
-      className="relative overflow-hidden"
-    >
+    <section id="overview" className="relative overflow-hidden">
       <BackgroundRippleEffect />
 
       {/* Text Hover Effect Title */}
@@ -43,10 +40,11 @@ export function HeroSection() {
             <span className="text-[var(--color-text)]">
               {home.macbook.titleLine1}
               <br />
-              <span className="text-gradient">{home.macbook.titleHighlight}</span>
+              <span className="text-gradient">
+                {home.macbook.titleHighlight}
+              </span>
             </span>
           }
-          showGradient={true}
         />
       </div>
     </section>
