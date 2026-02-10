@@ -48,7 +48,7 @@ export function LogosWithBlurFlip({ logoSets }: { logoSets?: Logo[][] }) {
   return (
     <section id="customers" className="section-padding">
       <div className="container-main">
-        <div className="relative z-20 px-4 py-10 md:px-8 md:py-20">
+        <div className="relative z-20 px-4 pt-10 md:px-8 md:pt-20">
           <h2 className="text-center text-section-title font-bold text-[var(--color-text)]">
             {home.integrations.title}
           </h2>

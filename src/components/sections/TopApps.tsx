@@ -1,39 +1,57 @@
 "use client";
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
+import { motion } from "framer-motion";
 
 interface AppItem {
   name: string;
   desc: string;
   color: string;
-  initial: string;
+  photoURL?: string;
 }
 
-function AppList({ items, cta }: { items: AppItem[]; cta: string }) {
+function AppList({
+  items,
+  onItemClick,
+}: {
+  items: AppItem[];
+  onItemClick?: (item: AppItem) => void;
+}) {
   return (
     <div className="divide-y divide-[var(--color-border)]">
       {items.map((app) => (
-        <div
+        <motion.div
           key={app.name}
-          className="flex items-center gap-4 py-3.5 transition-colors hover:bg-[var(--color-text)]/[0.02]"
+          whileHover={{
+            y: -2,
+            scale: 1.01,
+            boxShadow: "0 18px 40px -18px rgba(0,0,0,0.30)",
+          }}
+          whileTap={{ scale: 0.99 }}
+          className="flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 transition-colors hover:bg-[var(--color-text)]/[0.04]"
+          onClick={() => onItemClick?.(app)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onItemClick?.(app);
+            }
+          }}
         >
-          <div
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${app.color}`}
-          >
-            <span className="text-sm font-bold text-white">{app.initial}</span>
-          </div>
+          <img
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl object-cover"
+            src={app.photoURL || "https://placehold.co/60x60#eee/white"}
+            alt="User avatar"
+          />
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold leading-tight">{app.name}</p>
-            <p className="mt-0.5 text-[11px] text-[var(--color-text-secondary)]">
+            <p className="mt-0.5 text-[13px] text-[var(--color-text-secondary)]">
               {app.desc}
             </p>
           </div>
-          <button className="shrink-0 rounded-full bg-accent/10 px-3.5 py-1.5 text-[11px] font-semibold text-accent transition-colors hover:bg-accent/20">
-            {cta}
-          </button>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
@@ -41,6 +59,10 @@ function AppList({ items, cta }: { items: AppItem[]; cta: string }) {
 
 export function TopApps() {
   const topApps = useTranslations("home").topApps;
+  const handleCardClick = (item: AppItem) => {
+    // Replace with navigation when URLs are available
+    console.log("App card clicked:", item.name);
+  };
 
   return (
     <section id="top-apps" className="section-padding">
@@ -59,11 +81,14 @@ export function TopApps() {
                 {topApps.left.eyebrow}
               </p>
               <h3 className="mt-1 text-xl font-bold">{topApps.left.title}</h3>
-              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+              <p className="mt-1 text-[13px] text-[var(--color-text-secondary)]">
                 {topApps.left.description}
               </p>
               <div className="mt-4">
-                <AppList items={topApps.left.items} cta={topApps.button} />
+                <AppList
+                  items={topApps.left.items}
+                  onItemClick={handleCardClick}
+                />
               </div>
             </div>
           </ScrollReveal>
@@ -77,11 +102,14 @@ export function TopApps() {
               <h3 className="mt-1 text-xl font-bold">
                 {topApps.right.title}
               </h3>
-              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+              <p className="mt-1 text-[13px] text-[var(--color-text-secondary)]">
                 {topApps.right.description}
               </p>
               <div className="mt-4">
-                <AppList items={topApps.right.items} cta={topApps.button} />
+                <AppList
+                  items={topApps.right.items}
+                  onItemClick={handleCardClick}
+                />
               </div>
             </div>
           </ScrollReveal>

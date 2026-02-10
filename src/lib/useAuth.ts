@@ -7,12 +7,14 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signOut as firebaseSignOut,
   User,
 } from "firebase/auth";
 import { getFirebaseAuth } from "./firebase";
 
 const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -29,6 +31,10 @@ export function useAuth() {
 
   const signInWithGoogle = useCallback(async () => {
     return signInWithPopup(getFirebaseAuth(), googleProvider);
+  }, []);
+
+  const signInWithGithub = useCallback(async () => {
+    return signInWithPopup(getFirebaseAuth(), githubProvider);
   }, []);
 
   const signInWithEmail = useCallback(
@@ -53,6 +59,7 @@ export function useAuth() {
     user,
     loading,
     signInWithGoogle,
+    signInWithGithub,
     signInWithEmail,
     signUpWithEmail,
     signOut,

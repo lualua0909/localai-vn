@@ -16,7 +16,7 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
+              <h4 className="mb-4 text-[13px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
                 {col.title}
               </h4>
               <ul className="space-y-2.5">
@@ -24,7 +24,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
+                      className="text-[13px] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
                     >
                       {link.label}
                     </Link>
@@ -37,10 +37,10 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-border)] pt-8 sm:flex-row">
-          <p className="text-xs text-[var(--color-text-secondary)]">
+          <p className="text-[13px] text-[var(--color-text-secondary)]">
             {footer.copyright.replace("{year}", String(year))}
           </p>
-          <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
+          <div className="flex items-center gap-2 text-[13px] text-[var(--color-text-secondary)]">
             <span className="font-medium">{footer.languageLabel}</span>
             <select
               value={language}

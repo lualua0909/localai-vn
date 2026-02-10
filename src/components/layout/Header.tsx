@@ -49,7 +49,7 @@ export function Header() {
             <Link
               key={l.label}
               href={l.href}
-              className="focus-ring rounded-md text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
+              className="focus-ring rounded-md text-[13px] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
             >
               {l.label}
             </Link>
@@ -65,7 +65,7 @@ export function Header() {
 
           <Link
             href="/signin"
-            className="focus-ring rounded-full bg-[var(--color-text)] px-4 py-1.5 text-xs font-medium text-[var(--color-bg)] transition-opacity hover:opacity-80"
+            className="focus-ring rounded-full bg-[var(--color-text)] px-4 py-1.5 text-[13px] font-medium text-[var(--color-bg)] transition-opacity hover:opacity-80"
           >
             {common.header.signin}
           </Link>

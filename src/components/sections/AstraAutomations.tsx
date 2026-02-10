@@ -4,6 +4,12 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ArrowRight, UserPlus, Upload, Rocket } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 
+const colorClassMap: Record<string, string> = {
+  "bg-blue-500/10 text-blue-500": "bg-blue-500/10 text-blue-500",
+  "bg-purple-500/10 text-purple-500": "bg-purple-500/10 text-purple-500",
+  "bg-emerald-500/10 text-emerald-500": "bg-emerald-500/10 text-emerald-500",
+};
+
 export function AstraAutomations() {
   const automations = useTranslations("home").automations;
   const iconMap = {
@@ -20,7 +26,7 @@ export function AstraAutomations() {
     <section id="how-it-works" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
             {automations.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
@@ -41,7 +47,10 @@ export function AstraAutomations() {
                   </span>
                 </div>
 
-                <div className={`mb-4 mt-2 flex h-14 w-14 items-center justify-center rounded-2xl ${step.color}`}>
+                <div
+                  className={`mb-4 mt-2 flex h-14 w-14 items-center justify-center rounded-2xl ${colorClassMap[step.color] ?? "bg-neutral-200 text-neutral-700"
+                    }`}
+                >
                   {step.icon}
                 </div>
 

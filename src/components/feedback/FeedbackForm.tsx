@@ -75,11 +75,10 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
             >
               <Star
                 size={22}
-                className={`transition-colors ${
-                  star <= (hoverRating || rating)
+                className={`transition-colors ${star <= (hoverRating || rating)
                     ? "fill-amber-400 text-amber-400"
                     : "text-[var(--color-border)]"
-                }`}
+                  }`}
               />
             </button>
           ))}
@@ -103,7 +102,7 @@ export function FeedbackForm({ uid }: FeedbackFormProps) {
       </div>
 
       {status === "error" && (
-        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-500">
+        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-[13px] text-red-500">
           {copy.form.error}
         </p>
       )}

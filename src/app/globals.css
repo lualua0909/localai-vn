@@ -52,9 +52,18 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-      "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue",
-      Arial, sans-serif;
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Pro Display",
+      "SF Pro Text",
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
   }
 
   ::selection {
@@ -69,7 +78,7 @@
   }
 
   .section-padding {
-    @apply py-10 sm:py-14 lg:py-20;
+    @apply pt-10 sm:pt-14 lg:pt-20;
   }
 
   .text-gradient {

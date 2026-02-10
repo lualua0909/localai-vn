@@ -17,7 +17,7 @@ export default function BlogPage() {
         {/* Header */}
         <div className="container-main section-padding pb-0">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+            <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
               {blog.hero.eyebrow}
             </p>
             <h1 className="text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
@@ -65,10 +65,10 @@ export default function BlogPage() {
 
                     {/* Author & Date */}
                     <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4">
-                      <span className="text-xs font-medium">
+                      <span className="text-[13px] font-medium">
                         {post.author}
                       </span>
-                      <span className="text-[11px] text-[var(--color-text-secondary)]">
+                      <span className="text-[13px] text-[var(--color-text-secondary)]">
                         {post.date}
                       </span>
                     </div>

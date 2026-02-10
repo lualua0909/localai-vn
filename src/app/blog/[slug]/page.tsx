@@ -202,7 +202,7 @@ export default function BlogPostPage() {
 
           {/* Header */}
           <header className="mx-auto mt-8 max-w-3xl text-center">
-            <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+            <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-[13px] font-semibold text-accent">
               {post.category}
             </span>
 
@@ -223,7 +223,7 @@ export default function BlogPostPage() {
               </div>
               <div className="text-left">
                 <p className="text-sm font-medium">{post.author}</p>
-                <p className="text-xs text-[var(--color-text-secondary)]">
+                <p className="text-[13px] text-[var(--color-text-secondary)]">
                   {post.date} · {post.readTime}
                 </p>
               </div>
@@ -255,20 +255,20 @@ export default function BlogPostPage() {
             <div className="mt-10">
               <div className="glass-card flex items-center gap-5 rounded-2xl p-6">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent/10">
-                <span className="text-lg font-bold text-accent">
-                  {post.author.charAt(0)}
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold">
-                  {blogCopy.authorBy.replace("{author}", post.author)}
-                </p>
-                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-                  {blogCopy.authorBio}
-                </p>
+                  <span className="text-lg font-bold text-accent">
+                    {post.author.charAt(0)}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">
+                    {blogCopy.authorBy.replace("{author}", post.author)}
+                  </p>
+                  <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                    {blogCopy.authorBio}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
           </TracingBeam>
         </article>
 
@@ -297,11 +297,11 @@ export default function BlogPostPage() {
                     <h3 className="mb-2 text-sm font-semibold leading-snug transition-colors group-hover:text-accent">
                       {rp.title}
                     </h3>
-                    <p className="flex-1 text-xs text-[var(--color-text-secondary)]">
+                    <p className="flex-1 text-[13px] text-[var(--color-text-secondary)]">
                       {rp.description}
                     </p>
                     <div className="mt-3 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
-                      <span className="text-[11px] font-medium">
+                      <span className="text-[13px] font-medium">
                         {rp.author}
                       </span>
                       <span className="text-[10px] text-[var(--color-text-secondary)]">

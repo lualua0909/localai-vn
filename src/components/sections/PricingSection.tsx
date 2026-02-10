@@ -14,7 +14,7 @@ export function PricingSection() {
       <div className="container-main">
         {/* Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
             {pricing.header.eyebrow}
           </p>
           <h2 className="text-section-title font-bold tracking-tight">
@@ -30,14 +30,13 @@ export function PricingSection() {
           {plans.map((plan, idx) => (
             <ScrollReveal key={plan.name} delay={idx * 0.1}>
               <div
-                className={`glass-card relative flex h-full flex-col rounded-3xl p-8 ${
-                  plan.popular
-                    ? "ring-2 ring-accent shadow-lg shadow-accent/10"
-                    : ""
-                }`}
+                className={`glass-card relative flex h-full flex-col rounded-3xl p-8 ${plan.popular
+                  ? "ring-2 ring-accent shadow-lg shadow-accent/10"
+                  : ""
+                  }`}
               >
                 {plan.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-[11px] font-semibold text-white">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-[13px] font-semibold text-white">
                     {pricing.popularBadge}
                   </span>
                 )}

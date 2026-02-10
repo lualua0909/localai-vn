@@ -25,7 +25,7 @@ function AppContent() {
             </span>
             <button
               onClick={signOut}
-              className="focus-ring flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-text)]/5 hover:text-[var(--color-text)]"
+              className="focus-ring flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-text)]/5 hover:text-[var(--color-text)]"
             >
               <LogOut size={14} />
               {appCopy.topbar.signOut}
@@ -39,17 +39,14 @@ function AppContent() {
           {/* Profile card */}
           <div className="glass-card mb-8 rounded-3xl p-8">
             <div className="flex items-center gap-4">
-              {user?.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt=""
-                  className="h-14 w-14 rounded-full"
-                />
-              ) : (
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
-                  <User size={24} className="text-accent" />
-                </div>
-              )}
+              <img
+                src={
+                  user?.photoURL ||
+                  "https://placehold.co/60x60#eee/white"
+                }
+                alt="User avatar"
+                className="h-14 w-14 rounded-full object-cover"
+              />
               <div>
                 <h1 className="text-xl font-bold">
                   {user?.displayName || appCopy.profile.fallbackName}
@@ -66,7 +63,7 @@ function AppContent() {
                   key={stat.label}
                   className="rounded-xl border border-[var(--color-border)] p-4"
                 >
-                  <p className="text-[11px] text-[var(--color-text-secondary)]">
+                  <p className="text-[13px] text-[var(--color-text-secondary)]">
                     {stat.label}
                   </p>
                   <p className="mt-1 text-lg font-semibold">{stat.value}</p>

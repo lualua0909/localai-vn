@@ -53,9 +53,8 @@ export function InfiniteMovingCards({
     >
       <ul
         ref={scrollerRef}
-        className={`flex w-max shrink-0 gap-4 py-4 ${
-          start ? "animate-[scroll_var(--animation-duration)_linear_infinite_var(--animation-direction)]" : ""
-        }`}
+        className={`flex w-max shrink-0 gap-4 py-4 ${start ? "animate-[scroll_var(--animation-duration)_linear_infinite_var(--animation-direction)]" : ""
+          }`}
         style={
           {
             "--animation-direction": "forwards",
@@ -72,7 +71,7 @@ export function InfiniteMovingCards({
             </p>
             <div>
               <p className="text-sm font-medium">{item.name}</p>
-              <p className="text-xs text-[var(--color-text-secondary)]">
+              <p className="text-[13px] text-[var(--color-text-secondary)]">
                 {item.title}
               </p>
             </div>

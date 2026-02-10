@@ -9,8 +9,14 @@ import { useTranslations } from "@/lib/i18n";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail } =
-    useAuth();
+  const {
+    user,
+    loading,
+    signInWithGoogle,
+    signInWithGithub,
+    signInWithEmail,
+    signUpWithEmail,
+  } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,6 +54,18 @@ export default function SignInPage() {
     setError("");
     try {
       await signInWithGoogle();
+      router.push("/app");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : copy.errorDefault;
+      setError(message);
+    }
+  };
+
+  const handleGithubAuth = async () => {
+    setError("");
+    try {
+      await signInWithGithub();
       router.push("/app");
     } catch (err: unknown) {
       const message =
@@ -100,11 +118,20 @@ export default function SignInPage() {
           </svg>
           {copy.google}
         </button>
+        <button
+          onClick={handleGithubAuth}
+          className="focus-ring mt-3 flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5"
+        >
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.64 0 8.13c0 3.59 2.29 6.64 5.47 7.72.4.08.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.44-2.53-.5-2.69-.96-.09-.23-.48-.96-.82-1.15-.28-.15-.68-.52-.01-.53.63-.01 1.08.59 1.23.84.72 1.21 1.87.87 2.33.66.07-.54.28-.87.51-1.07-1.78-.2-3.64-.9-3.64-3.98 0-.88.31-1.6.82-2.16-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.05 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.16 0 3.09-1.87 3.78-3.65 3.98.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.044 8.044 0 0 0 16 8.13C16 3.64 12.42 0 8 0Z" />
+          </svg>
+          {copy.github}
+        </button>
 
         {/* Divider */}
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[var(--color-border)]" />
-          <span className="text-xs text-[var(--color-text-secondary)]">
+          <span className="text-[13px] text-[var(--color-text-secondary)]">
             {copy.divider}
           </span>
           <div className="h-px flex-1 bg-[var(--color-border)]" />
@@ -115,7 +142,7 @@ export default function SignInPage() {
           <div>
             <label
               htmlFor="email"
-              className="mb-1.5 block text-xs font-medium text-[var(--color-text-secondary)]"
+              className="mb-1.5 block text-[13px] font-medium text-[var(--color-text-secondary)]"
             >
               {copy.form.emailLabel}
             </label>
@@ -132,7 +159,7 @@ export default function SignInPage() {
           <div>
             <label
               htmlFor="password"
-              className="mb-1.5 block text-xs font-medium text-[var(--color-text-secondary)]"
+              className="mb-1.5 block text-[13px] font-medium text-[var(--color-text-secondary)]"
             >
               {copy.form.passwordLabel}
             </label>
@@ -149,7 +176,7 @@ export default function SignInPage() {
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-500">
+            <p className="rounded-lg bg-red-500/10 px-3 py-2 text-[13px] text-red-500">
               {error}
             </p>
           )}
@@ -164,8 +191,8 @@ export default function SignInPage() {
             {submitting
               ? copy.form.submit.loading
               : isSignUp
-              ? copy.form.submit.signup
-              : copy.form.submit.signin}
+                ? copy.form.submit.signup
+                : copy.form.submit.signin}
           </Button>
         </form>
 

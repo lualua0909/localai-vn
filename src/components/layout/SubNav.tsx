@@ -47,7 +47,7 @@ export function SubNav() {
           <button
             key={p.id}
             onClick={() => scrollTo(p.id)}
-            className="focus-ring relative shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors"
+            className="focus-ring relative shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors"
           >
             {active === p.id && (
               <motion.span
@@ -57,11 +57,10 @@ export function SubNav() {
               />
             )}
             <span
-              className={`relative z-10 ${
-                active === p.id
+              className={`relative z-10 ${active === p.id
                   ? "text-[var(--color-text)]"
                   : "text-[var(--color-text-secondary)]"
-              }`}
+                }`}
             >
               {p.label}
             </span>

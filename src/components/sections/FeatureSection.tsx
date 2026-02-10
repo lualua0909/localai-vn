@@ -28,14 +28,13 @@ export function FeatureSection({
   return (
     <section id={id} className="section-padding">
       <div
-        className={`container-main grid items-center gap-10 lg:grid-cols-2 lg:gap-16 ${
-          reverse ? "lg:[&>:first-child]:order-2" : ""
-        }`}
+        className={`container-main grid items-center gap-10 lg:grid-cols-2 lg:gap-16 ${reverse ? "lg:[&>:first-child]:order-2" : ""
+          }`}
       >
         {/* Text */}
         <div>
           <ScrollReveal>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
+            <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
               {eyebrow}
             </p>
           </ScrollReveal>
