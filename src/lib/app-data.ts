@@ -120,8 +120,11 @@ export const appData: Record<string, AppDetail> = {
       <p>Trải nghiệm chatbot AI tiếng Việt thông minh nhất, hỗ trợ đa ngữ cảnh. VietGPT được tối ưu hoá cho ngôn ngữ và văn hoá Việt Nam.</p>
     `,
     screenshots: [
-      "https://assets.aceternity.com/demos/aceternity-ui-demo.png",
-      "https://assets.aceternity.com/demos/algochurn.png"
+      "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
+      "https://assets.aceternity.com/animated-modal.png",
+      "https://assets.aceternity.com/animated-testimonials.webp",
+      "https://assets.aceternity.com/cloudinary_bkp/Tooltip_luwy44.png",
+      "https://assets.aceternity.com/github-globe.png"
     ],
     features: [
       {

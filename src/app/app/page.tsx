@@ -1,19 +1,14 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "@/lib/i18n";
-import { motion } from "framer-motion";
-import { Search, Star } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { parseReviews } from "@/util";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { GlowingEffect } from "@/components/ui/glowing-effect";
-
-import Link from "next/link";
 
 const ThreeDMarquee = dynamic(
   () => import("@/components/ui/3d-marquee").then((m) => m.ThreeDMarquee),
