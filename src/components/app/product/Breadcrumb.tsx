@@ -16,7 +16,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4 }}
-      className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] mb-8"
+      className="flex items-center gap-2 typo-caption text-[var(--color-text-secondary)] mb-10"
     >
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-2">
@@ -29,7 +29,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
               {item.label}
             </Link>
           ) : (
-            <span className="text-[var(--color-text)] font-medium truncate">
+            <span className="text-[var(--color-text)] font-semibold truncate">
               {item.label}
             </span>
           )}

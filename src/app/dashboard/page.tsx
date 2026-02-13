@@ -4,14 +4,12 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { useAuth } from "@/lib/useAuth";
 import { Button } from "@/components/ui/Button";
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 
 import { useState } from "react";
 import { ProductManager } from "@/components/dashboard/ProductManager";
-import { userRoles } from "@/hooks/useProducts";
-import { LayoutDashboard, Package, Settings } from "lucide-react";
-import { Header } from "@/components/layout/Header";
+import { LayoutDashboard, Package } from "lucide-react";
 import { AppName } from "@/components/ui/appName";
 
 function DashboardContent() {
@@ -25,38 +23,38 @@ function DashboardContent() {
   const [demoRole, setDemoRole] = useState<number>(1);
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] pb-20">
+    <div className="min-h-screen bg-[var(--color-bg)] pb-24">
       {/* Top bar */}
       <header className="border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl sticky top-0 z-30">
-        <div className="container-main flex h-16 items-center justify-between">
-          <div className="flex items-center gap-6">
+        <div className="container-main flex h-14 items-center justify-between">
+          <div className="flex items-center gap-8">
             <AppName />
 
             {/* Navigation Tabs */}
-            <div className="hidden md:flex items-center gap-1 bg-[var(--color-bg-alt)]/50 p-1 rounded-lg border border-[var(--color-border)]">
+            <nav className="hidden md:flex items-center gap-1">
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg typo-caption font-semibold transition-all ${
                   activeTab === "overview"
-                    ? "bg-white dark:bg-[var(--color-bg)] shadow-sm text-[var(--color-text)]"
+                    ? "bg-[var(--color-bg-alt)] text-[var(--color-text)]"
                     : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
                 }`}
               >
-                <LayoutDashboard size={16} />
+                <LayoutDashboard size={14} />
                 Overview
               </button>
               <button
                 onClick={() => setActiveTab("products")}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg typo-caption font-semibold transition-all ${
                   activeTab === "products"
-                    ? "bg-white dark:bg-[var(--color-bg)] shadow-sm text-[var(--color-text)]"
+                    ? "bg-[var(--color-bg-alt)] text-[var(--color-text)]"
                     : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
                 }`}
               >
-                <Package size={16} />
+                <Package size={14} />
                 Products
               </button>
-            </div>
+            </nav>
           </div>
 
           <div className="flex items-center gap-4">
@@ -64,7 +62,7 @@ function DashboardContent() {
             <select
               value={demoRole}
               onChange={(e) => setDemoRole(Number(e.target.value))}
-              className="text-xs bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-md px-2 py-1"
+              className="typo-caption bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg px-2.5 py-1.5"
             >
               <option value={1}>View as User</option>
               <option value={0}>View as Admin</option>
@@ -74,40 +72,40 @@ function DashboardContent() {
               <img
                 src={user?.photoURL || "https://placehold.co/60x60/eee/white"}
                 alt="User"
-                className="h-8 w-8 rounded-full object-cover border border-[var(--color-border)]"
+                className="h-8 w-8 rounded-full object-cover"
               />
               <button
                 onClick={signOut}
                 className="text-[var(--color-text-secondary)] hover:text-red-500 transition-colors"
               >
-                <LogOut size={18} />
+                <LogOut size={16} />
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container-main py-8">
+      <main className="container-main py-10">
         {activeTab === "overview" && (
           <div className="mx-auto max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Profile card */}
-            <div className="glass-card mb-6 rounded-2xl p-6 md:p-8">
+            <div className="glass-card mb-8 rounded-2xl p-8 md:p-10">
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 <img
                   src={
                     user?.photoURL || "https://placehold.co/100x100/eee/white"
                   }
                   alt="User avatar"
-                  className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover border-4 border-white dark:border-[var(--color-bg)] shadow-md"
+                  className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover"
                 />
                 <div className="text-center md:text-left">
-                  <h1 className="text-2xl font-bold">
+                  <h1 className="typo-h1">
                     {user?.displayName || appCopy.profile.fallbackName}
                   </h1>
-                  <p className="text-[var(--color-text-secondary)] font-medium">
+                  <p className="typo-body text-[var(--color-text-secondary)] mt-1">
                     {user?.email}
                   </p>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-1 uppercase tracking-wider">
+                  <p className="typo-caption text-[var(--color-text-secondary)] mt-2 uppercase tracking-wider">
                     Role: {demoRole === 0 ? "Admin" : "User"}
                   </p>
                 </div>
@@ -118,11 +116,11 @@ function DashboardContent() {
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
+              <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[var(--color-border)] pt-10">
                 {appCopy.profile.stats.map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                    <p className="text-xs text-[var(--color-text-secondary)] uppercase tracking-wide mt-1">
+                    <p className="typo-h1">{stat.value}</p>
+                    <p className="typo-caption text-[var(--color-text-secondary)] uppercase tracking-wider mt-2">
                       {stat.label}
                     </p>
                   </div>
@@ -131,8 +129,8 @@ function DashboardContent() {
             </div>
 
             {/* Feedback */}
-            <div className="glass-card rounded-2xl p-8">
-              <h2 className="mb-2 text-lg font-semibold">
+            <div className="glass-card rounded-2xl p-8 md:p-10">
+              <h2 className="typo-h2 mb-4">
                 {appCopy.feedback.title}
               </h2>
               <FeedbackForm uid={user?.uid} />
@@ -142,10 +140,6 @@ function DashboardContent() {
 
         {activeTab === "products" && (
           <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Inject role into ProductManager context via a wrapper or prop if possible, 
-                for now we'll rely on the mocked logic which uses a hardcoded email map, 
-                BUT I will update useProducts to accept an override role for this demo. 
-            */}
             <ProductManagerWrapper
               demoRole={demoRole}
               userEmail={user?.email}
@@ -157,10 +151,6 @@ function DashboardContent() {
   );
 }
 
-// Wrapper to inject the demo role into the hook's context effectively
-// We need to modify useProducts to accept role override or handle it here.
-// Since useProducts is a hook, we can't easily override its internal logic from outside without prop.
-// Let's modify ProductManager to accept `role` prop.
 function ProductManagerWrapper({
   demoRole,
   userEmail
@@ -168,8 +158,6 @@ function ProductManagerWrapper({
   demoRole: number;
   userEmail?: string | null;
 }) {
-  // We need to pass this down. I'll modify ProductManager.tsx next to accept 'roleOverride'
-  // For now, I'll assume ProductManager can handle it.
   return <ProductManager userEmail={userEmail} roleOverride={demoRole} />;
 }
 

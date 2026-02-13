@@ -50,6 +50,7 @@ const marqueeImages = [
 ];
 
 import { AppCard } from "@/components/app/AppCard";
+import { appData } from "@/lib/app-data";
 
 type AppItem = {
   name: string;
@@ -57,6 +58,7 @@ type AppItem = {
   category: string;
   rating: string;
   reviews: string;
+  trending?: boolean;
 };
 
 function ExploreContent() {
@@ -92,7 +94,12 @@ function ExploreContent() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const itemsPerPage = 12;
 
-  const filteredApps = t.apps
+  const appsWithTrending = t.apps.map((app: AppItem) => {
+    const slug = app.name.toLowerCase().replace(/\s+/g, "");
+    return { ...app, trending: appData[slug]?.trending ?? false };
+  });
+
+  const filteredApps = appsWithTrending
     .filter((app: AppItem) => {
       const matchCategory = !activeCategory || app.category === activeCategory;
       const matchSearch =

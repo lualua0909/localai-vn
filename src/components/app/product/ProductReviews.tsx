@@ -59,7 +59,7 @@ export function ProductReviews({
             date: "1 tuần trước",
             rating: 4,
           },
-        ]
+        ],
   );
 
   const avgRating =
@@ -94,21 +94,19 @@ export function ProductReviews({
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5 }}
-      className="mt-14 pt-10 border-t border-[var(--color-border)]"
+      className="mt-16 pt-12 border-t border-[var(--color-border)]"
     >
-      <h3 className="text-lg font-semibold mb-6 tracking-tight">
-        Đánh giá &amp; Bình luận
-      </h3>
+      <h3 className="typo-h2 mb-8">Đánh giá &amp; Bình luận</h3>
 
-      <GlowCard className="mb-8">
-        <div className="flex flex-col sm:flex-row gap-6">
+      <GlowCard className="mb-10">
+        <div className="flex flex-col sm:flex-row gap-8">
           {/* Rating summary */}
-          <div className="flex flex-col items-center justify-center sm:border-r sm:border-[var(--color-border)] sm:pr-8 py-2">
-            <div className="text-4xl font-bold text-[var(--color-text)] mb-1">
+          <div className="flex flex-col items-center justify-center sm:border-r sm:border-[var(--color-border)] sm:pr-10 py-2">
+            <div className="typo-display-l text-[var(--color-text)] mb-1">
               {avgRating}
             </div>
             <StarRating value={Number(avgRating)} size={16} />
-            <p className="text-xs text-[var(--color-text-secondary)] whitespace-nowrap mt-1">
+            <p className="typo-caption text-[var(--color-text-secondary)] whitespace-nowrap mt-2">
               {comments.length} đánh giá
             </p>
           </div>
@@ -129,16 +127,16 @@ export function ProductReviews({
                       size={20}
                       interactive
                       onChange={setRating}
-                      className="mb-2"
+                      className="mb-3"
                     />
                     <textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Chia sẻ nhận xét của bạn..."
-                      className="w-full bg-[var(--color-bg)] rounded-xl border border-[var(--color-border)] p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40 min-h-[80px] resize-y placeholder:text-[var(--color-text-secondary)] transition-all"
+                      className="w-full typo-body bg-[var(--color-bg)] rounded-xl border border-[var(--color-border)] p-4 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40 min-h-[80px] resize-y placeholder:text-[var(--color-text-secondary)] transition-all"
                     />
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">
+                    <div className="flex items-center justify-between mt-3">
+                      <p className="typo-caption text-[var(--color-text-secondary)]">
                         Maker sẽ nhận được thông báo
                       </p>
                       <Button
@@ -156,14 +154,14 @@ export function ProductReviews({
                 </div>
               </form>
             ) : (
-              <div className="flex flex-col items-center justify-center py-4 text-center">
-                <p className="text-sm text-[var(--color-text-secondary)] mb-3">
+              <div className="flex flex-col items-center justify-center py-6 text-center">
+                <p className="typo-body text-[var(--color-text-secondary)] mb-4">
                   Đăng nhập để viết bình luận
                 </p>
                 <Button variant="secondary" size="sm" href="/signin">
                   Đăng nhập
                 </Button>
-                <p className="text-[11px] text-[var(--color-text-secondary)] mt-3">
+                <p className="typo-caption text-[var(--color-text-secondary)] mt-4">
                   Maker sẽ nhận được thông báo
                 </p>
               </div>
@@ -177,43 +175,39 @@ export function ProductReviews({
         variants={staggerContainer}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="space-y-4"
+        className="space-y-2"
       >
         {comments.map((c, i) => (
           <motion.div
             key={i}
             variants={staggerItem}
-            className="flex gap-3 group p-4 rounded-xl hover:bg-[var(--color-bg-alt)]/60 transition-colors"
+            className="flex gap-4 group p-5 rounded-2xl hover:bg-[var(--color-bg-alt)]/60 transition-colors"
           >
             <Avatar name={c.user} size="sm" className="mt-0.5" />
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-medium text-sm">{c.user}</span>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="typo-body font-semibold">{c.user}</span>
                 {c.rating && <StarRating value={c.rating} size={10} />}
-                <span className="text-xs text-[var(--color-text-secondary)]">
-                  • {c.date}
+                <span className="typo-caption text-[var(--color-text-secondary)]">
+                  · {c.date}
                 </span>
               </div>
-              <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+              <p className="typo-body text-[var(--color-text-secondary)]">
                 {c.text}
               </p>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                className="flex gap-4 mt-2 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <button className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">
+              <div className="flex gap-4 mt-3">
+                <button className="typo-caption text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">
                   Trả lời
                 </button>
-                <button className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">
+                <button className="typo-caption text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">
                   Thích
                 </button>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         ))}
         {comments.length === 0 && (
-          <p className="text-center text-sm text-[var(--color-text-secondary)] py-8">
+          <p className="text-center typo-body text-[var(--color-text-secondary)] py-12">
             Chưa có bình luận nào. Hãy là người đầu tiên!
           </p>
         )}

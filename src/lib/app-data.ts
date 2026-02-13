@@ -8,6 +8,7 @@ export interface AppDetail {
   reviewsCount: string;
   category: string;
   author: string;
+  trending?: boolean;
   icon: string;
   screenshots: string[];
   features: {
@@ -27,85 +28,32 @@ export interface AppDetail {
 const defaultFeatures = [
   {
     title: "Tiếng Việt tối ưu",
-    description: "Được huấn luyện đặc biệt cho ngôn ngữ và văn hoá Việt Nam."
+    description: "Được huấn luyện đặc biệt cho ngôn ngữ và văn hoá Việt Nam.",
   },
   {
     title: "Hiệu suất cao",
-    description: "Xử lý tác vụ nhanh chóng với độ chính xác hàng đầu."
+    description: "Xử lý tác vụ nhanh chóng với độ chính xác hàng đầu.",
   },
   {
     title: "Dễ dàng tích hợp",
-    description: "API đơn giản, tài liệu chi tiết cho nhà phát triển."
-  }
+    description: "API đơn giản, tài liệu chi tiết cho nhà phát triển.",
+  },
 ];
 
 const defaultPricing = [
   {
     plan: "Cơ bản",
     price: "Miễn phí",
-    features: ["Tính năng cơ bản", "Hỗ trợ cộng đồng"]
+    features: ["Tính năng cơ bản", "Hỗ trợ cộng đồng"],
   },
   {
     plan: "Chuyên nghiệp",
     price: "199.000đ/tháng",
-    features: ["Tất cả tính năng", "Hỗ trợ 24/7", "Không giới hạn"]
-  }
+    features: ["Tất cả tính năng", "Hỗ trợ 24/7", "Không giới hạn"],
+  },
 ];
 
 export const appData: Record<string, AppDetail> = {
-  engagekit: {
-    id: "engagekit",
-    slug: "engagekit",
-    name: "EngageKit",
-    tagline: "The ultimate AI-powered LinkedIn engagement assistant",
-    category: "Productivity",
-    rating: 4.9,
-    reviewsCount: "1.2K",
-    author: "Unikorn Team",
-    icon: "https://placehold.co/100x100/2563eb/white?text=EK",
-    description: `
-      <p>EngageKit boosts your LinkedIn presence by automating engagement strategies while keeping your interactions personalized and authentic.</p>
-      <p class="mt-4">Never miss an opportunity to connect with key industry players. With EngageKit, you can streamline your networking process, track your growth, and become a thought leader in your niche.</p>
-    `,
-    screenshots: [
-      "https://assets.aceternity.com/macbook-scroll.png",
-      "https://assets.aceternity.com/linear.webp",
-      "https://assets.aceternity.com/pro.png"
-    ],
-    features: [
-      {
-        title: "Smart Replies",
-        description:
-          "AI-generated replies that sound just like you, trained on your previous posts."
-      },
-      {
-        title: "Analytics Dashboard",
-        description:
-          "Track your engagement metrics and watch your network grow in real-time."
-      },
-      {
-        title: "Auto-Connect",
-        description:
-          "Intelligent connection requests to expand your network with relevant professionals."
-      }
-    ],
-    pricing: [
-      {
-        plan: "Starter",
-        price: "Free",
-        features: ["50 AI replies/mo", "Basic Analytics", "1 User"]
-      },
-      {
-        plan: "Pro",
-        price: "$19/mo",
-        features: [
-          "Unlimited AI replies",
-          "Advanced Analytics",
-          "Priority Support"
-        ]
-      }
-    ]
-  },
   vietgpt: {
     id: "vietgpt",
     slug: "vietgpt",
@@ -114,6 +62,7 @@ export const appData: Record<string, AppDetail> = {
     category: "Chatbot",
     rating: 4.8,
     reviewsCount: "2.1K",
+    trending: true,
     author: "VietAI Team",
     icon: "https://placehold.co/100x100/0891b2/white?text=VG",
     description: `
@@ -124,31 +73,31 @@ export const appData: Record<string, AppDetail> = {
       "https://assets.aceternity.com/animated-modal.png",
       "https://assets.aceternity.com/animated-testimonials.webp",
       "https://assets.aceternity.com/cloudinary_bkp/Tooltip_luwy44.png",
-      "https://assets.aceternity.com/github-globe.png"
+      "https://assets.aceternity.com/github-globe.png",
     ],
     features: [
       {
         title: "Tiếng Việt tự nhiên",
-        description: "Hiểu và phản hồi tiếng Việt với ngữ điệu tự nhiên nhất."
+        description: "Hiểu và phản hồi tiếng Việt với ngữ điệu tự nhiên nhất.",
       },
       {
         title: "Hỗ trợ đa ngành",
         description:
-          "Kiến thức chuyên sâu trong các lĩnh vực Y tế, Luật, và Giáo dục tại Việt Nam."
-      }
+          "Kiến thức chuyên sâu trong các lĩnh vực Y tế, Luật, và Giáo dục tại Việt Nam.",
+      },
     ],
     pricing: [
       {
         plan: "Cơ bản",
         price: "Miễn phí",
-        features: ["100 tin nhắn/ngày", "Tốc độ tiêu chuẩn"]
+        features: ["100 tin nhắn/ngày", "Tốc độ tiêu chuẩn"],
       },
       {
         plan: "Nâng cao",
         price: "99.000đ/tháng",
-        features: ["Không giới hạn", "Tốc độ cao", "Ưu tiên hỗ trợ"]
-      }
-    ]
+        features: ["Không giới hạn", "Tốc độ cao", "Ưu tiên hỗ trợ"],
+      },
+    ],
   },
   pixelaistudio: {
     id: "pixelaistudio",
@@ -165,10 +114,10 @@ export const appData: Record<string, AppDetail> = {
     `,
     screenshots: [
       "https://assets.aceternity.com/demos/aceternity-ui-demo.png",
-      "https://assets.aceternity.com/demos/algochurn.png"
+      "https://assets.aceternity.com/demos/algochurn.png",
     ],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   codebuddyvn: {
     id: "codebuddyvn",
@@ -184,7 +133,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Trợ lý lập trình AI hỗ trợ developer Việt Nam, tích hợp trực tiếp vào VS Code.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   edumentor: {
     id: "edumentor",
@@ -200,7 +149,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Gia sư AI 1 kèm 1, cá nhân hoá lộ trình học tập cho học sinh Việt Nam.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   voiceaiviệt: {
     id: "voiceaiviệt",
@@ -216,7 +165,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Công nghệ nhận diện giọng nói tiếng Việt chính xác 99%, hỗ trợ cả giọng vùng miền.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   docuscanai: {
     id: "docuscanai",
@@ -232,7 +181,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Số hoá tài liệu tiếng Việt nhanh chóng, hỗ trợ nhận diện chữ viết tay.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   marketbot: {
     id: "marketbot",
@@ -248,7 +197,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Giải pháp marketing tự động toàn diện cho doanh nghiệp SME.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   healthcheckai: {
     id: "healthcheckai",
@@ -264,7 +213,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Trợ lý sức khoẻ cá nhân, tư vấn sơ bộ và nhắc nhở lịch uống thuốc.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   finbot: {
     id: "finbot",
@@ -280,7 +229,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Quản lý tài chính cá nhân và đầu tư thông minh với sự hỗ trợ của AI.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   datasense: {
     id: "datasense",
@@ -296,7 +245,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Biến dữ liệu thô thành biểu đồ và insights có giá trị trong tích tắc.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   translatevn: {
     id: "translatevn",
@@ -312,7 +261,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Công cụ dịch thuật chuyên dụng cho cặp ngôn ngữ Anh-Việt, hiểu rõ ngữ cảnh văn hoá.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   storyai: {
     id: "storyai",
@@ -328,7 +277,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Sáng tác truyện, kịch bản, và nội dung marketing không giới hạn.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   legalaivn: {
     id: "legalaivn",
@@ -344,7 +293,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Tra cứu văn bản pháp luật và tư vấn pháp lý cơ bản nhanh chóng.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   farmsmart: {
     id: "farmsmart",
@@ -360,7 +309,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Phát hiện sâu bệnh và tối ưu hoá quy trình canh tác cho nông dân.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   tutormath: {
     id: "tutormath",
@@ -375,7 +324,7 @@ export const appData: Record<string, AppDetail> = {
     description: "<p>Giải toán chi tiết từng bước, từ cơ bản đến nâng cao.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   photofixai: {
     id: "photofixai",
@@ -391,7 +340,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Phục hồi ảnh cũ, làm nét ảnh mờ và xoá vật thể thừa tự động.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   chatdoc: {
     id: "chatdoc",
@@ -407,7 +356,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Tóm tắt và trả lời câu hỏi từ tài liệu PDF dài hàng trăm trang trong giây lát.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   musicgenvn: {
     id: "musicgenvn",
@@ -422,7 +371,7 @@ export const appData: Record<string, AppDetail> = {
     description: "<p>Tạo giai điệu và bài hát mới mang âm hưởng Việt Nam.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   resumeai: {
     id: "resumeai",
@@ -438,7 +387,7 @@ export const appData: Record<string, AppDetail> = {
       "<p>Tối ưu hoá CV của bạn để vượt qua hệ thống ATS và gây ấn tượng với nhà tuyển dụng.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
+    pricing: defaultPricing,
   },
   speechcoach: {
     id: "speechcoach",
@@ -454,8 +403,8 @@ export const appData: Record<string, AppDetail> = {
       "<p>Phản hồi chi tiết về phát âm, ngữ điệu và trọng âm giúp bạn nói tiếng Anh tự tin hơn.</p>",
     screenshots: [],
     features: defaultFeatures,
-    pricing: defaultPricing
-  }
+    pricing: defaultPricing,
+  },
 };
 
 export function getAppBySlug(slug: string): AppDetail | null {
@@ -472,18 +421,18 @@ export function getAppBySlug(slug: string): AppDetail | null {
 
 export function getRelatedApps(
   currentAppId: string,
-  limit: number = 4
+  limit: number = 4,
 ): AppDetail[] {
   const currentApp = appData[currentAppId];
   if (!currentApp) return [];
 
   const allApps = Object.values(appData).filter(
-    (app) => app.id !== currentAppId
+    (app) => app.id !== currentAppId,
   );
 
   // 1. Same category
   const sameCategory = allApps.filter(
-    (app) => app.category === currentApp.category
+    (app) => app.category === currentApp.category,
   );
 
   // 2. Others (fallback)

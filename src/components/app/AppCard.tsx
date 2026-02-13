@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
-import { Star } from "lucide-react";
+import { Star, TrendingUp } from "lucide-react";
 
 export type AppItem = {
   name: string;
@@ -9,6 +9,7 @@ export type AppItem = {
   rating: string | number;
   reviews: string; // Intentionally allowing string for "2.1K" format
   reviewsCount?: string; // Alternative field name often used
+  trending?: boolean;
 };
 
 export function AppCard({ app }: { app: AppItem }) {
@@ -21,7 +22,7 @@ export function AppCard({ app }: { app: AppItem }) {
   return (
     <Link
       href={`/app/${slug}`}
-      className="glass-card flex cursor-pointer items-start gap-3 rounded-2xl p-4 transition-transform hover:scale-[1.02] relative"
+      className="glass-card border-none flex cursor-pointer items-start gap-3 rounded-2xl p-4 shadow-md transition-transform hover:scale-[1.02] relative"
     >
       <GlowingEffect
         spread={40}
@@ -29,7 +30,7 @@ export function AppCard({ app }: { app: AppItem }) {
         disabled={false}
         proximity={64}
         inactiveZone={0.01}
-        borderWidth={1.5}
+        borderWidth={2}
       />
       <img
         className="h-14 w-14 shrink-0 rounded-xl object-cover"
@@ -37,9 +38,17 @@ export function AppCard({ app }: { app: AppItem }) {
         alt={app.name}
       />
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-tight truncate">
-          {app.name}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <p className="text-sm font-semibold leading-tight truncate">
+            {app.name}
+          </p>
+          {app.trending && (
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-medium text-emerald-500 shrink-0">
+              <TrendingUp size={10} />
+              Trending
+            </span>
+          )}
+        </div>
         <p className="mt-0.5 text-[12px] text-[var(--color-text-secondary)] truncate">
           {app.category}
         </p>

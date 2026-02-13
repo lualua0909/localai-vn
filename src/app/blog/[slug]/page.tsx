@@ -5,10 +5,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getBlogPost, blogPosts } from "@/lib/blog-data";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useTranslations } from "@/lib/i18n";
+import { PostCard } from "../page";
 
 function renderMarkdown(content: string) {
   const lines = content.split("\n");
@@ -33,7 +32,7 @@ function renderMarkdown(content: string) {
           className="mb-4 mt-12 text-2xl font-bold tracking-tight first:mt-0"
         >
           {line.slice(3)}
-        </h2>
+        </h2>,
       );
       i++;
       continue;
@@ -44,7 +43,7 @@ function renderMarkdown(content: string) {
       elements.push(
         <h3 key={key++} className="mb-3 mt-8 text-xl font-semibold">
           {line.slice(4)}
-        </h3>
+        </h3>,
       );
       i++;
       continue;
@@ -63,7 +62,7 @@ function renderMarkdown(content: string) {
           className="my-6 border-l-2 border-accent pl-6 italic text-[var(--color-text-secondary)]"
         >
           <p>{quoteLines.join(" ")}</p>
-        </blockquote>
+        </blockquote>,
       );
       continue;
     }
@@ -82,7 +81,7 @@ function renderMarkdown(content: string) {
               {renderInline(item)}
             </li>
           ))}
-        </ol>
+        </ol>,
       );
       continue;
     }
@@ -101,7 +100,7 @@ function renderMarkdown(content: string) {
               {renderInline(item)}
             </li>
           ))}
-        </ul>
+        </ul>,
       );
       continue;
     }
@@ -126,7 +125,7 @@ function renderMarkdown(content: string) {
           className="my-4 text-base leading-[1.8] text-[var(--color-text-secondary)]"
         >
           {renderInline(paraLines.join(" "))}
-        </p>
+        </p>,
       );
     }
   }
@@ -165,13 +164,13 @@ export default function BlogPostPage() {
             <p className="mt-2 text-[var(--color-text-secondary)]">
               {blogCopy.notFound.description}
             </p>
-            <Link
+            {/* <Link
               href="/blog"
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
             >
               <ArrowLeft size={14} />
               {blogCopy.notFound.back}
-            </Link>
+            </Link> */}
           </div>
         </main>
         <Footer />
@@ -180,17 +179,15 @@ export default function BlogPostPage() {
   }
 
   // Related posts (exclude current)
-  const related = blogPosts
-    .filter((p) => p.slug !== slug)
-    .slice(0, 3);
+  const related = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
     <>
       <Header />
-      <main className="pt-20">
+      <main className="pt-0">
         <article className="container-main section-padding pb-0">
           {/* Back link */}
-          <div className="mx-auto max-w-3xl">
+          {/* <div className="mx-auto max-w-3xl">
             <Link
               href="/blog"
               className="inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
@@ -198,21 +195,21 @@ export default function BlogPostPage() {
               <ArrowLeft size={14} />
               {blogCopy.back}
             </Link>
-          </div>
+          </div> */}
 
           {/* Header */}
           <header className="mx-auto mt-8 max-w-3xl text-center">
-            <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-[13px] font-semibold text-accent">
+            {/* <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-[13px] font-semibold text-accent">
               {post.category}
-            </span>
+            </span> */}
 
             <h1 className="mt-6 text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
               {post.title}
             </h1>
 
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+            {/* <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
               {post.description}
-            </p>
+            </p> */}
 
             {/* Author & Meta */}
             <div className="mt-8 flex items-center justify-center gap-4">
@@ -279,38 +276,7 @@ export default function BlogPostPage() {
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((rp) => (
-              <Link key={rp.slug} href={`/blog/${rp.slug}`} className="group">
-                <article className="glass-card flex h-full flex-col overflow-hidden rounded-2xl transition-transform duration-300 group-hover:-translate-y-1">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden">
-                    <Image
-                      src={rp.image}
-                      alt={rp.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full bg-[var(--color-bg)]/80 px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm">
-                      {rp.category}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="mb-2 text-sm font-semibold leading-snug transition-colors group-hover:text-accent">
-                      {rp.title}
-                    </h3>
-                    <p className="flex-1 text-[13px] text-[var(--color-text-secondary)]">
-                      {rp.description}
-                    </p>
-                    <div className="mt-3 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
-                      <span className="text-[13px] font-medium">
-                        {rp.author}
-                      </span>
-                      <span className="text-[10px] text-[var(--color-text-secondary)]">
-                        {rp.date}
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </Link>
+              <PostCard key={rp.slug} post={rp} />
             ))}
           </div>
         </section>

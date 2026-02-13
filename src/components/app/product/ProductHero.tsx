@@ -11,11 +11,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { AppDetail } from "@/lib/app-data";
-import { GlowingEffect } from "@/components/ui/glowing-effect";
-import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
 import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
 
 interface ProductHeroProps {
   app: AppDetail;
@@ -36,130 +35,104 @@ export function ProductHero({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="relative rounded-2xl overflow-hidden">
-        <GlowingEffect
-          spread={50}
-          glow
-          disabled={false}
-          proximity={80}
-          inactiveZone={0.01}
-          borderWidth={2}
-        />
-        <div className="relative bg-white dark:bg-[var(--color-bg-alt)] rounded-2xl border border-[var(--color-border)] overflow-hidden">
-          {/* Gradient banner */}
-          <div className="relative h-28 sm:h-36 bg-gradient-to-br from-indigo-500/90 via-blue-500/80 to-cyan-400/70 overflow-hidden">
-            <DottedGlowBackground
-              gap={16}
-              radius={1.5}
-              color="rgba(255,255,255,0.3)"
-              glowColor="rgba(255,255,255,0.6)"
-              opacity={0.5}
-              speedScale={0.4}
+      <div className="rounded-2xl bg-white dark:bg-[var(--color-bg-alt)] shadow-md overflow-hidden hover:shadow-xl transition-transform duration-300">
+        {/* Content */}
+        <div className="px-6 sm:px-8 py-8">
+          {/* App icon + name */}
+          <div className="flex items-start gap-5 mb-6">
+            <img
+              src={app.icon}
+              alt={app.name}
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-[20px] shadow-sm object-cover bg-white shrink-0"
             />
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/20 to-transparent dark:from-black/20" />
+            <div className="flex-1 min-w-0 pt-1">
+              <Badge variant="accent" size="md" className="mb-2">
+                {app.category}
+              </Badge>
+              <h1 className="typo-h1 truncate">{app.name}</h1>
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="relative px-5 sm:px-6 pb-5">
-            {/* Floating app icon */}
-            <div className="-mt-12 mb-4 flex items-end gap-4">
-              <img
-                src={app.icon}
-                alt={app.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl shadow-lg ring-4 ring-white dark:ring-[var(--color-bg-alt)] object-cover bg-white shrink-0"
-              />
-              <div className="pb-1 flex-1 min-w-0">
-                <Badge variant="accent" size="md" className="mb-1.5">
-                  {app.category}
-                </Badge>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight leading-tight truncate">
-                  {app.name}
-                </h1>
+          {/* Tagline */}
+          <p className="typo-body text-[var(--color-text-secondary)] mb-5">
+            {app.tagline}
+          </p>
+
+          {/* Rating row */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-1.5">
+              <Star size={14} className="text-amber-400 fill-amber-400" />
+              <span className="typo-body font-semibold text-[var(--color-text)]">
+                {app.rating}
+              </span>
+            </div>
+            <span className="text-[var(--color-border)]">·</span>
+            <Link
+              href="#reviews"
+              className="typo-caption text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              {app.reviewsCount
+                ? `${app.reviewsCount} đánh giá`
+                : "Chưa có đánh giá"}
+            </Link>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="pill"
+              size="md"
+              icon={<Globe size={15} />}
+              href="#"
+            >
+              Truy cập
+              <ExternalLink size={12} className="opacity-60" />
+            </Button>
+            <Button variant="outline" size="sm" icon={<Bookmark size={14} />}>
+              Lưu
+            </Button>
+            <Button variant="outline" size="sm" icon={<Share2 size={14} />}>
+              Chia sẻ
+            </Button>
+          </div>
+
+          {/* Divider + upvote & author */}
+          <div className="border-t border-[var(--color-border)] mt-8 pt-6">
+            <div className="flex items-center justify-between gap-4">
+              {/* Upvote */}
+              <div className="flex items-center gap-3">
+                <Button
+                  variant={upvoted ? "primary" : "outline"}
+                  size="sm"
+                  icon={<ArrowUpCircle size={16} />}
+                  onClick={onToggleUpvote}
+                  className={
+                    upvoted ? "shadow-md shadow-[var(--color-accent)]/25" : ""
+                  }
+                >
+                  {upvoted ? "Đã vote" : "Upvote"}
+                </Button>
+                <motion.span
+                  key={upvoteCount}
+                  initial={{ scale: 1.3 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="typo-body font-semibold text-[var(--color-accent)]"
+                >
+                  {upvoteCount}
+                </motion.span>
               </div>
-            </div>
 
-            {/* Tagline */}
-            <p className="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed mb-3">
-              {app.tagline}
-            </p>
-
-            {/* Rating row */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2.5 py-1.5">
-                <Star size={14} className="text-amber-400 fill-amber-400" />
-                <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                  {app.rating}
-                </span>
-              </div>
-              <Link
-                href="#reviews"
-                className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
-              >
-                {app.reviewsCount
-                  ? `${app.reviewsCount} đánh giá`
-                  : "Chưa có đánh giá"}
-              </Link>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              <Button
-                variant="pill"
-                size="md"
-                icon={<Globe size={15} />}
-                href="#"
-              >
-                Truy cập
-                <ExternalLink size={12} className="opacity-60" />
-              </Button>
-              <Button variant="outline" size="sm" icon={<Bookmark size={14} />}>
-                Lưu
-              </Button>
-              <Button variant="outline" size="sm" icon={<Share2 size={14} />}>
-                Chia sẻ
-              </Button>
-            </div>
-
-            {/* Divider + upvote & author */}
-            <div className="border-t border-[var(--color-border)] mt-5 pt-4">
-              <div className="flex items-center justify-between gap-4">
-                {/* Upvote */}
-                <div className="flex items-center gap-3">
-                  <Button
-                    variant={upvoted ? "primary" : "outline"}
-                    size="sm"
-                    icon={<ArrowUpCircle size={16} />}
-                    onClick={onToggleUpvote}
-                    className={
-                      upvoted
-                        ? "shadow-md shadow-[var(--color-accent)]/25"
-                        : ""
-                    }
-                  >
-                    {upvoted ? "Đã vote" : "Upvote"}
-                  </Button>
-                  <motion.span
-                    key={upvoteCount}
-                    initial={{ scale: 1.3 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="text-lg font-bold text-[var(--color-accent)]"
-                  >
-                    {upvoteCount}
-                  </motion.span>
-                </div>
-
-                {/* Author */}
-                <div className="flex items-center gap-2.5">
-                  <Avatar name={app.author} size="sm" />
-                  <div className="text-right">
-                    <p className="text-sm font-semibold leading-tight">
-                      {app.author}
-                    </p>
-                    <p className="text-[11px] text-[var(--color-text-secondary)]">
-                      @{app.author.toLowerCase().replace(/\s+/g, "")}
-                    </p>
-                  </div>
+              {/* Author */}
+              <div className="flex items-center gap-3">
+                <Avatar name={app.author} size="sm" />
+                <div className="text-right">
+                  <p className="typo-body font-semibold leading-tight">
+                    {app.author}
+                  </p>
+                  <p className="typo-caption text-[var(--color-text-secondary)]">
+                    @{app.author.toLowerCase().replace(/\s+/g, "")}
+                  </p>
                 </div>
               </div>
             </div>

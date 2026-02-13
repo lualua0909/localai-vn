@@ -14,7 +14,7 @@ interface AppItem {
 
 function AppList({
   items,
-  onItemClick
+  onItemClick,
 }: {
   items: AppItem[];
   onItemClick?: (item: AppItem) => void;
@@ -24,10 +24,10 @@ function AppList({
       key={app.name}
       whileHover={{
         y: -2,
-        scale: 1.01
+        scale: 1.01,
       }}
       whileTap={{ scale: 0.99 }}
-      className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5"
+      className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 shadow-sm"
       onClick={() => onItemClick?.(app)}
       role="button"
       tabIndex={0}
@@ -79,7 +79,7 @@ export function TopApps() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left card — Top apps this week */}
           <ScrollReveal delay={0}>
-            <div className="glass-card h-full rounded-3xl p-6">
+            <div className="h-full rounded-3xl p-6">
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
                 {topApps.left.eyebrow}
               </p>
@@ -87,7 +87,7 @@ export function TopApps() {
               <p className="mt-1 text-[13px] text-[var(--color-text-secondary)]">
                 {topApps.left.description}
               </p>
-              <div className="mt-4">
+              <div className="mt-4 flex gap-2 flex-col">
                 <AppList
                   items={topApps.left.items}
                   onItemClick={handleCardClick}
@@ -98,7 +98,7 @@ export function TopApps() {
 
           {/* Right card — Vietnam's favourites */}
           <ScrollReveal delay={0.1}>
-            <div className="glass-card h-full rounded-3xl p-6">
+            <div className="h-full rounded-3xl p-6">
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
                 {topApps.right.eyebrow}
               </p>

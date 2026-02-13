@@ -8,9 +8,9 @@ import { AstraModels } from "@/components/sections/AstraModels";
 import { TopApps } from "@/components/sections/TopApps";
 import { AstraStudio } from "@/components/sections/AstraStudio";
 import { AstraAutomations } from "@/components/sections/AstraAutomations";
-import { AstraIntegrations } from "@/components/sections/AstraIntegrations";
 import { AstraSecurity } from "@/components/sections/AstraSecurity";
 import { AstraAnalytics } from "@/components/sections/AstraAnalytics";
+import { LogosWithBlurFlip } from "@/components/ui/logo-clouds";
 
 export default function HomePage() {
   return (
@@ -23,9 +23,9 @@ export default function HomePage() {
         <TopApps />
         <AstraStudio />
         <AstraAutomations />
-        <AstraIntegrations />
+        {/* <LogosWithBlurFlip /> */}
         <AstraSecurity />
-        <AstraAnalytics />
+        {/* <AstraAnalytics /> */}
       </main>
       <Footer />
     </>

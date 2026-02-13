@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[var(--color-bg-alt)]">
+    <footer>
       <div className="container-main section-padding">
         {/* Columns */}
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
