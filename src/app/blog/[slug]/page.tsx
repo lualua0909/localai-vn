@@ -1,13 +1,15 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { getBlogPost, blogPosts } from "@/lib/blog-data";
+import type { BlogPost } from "@/lib/blog-data";
+import { getBlogBySlug, getBlogs } from "@/lib/firestore";
 import Image from "next/image";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useTranslations } from "@/lib/i18n";
-import { PostCard } from "../page";
+import { PostCard } from "@/components/blog/PostCard";
 
 function renderMarkdown(content: string) {
   const lines = content.split("\n");
@@ -18,13 +20,11 @@ function renderMarkdown(content: string) {
   while (i < lines.length) {
     const line = lines[i];
 
-    // Empty line
     if (line.trim() === "") {
       i++;
       continue;
     }
 
-    // H2
     if (line.startsWith("## ")) {
       elements.push(
         <h2
@@ -32,24 +32,22 @@ function renderMarkdown(content: string) {
           className="mb-4 mt-12 text-2xl font-bold tracking-tight first:mt-0"
         >
           {line.slice(3)}
-        </h2>,
+        </h2>
       );
       i++;
       continue;
     }
 
-    // H3
     if (line.startsWith("### ")) {
       elements.push(
         <h3 key={key++} className="mb-3 mt-8 text-xl font-semibold">
           {line.slice(4)}
-        </h3>,
+        </h3>
       );
       i++;
       continue;
     }
 
-    // Blockquote
     if (line.startsWith("> ")) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].startsWith("> ")) {
@@ -62,12 +60,11 @@ function renderMarkdown(content: string) {
           className="my-6 border-l-2 border-accent pl-6 italic text-[var(--color-text-secondary)]"
         >
           <p>{quoteLines.join(" ")}</p>
-        </blockquote>,
+        </blockquote>
       );
       continue;
     }
 
-    // Ordered list
     if (/^\d+\.\s/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
@@ -81,12 +78,11 @@ function renderMarkdown(content: string) {
               {renderInline(item)}
             </li>
           ))}
-        </ol>,
+        </ol>
       );
       continue;
     }
 
-    // Unordered list
     if (line.startsWith("- ")) {
       const items: string[] = [];
       while (i < lines.length && lines[i].startsWith("- ")) {
@@ -100,12 +96,11 @@ function renderMarkdown(content: string) {
               {renderInline(item)}
             </li>
           ))}
-        </ul>,
+        </ul>
       );
       continue;
     }
 
-    // Paragraph
     const paraLines: string[] = [];
     while (
       i < lines.length &&
@@ -125,7 +120,7 @@ function renderMarkdown(content: string) {
           className="my-4 text-base leading-[1.8] text-[var(--color-text-secondary)]"
         >
           {renderInline(paraLines.join(" "))}
-        </p>,
+        </p>
       );
     }
   }
@@ -134,7 +129,6 @@ function renderMarkdown(content: string) {
 }
 
 function renderInline(text: string): React.ReactNode {
-  // Bold
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
@@ -151,8 +145,33 @@ function renderInline(text: string): React.ReactNode {
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const post = getBlogPost(slug);
   const blogCopy = useTranslations("blogDetail");
+
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [related, setRelated] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([getBlogBySlug(slug), getBlogs()]).then(
+      ([blogPost, allBlogs]) => {
+        setPost(blogPost);
+        setRelated(allBlogs.filter((p) => p.slug !== slug).slice(0, 3));
+        setLoading(false);
+      }
+    );
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="flex min-h-screen items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   if (!post) {
     return (
@@ -164,13 +183,6 @@ export default function BlogPostPage() {
             <p className="mt-2 text-[var(--color-text-secondary)]">
               {blogCopy.notFound.description}
             </p>
-            {/* <Link
-              href="/blog"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
-            >
-              <ArrowLeft size={14} />
-              {blogCopy.notFound.back}
-            </Link> */}
           </div>
         </main>
         <Footer />
@@ -178,40 +190,16 @@ export default function BlogPostPage() {
     );
   }
 
-  // Related posts (exclude current)
-  const related = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
-
   return (
     <>
       <Header />
       <main className="pt-0">
         <article className="container-main section-padding pb-0">
-          {/* Back link */}
-          {/* <div className="mx-auto max-w-3xl">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
-            >
-              <ArrowLeft size={14} />
-              {blogCopy.back}
-            </Link>
-          </div> */}
-
-          {/* Header */}
           <header className="mx-auto mt-8 max-w-3xl text-center">
-            {/* <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-[13px] font-semibold text-accent">
-              {post.category}
-            </span> */}
-
             <h1 className="mt-6 text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
               {post.title}
             </h1>
 
-            {/* <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
-              {post.description}
-            </p> */}
-
-            {/* Author & Meta */}
             <div className="mt-8 flex items-center justify-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10">
                 <span className="text-sm font-bold text-accent">
@@ -227,7 +215,6 @@ export default function BlogPostPage() {
             </div>
           </header>
 
-          {/* Featured Image */}
           <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-2xl">
             <div className="relative aspect-[2/1] w-full">
               <Image
@@ -241,14 +228,11 @@ export default function BlogPostPage() {
             </div>
           </div>
 
-          {/* Article Body with Tracing Beam */}
           <TracingBeam className="mt-12 max-w-3xl">
             <div className="prose-custom">{renderMarkdown(post.content)}</div>
 
-            {/* Divider */}
             <div className="mt-16 border-t border-[var(--color-border)]" />
 
-            {/* Author Card */}
             <div className="mt-10">
               <div className="glass-card flex items-center gap-5 rounded-2xl p-6">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent/10">
@@ -269,7 +253,6 @@ export default function BlogPostPage() {
           </TracingBeam>
         </article>
 
-        {/* Related Posts */}
         <section className="container-main section-padding">
           <h2 className="mb-8 text-center text-xl font-bold">
             {blogCopy.relatedTitle}

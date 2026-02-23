@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { AppDetail } from "@/lib/app-data";
+import { useState, useEffect } from "react";
+import type { AppDetail } from "@/lib/app-data";
+import { getCategories, type Category, type UserProfile } from "@/lib/firestore";
 import { useProducts, ProductFormData } from "@/hooks/useProducts";
 import {
   Plus,
@@ -15,62 +16,67 @@ import { SimpleModal } from "@/components/ui/SimpleModal";
 import { Button } from "@/components/ui/Button";
 
 interface ProductManagerProps {
-  userEmail: string | undefined | null;
-  roleOverride?: number;
+  userProfile: UserProfile;
 }
 
-export function ProductManager({
-  userEmail,
-  roleOverride
-}: ProductManagerProps) {
+export function ProductManager({ userProfile }: ProductManagerProps) {
   const {
     products,
     myProducts,
     isAdmin,
+    loading,
     addProduct,
-    updateProduct: updateInternalProduct,
-    deleteProduct: deleteInternalProduct
-  } = useProducts(userEmail, roleOverride);
+    updateProduct,
+    deleteProduct,
+  } = useProducts(userProfile);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ProductFormData | null>(
     null
   );
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  // Local state for product status since appData doesn't persist it
-  const [productStatuses, setProductStatuses] = useState<
-    Record<string, "published" | "pending" | "rejected" | "draft">
-  >({});
+  useEffect(() => {
+    getCategories().then(setCategories);
+  }, []);
 
   const handleEdit = (product: AppDetail) => {
     setEditingProduct(product);
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      deleteInternalProduct(id);
+      await deleteProduct(id);
     }
   };
 
-  const handleApprove = (id: string) => {
-    setProductStatuses((prev) => ({ ...prev, [id]: "published" }));
+  const handleApprove = async (id: string) => {
+    await updateProduct(id, { status: "published" });
   };
 
-  const handleReject = (id: string) => {
-    setProductStatuses((prev) => ({ ...prev, [id]: "rejected" }));
+  const handleReject = async (id: string) => {
+    await updateProduct(id, { status: "rejected" });
   };
 
-  const handleSave = (data: ProductFormData) => {
+  const handleSave = async (data: ProductFormData) => {
     if (editingProduct?.id) {
-      updateInternalProduct(editingProduct.id, data);
+      await updateProduct(editingProduct.id, data);
     } else {
-      addProduct(data);
+      await addProduct(data);
     }
     setIsModalOpen(false);
     setEditingProduct(null);
   };
 
   const displayedProducts = isAdmin ? products : myProducts;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -91,7 +97,6 @@ export function ProductManager({
         </Button>
       </div>
 
-      {/* Product List */}
       <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] overflow-hidden">
         {displayedProducts.length === 0 ? (
           <div className="p-12 text-center typo-body text-[var(--color-text-secondary)]">
@@ -100,8 +105,7 @@ export function ProductManager({
         ) : (
           <div className="divide-y divide-[var(--color-border)]">
             {displayedProducts.map((p) => {
-              const status =
-                productStatuses[p.id] || (isAdmin ? "published" : "pending");
+              const status = p.status || "published";
 
               return (
                 <div
@@ -131,7 +135,6 @@ export function ProductManager({
                   </div>
 
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {/* View Button */}
                     <Button
                       href={`/app/${p.slug}`}
                       variant="outline"
@@ -141,8 +144,7 @@ export function ProductManager({
                       <Eye size={16} />
                     </Button>
 
-                    {/* Edit Button (Owner or Admin) */}
-                    {(isAdmin || p.author === "VietAI Team") && (
+                    {(isAdmin || p.author === userProfile.email) && (
                       <button
                         onClick={() => handleEdit(p)}
                         className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-blue-500/10 text-blue-500 transition-colors"
@@ -151,7 +153,6 @@ export function ProductManager({
                       </button>
                     )}
 
-                    {/* Delete Button (Admin only or Owner if Draft) */}
                     {(isAdmin || status === "draft") && (
                       <button
                         onClick={() => handleDelete(p.id)}
@@ -161,7 +162,6 @@ export function ProductManager({
                       </button>
                     )}
 
-                    {/* Admin Actions */}
                     {isAdmin && status === "pending" && (
                       <>
                         <div className="w-px h-4 bg-[var(--color-border)] mx-1" />
@@ -194,6 +194,7 @@ export function ProductManager({
         onClose={() => setIsModalOpen(false)}
         initialData={editingProduct}
         onSave={handleSave}
+        categories={categories}
       />
     </div>
   );
@@ -204,7 +205,7 @@ function StatusBadge({ status }: { status: string }) {
     published: "bg-green-500/10 text-green-600 border-green-500/20",
     pending: "bg-amber-500/10 text-amber-600 border-amber-500/20",
     rejected: "bg-red-500/10 text-red-600 border-red-500/20",
-    draft: "bg-gray-500/10 text-gray-600 border-gray-500/20"
+    draft: "bg-gray-500/10 text-gray-600 border-gray-500/20",
   };
 
   return (
@@ -221,28 +222,29 @@ interface ProductFormModalProps {
   onClose: () => void;
   initialData: ProductFormData | null;
   onSave: (data: ProductFormData) => void;
+  categories: Category[];
 }
 
 function ProductFormModal({
   isOpen,
   onClose,
   initialData,
-  onSave
+  onSave,
+  categories,
 }: ProductFormModalProps) {
   const [formData, setFormData] = useState<ProductFormData>({
     name: "",
     tagline: "",
     description: "",
     category: "",
-    author: "VietAI Team",
+    author: "",
     icon: "",
     screenshots: [],
     features: [],
     pricing: [],
-    ...initialData
+    ...initialData,
   });
 
-  // Reset form when opening
   if (!isOpen && initialData && formData.id !== initialData.id) {
     setFormData({ ...initialData });
   }
@@ -287,7 +289,9 @@ function ProductFormModal({
             </div>
 
             <div>
-              <label className="block typo-caption font-semibold mb-2">Tagline</label>
+              <label className="block typo-caption font-semibold mb-2">
+                Tagline
+              </label>
               <input
                 type="text"
                 value={formData.tagline}
@@ -300,7 +304,9 @@ function ProductFormModal({
             </div>
 
             <div>
-              <label className="block typo-caption font-semibold mb-2">Category</label>
+              <label className="block typo-caption font-semibold mb-2">
+                Category
+              </label>
               <select
                 value={formData.category}
                 onChange={(e) =>
@@ -309,17 +315,20 @@ function ProductFormModal({
                 className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3 typo-body focus:ring-2 focus:ring-[var(--color-accent)] outline-none"
               >
                 <option value="">Select Category</option>
-                <option value="Productivity">Productivity</option>
-                <option value="Chatbot">Chatbot</option>
-                <option value="Creative">Creative</option>
-                <option value="Utility">Utility</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.label_en} ({cat.label_vi})
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <div className="space-y-5">
             <div>
-              <label className="block typo-caption font-semibold mb-2">Icon URL</label>
+              <label className="block typo-caption font-semibold mb-2">
+                Icon URL
+              </label>
               <input
                 type="text"
                 value={formData.icon}
@@ -352,11 +361,6 @@ function ProductFormModal({
               />
             </div>
           </div>
-        </div>
-
-        <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl typo-caption text-amber-700">
-          Detailed Feature & Pricing editor would go here. For demo, we use
-          basic fields.
         </div>
       </form>
     </SimpleModal>

@@ -1,6 +1,11 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
+import {
+  getMessaging as _getMessaging,
+  isSupported,
+  Messaging,
+} from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -34,4 +39,14 @@ export function getFirebaseDb(): Firestore {
     _db = getFirestore(getFirebaseApp());
   }
   return _db;
+}
+
+let _messaging: Messaging | null = null;
+
+export async function getFirebaseMessaging(): Promise<Messaging | null> {
+  if (_messaging) return _messaging;
+  const supported = await isSupported();
+  if (!supported) return null;
+  _messaging = _getMessaging(getFirebaseApp());
+  return _messaging;
 }

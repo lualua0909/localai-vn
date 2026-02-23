@@ -1,71 +1,57 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { GlowingEffect } from "../ui/glowing-effect";
+import { getTopApps, getTrendingApps } from "@/lib/firestore";
+import type { AppDetail } from "@/lib/app-data";
+import Link from "next/link";
 
-interface AppItem {
-  name: string;
-  desc: string;
-  color: string;
-  photoURL?: string;
-}
-
-function AppList({
-  items,
-  onItemClick,
-}: {
-  items: AppItem[];
-  onItemClick?: (item: AppItem) => void;
-}) {
+function AppList({ items }: { items: AppDetail[] }) {
   return items.map((app) => (
-    <motion.div
-      key={app.name}
-      whileHover={{
-        y: -2,
-        scale: 1.01,
-      }}
-      whileTap={{ scale: 0.99 }}
-      className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 shadow-sm"
-      onClick={() => onItemClick?.(app)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onItemClick?.(app);
-        }
-      }}
-    >
-      <GlowingEffect
-        spread={40}
-        glow={true}
-        disabled={false}
-        proximity={64}
-        inactiveZone={0.01}
-      />
-      <img
-        className="h-11 w-11 shrink-0 rounded-xl object-cover"
-        src={app.photoURL || "https://placehold.co/60x60/eee/white"}
-        alt={app.name}
-      />
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-tight">{app.name}</p>
-        <p className="mt-0.5 text-[13px] text-[var(--color-text-secondary)]">
-          {app.desc}
-        </p>
-      </div>
-    </motion.div>
+    <Link key={app.slug} href={`/app/${app.slug}`}>
+      <motion.div
+        whileHover={{ y: -2, scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 shadow-sm"
+      >
+        <GlowingEffect
+          spread={40}
+          glow={true}
+          disabled={false}
+          proximity={64}
+          inactiveZone={0.01}
+        />
+        <img
+          className="h-11 w-11 shrink-0 rounded-xl object-cover"
+          src={
+            app.icon ||
+            `https://placehold.co/60x60/eee/white?text=${app.name.charAt(0)}`
+          }
+          alt={app.name}
+        />
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold leading-tight">{app.name}</p>
+          <p className="mt-0.5 text-[13px] text-[var(--color-text-secondary)]">
+            {app.tagline}
+          </p>
+        </div>
+      </motion.div>
+    </Link>
   ));
 }
 
 export function TopApps() {
   const topApps = useTranslations("home").topApps;
-  const handleCardClick = (item: AppItem) => {
-    // Replace with navigation when URLs are available
-    console.log("App card clicked:", item.name);
-  };
+  const [leftApps, setLeftApps] = useState<AppDetail[]>([]);
+  const [rightApps, setRightApps] = useState<AppDetail[]>([]);
+
+  useEffect(() => {
+    getTopApps(5).then(setLeftApps);
+    getTrendingApps(5).then(setRightApps);
+  }, []);
 
   return (
     <section id="top-apps" className="section-padding">
@@ -88,10 +74,7 @@ export function TopApps() {
                 {topApps.left.description}
               </p>
               <div className="mt-4 flex gap-2 flex-col">
-                <AppList
-                  items={topApps.left.items}
-                  onItemClick={handleCardClick}
-                />
+                <AppList items={leftApps} />
               </div>
             </div>
           </ScrollReveal>
@@ -107,10 +90,7 @@ export function TopApps() {
                 {topApps.right.description}
               </p>
               <div className="mt-4">
-                <AppList
-                  items={topApps.right.items}
-                  onItemClick={handleCardClick}
-                />
+                <AppList items={rightApps} />
               </div>
             </div>
           </ScrollReveal>

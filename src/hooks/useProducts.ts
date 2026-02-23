@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
-import { appData as initialAppData, AppDetail } from "@/lib/app-data";
+import { useState, useEffect, useCallback } from "react";
+import type { AppDetail } from "@/lib/app-data";
+import type { UserProfile } from "@/lib/firestore";
+import {
+  getApps,
+  addApp as firestoreAddApp,
+  updateApp as firestoreUpdateApp,
+  deleteApp as firestoreDeleteApp,
+} from "@/lib/firestore";
 
-// Type for product form data (some fields optional during creation)
 export type ProductFormData = Omit<
   AppDetail,
   "id" | "slug" | "rating" | "reviewsCount" | "views" | "score"
@@ -10,69 +16,63 @@ export type ProductFormData = Omit<
   slug?: string;
 };
 
-// Mock roles
-export const userRoles: Record<string, number> = {
-  "admin@astra.ai": 0, // Admin
-  "user@astra.ai": 1 // User
-};
-
-export function useProducts(
-  userEmail: string | undefined | null,
-  roleOverride?: number
-) {
-  // Initialize state with appData values
+export function useProducts(userProfile: UserProfile | null) {
   const [products, setProducts] = useState<AppDetail[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Convert object to array
-    setProducts(Object.values(initialAppData));
+  const isAdmin = userProfile ? userProfile.role <= 1 : false;
+
+  const fetchProducts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const apps = await getApps();
+      setProducts(apps);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const role =
-    roleOverride !== undefined
-      ? roleOverride
-      : userEmail && userRoles[userEmail] !== undefined
-        ? userRoles[userEmail]
-        : 1;
-  const isAdmin = role === 0;
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
-  const getMyProducts = () => {
-    if (!userEmail) return [];
-    // Mock: filter by author name matching email purely for demo,
-    // or just return a subset if not admin.
-    // Since real appData doesn't link to emails, we'll simulate:
-    // "VietAI Team" is the current user for demo purposes if not admin.
-    if (isAdmin) return products;
-    return products.filter((p) => p.author === "VietAI Team");
-  };
+  const myProducts = isAdmin
+    ? products
+    : products.filter((p) => p.author === userProfile?.email);
 
-  const addProduct = (data: ProductFormData) => {
-    const newProduct: AppDetail = {
+  const addProduct = async (data: ProductFormData) => {
+    const slug = data.slug || data.name.toLowerCase().replace(/\s+/g, "-");
+    const newApp: Omit<AppDetail, "id"> = {
       ...data,
-      id: data.id || Math.random().toString(36).substr(2, 9),
-      slug: data.slug || data.name.toLowerCase().replace(/\s+/g, "-"),
-      rating: 0, // Default for new
+      slug,
+      rating: 0,
       reviewsCount: "0",
       views: 0,
-      score: 0
+      score: 0,
+      status: isAdmin ? "published" : "pending",
     };
-    setProducts([newProduct, ...products]);
+    await firestoreAddApp(newApp);
+    await fetchProducts();
   };
 
-  const updateProduct = (id: string, data: ProductFormData) => {
-    setProducts(products.map((p) => (p.id === id ? { ...p, ...data } : p)));
+  const updateProduct = async (id: string, data: Partial<AppDetail>) => {
+    await firestoreUpdateApp(id, data);
+    await fetchProducts();
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(products.filter((p) => p.id !== id));
+  const deleteProduct = async (id: string) => {
+    await firestoreDeleteApp(id);
+    await fetchProducts();
   };
 
   return {
     products,
-    myProducts: getMyProducts(),
+    myProducts,
     isAdmin,
+    loading,
     addProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    refetch: fetchProducts,
   };
 }
