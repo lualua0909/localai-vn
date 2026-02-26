@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "@/lib/i18n";
 import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { parseReviews } from "@/util";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { AppCard } from "@/components/app/AppCard";
+import { getApps, getCategories } from "@/lib/firestore";
+import type { Category } from "@/lib/firestore";
+import { useLanguage } from "@/lib/i18n";
+import type { AppDetail } from "@/lib/app-data";
 
 const ThreeDMarquee = dynamic(
   () => import("@/components/ui/3d-marquee").then((m) => m.ThreeDMarquee),
@@ -46,24 +50,18 @@ const marqueeImages = [
   "https://assets.aceternity.com/multi-step-loader.png",
   "https://assets.aceternity.com/vortex.png",
   "https://assets.aceternity.com/wobble-card.png",
-  "https://assets.aceternity.com/world-map.webp"
+  "https://assets.aceternity.com/world-map.webp",
 ];
-
-import { AppCard } from "@/components/app/AppCard";
-
-type AppItem = {
-  name: string;
-  desc: string;
-  category: string;
-  rating: string;
-  reviews: string;
-};
 
 function ExploreContent() {
   const t = useTranslations("explore");
+  const { language } = useLanguage();
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const [apps, setApps] = useState<AppDetail[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingApps, setLoadingApps] = useState(true);
   const [sortBy, setSortBy] = useState<"newest" | "rating" | "interaction">(
     "newest"
   );
@@ -71,12 +69,21 @@ function ExploreContent() {
   const [search, setSearch] = useState("");
   const isMobile = useIsMobile();
 
+  useEffect(() => {
+    Promise.all([getApps(), getCategories()])
+      .then(([appsData, catsData]) => {
+        setApps(appsData);
+        setCategories(catsData);
+      })
+      .finally(() => setLoadingApps(false));
+  }, []);
+
   const placeholders = [
     "Search for AI chatbots...",
     "Find image generation tools...",
     "Discover education apps...",
     "Look for finance assistants...",
-    "Explore creative tools..."
+    "Explore creative tools...",
   ];
 
   const handleVanishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,28 +92,32 @@ function ExploreContent() {
 
   const handleVanishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Optional: Log or specific action on submit
-    console.log("submitted");
   };
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const itemsPerPage = 12;
 
-  const filteredApps = t.apps
-    .filter((app: AppItem) => {
+  const filteredApps = apps
+    .filter((app) => {
       const matchCategory = !activeCategory || app.category === activeCategory;
       const matchSearch =
         !search ||
         app.name.toLowerCase().includes(search.toLowerCase()) ||
-        app.desc.toLowerCase().includes(search.toLowerCase());
+        app.tagline.toLowerCase().includes(search.toLowerCase());
       return matchCategory && matchSearch;
     })
-    .sort((a: AppItem, b: AppItem) => {
+    .sort((a, b) => {
       if (sortBy === "rating") {
-        return parseFloat(b.rating) - parseFloat(a.rating);
+        return b.rating - a.rating;
       }
       if (sortBy === "interaction") {
-        return parseReviews(b.reviews) - parseReviews(a.reviews);
+        const parseReviews = (r: string) => {
+          if (r.includes("K")) return parseFloat(r) * 1000;
+          return parseFloat(r) || 0;
+        };
+        return (
+          parseReviews(b.reviewsCount) - parseReviews(a.reviewsCount)
+        );
       }
       return 0;
     });
@@ -122,7 +133,6 @@ function ExploreContent() {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.set("page", page.toString());
     router.push(`?${params.toString()}`);
-    // Optional: Scroll to top of grid or page
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -164,7 +174,9 @@ function ExploreContent() {
               <div className="relative">
                 <select
                   value={sortBy}
-                  onChange={(e) => handleSortChange(e.target.value as any)}
+                  onChange={(e) =>
+                    handleSortChange(e.target.value as "newest" | "rating" | "interaction")
+                  }
                   className="appearance-none rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 pr-8 text-sm font-medium outline-none transition-colors hover:bg-[var(--color-text)]/5 focus:border-[var(--color-text)] cursor-pointer"
                 >
                   <option value="newest">{t.sortOptions.newest}</option>
@@ -195,13 +207,15 @@ function ExploreContent() {
               <div className="relative sm:hidden">
                 <select
                   value={activeCategory || ""}
-                  onChange={(e) => handleCategoryChange(e.target.value || null)}
+                  onChange={(e) =>
+                    handleCategoryChange(e.target.value || null)
+                  }
                   className="appearance-none rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 pr-8 text-sm font-medium outline-none transition-colors hover:bg-[var(--color-text)]/5 focus:border-[var(--color-text)] cursor-pointer"
                 >
                   <option value="">{t.filterAll}</option>
-                  {t.categories.map((cat: string) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {language === "en" ? cat.label_en : cat.label_vi}
                     </option>
                   ))}
                 </select>
@@ -237,71 +251,80 @@ function ExploreContent() {
               >
                 {t.filterAll}
               </button>
-              {t.categories.map((cat: string) => (
+              {categories.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.id}
                   onClick={() =>
-                    handleCategoryChange(activeCategory === cat ? null : cat)
+                    handleCategoryChange(activeCategory === cat.name ? null : cat.name)
                   }
                   className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                    activeCategory === cat
+                    activeCategory === cat.name
                       ? "bg-[var(--color-text)] text-[var(--color-bg)]"
                       : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
                   }`}
                 >
-                  {cat}
+                  {language === "en" ? cat.label_en : cat.label_vi}
                 </button>
               ))}
             </div>
 
             {/* App grid */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {paginatedApps.map((app: AppItem) => (
-                <AppCard key={app.name} app={app} />
-              ))}
-            </div>
-
-            {paginatedApps.length === 0 && (
-              <p className="py-12 text-center text-sm text-[var(--color-text-secondary)]">
-                {t.noResults}
-              </p>
-            )}
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-10 flex items-center justify-center gap-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Prev
-                </button>
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
-                          currentPage === page
-                            ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                            : "hover:bg-[var(--color-text)]/5 text-[var(--color-text-secondary)]"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-                </div>
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
+            {loadingApps ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {paginatedApps.map((app) => (
+                    <AppCard key={app.slug} app={app} />
+                  ))}
+                </div>
+
+                {paginatedApps.length === 0 && (
+                  <p className="py-12 text-center text-sm text-[var(--color-text-secondary)]">
+                    {t.noResults}
+                  </p>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="mt-10 flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Prev
+                    </button>
+                    <div className="flex items-center gap-1">
+                      {Array.from(
+                        { length: totalPages },
+                        (_, i) => i + 1
+                      ).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
+                            currentPage === page
+                              ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                              : "hover:bg-[var(--color-text)]/5 text-[var(--color-text-secondary)]"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

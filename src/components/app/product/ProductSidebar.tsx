@@ -36,7 +36,7 @@ export function ProductSidebar({ app, relatedApps }: ProductSidebarProps) {
   return (
     <aside
       ref={ref}
-      className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-24 lg:self-start space-y-5"
+      className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-24 lg:self-start space-y-6"
     >
       {/* Related products */}
       {relatedApps.length > 0 && (
@@ -46,7 +46,7 @@ export function ProductSidebar({ app, relatedApps }: ProductSidebarProps) {
           transition={{ duration: 0.4 }}
         >
           <GlowCard>
-            <h4 className="text-sm font-semibold mb-4 text-[var(--color-text-secondary)] uppercase tracking-wider">
+            <h4 className="typo-caption font-semibold mb-5 text-[var(--color-text-secondary)] uppercase tracking-wider">
               Sản phẩm liên quan
             </h4>
             <motion.div
@@ -67,17 +67,20 @@ export function ProductSidebar({ app, relatedApps }: ProductSidebarProps) {
                       className="w-10 h-10 rounded-xl object-cover bg-white shrink-0 shadow-sm"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate group-hover/rel:text-[var(--color-accent)] transition-colors">
+                      <p
+                        className="typo-body font-semibold truncate group-hover/rel:text-[var(--color-accent)] transition-colors"
+                        style={{ fontSize: 14 }}
+                      >
                         {ra.name}
                       </p>
-                      <p className="text-[11px] text-[var(--color-text-secondary)] truncate leading-snug">
+                      <p className="typo-caption text-[var(--color-text-secondary)] truncate">
                         {ra.tagline}
                       </p>
                       <div className="flex items-center gap-3 mt-0.5">
-                        <span className="text-[11px] text-[var(--color-text-secondary)] flex items-center gap-0.5">
+                        <span className="typo-caption text-[var(--color-text-secondary)] flex items-center gap-0.5">
                           <ArrowUpCircle size={10} /> {ra.score || 5}
                         </span>
-                        <span className="text-[11px] text-[var(--color-text-secondary)] flex items-center gap-0.5">
+                        <span className="typo-caption text-[var(--color-text-secondary)] flex items-center gap-0.5">
                           <MessageSquare size={10} /> 0
                         </span>
                       </div>
@@ -88,7 +91,7 @@ export function ProductSidebar({ app, relatedApps }: ProductSidebarProps) {
             </motion.div>
             <Link
               href="/app"
-              className="inline-block text-sm text-[var(--color-accent)] hover:underline mt-3 font-medium"
+              className="inline-block typo-caption font-semibold text-[var(--color-accent)] hover:underline mt-4"
             >
               Xem tất cả →
             </Link>
@@ -103,39 +106,43 @@ export function ProductSidebar({ app, relatedApps }: ProductSidebarProps) {
         transition={{ duration: 0.4, delay: 0.15 }}
       >
         <GlowCard>
-          <h4 className="text-sm font-semibold mb-4 text-[var(--color-text-secondary)] uppercase tracking-wider">
+          <h4 className="typo-caption font-semibold mb-5 text-[var(--color-text-secondary)] uppercase tracking-wider">
             Thống kê
           </h4>
           <div className="space-y-3">
             {[
               {
                 icon: <Calendar size={14} />,
-                label: "Ra mắt",
+                label: "Ra mắt:",
                 value: app.releaseDate || "09/02/2026",
               },
               {
                 icon: <Eye size={14} />,
-                label: "Lượt xem",
+                label: "Lượt xem:",
                 value: app.views || 9,
               },
               {
                 icon: <Zap size={14} />,
-                label: "Điểm",
+                label: "Điểm:",
                 value: app.score || 18,
               },
               {
                 icon: <User size={14} />,
-                label: "Nhà phát triển",
+                label: "Nhà phát triển:",
                 value: app.author,
               },
             ].map((stat, i) => (
               <div key={i}>
-                {i > 0 && <div className="h-px bg-[var(--color-border)] mb-3" />}
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-2 text-[var(--color-text-secondary)]">
+                <div className="flex items-center justify-between">
+                  <span className="typo-caption flex items-center gap-2 text-[var(--color-text-secondary)]">
                     {stat.icon} {stat.label}
                   </span>
-                  <span className="font-medium">{stat.value}</span>
+                  <span
+                    className="typo-body font-semibold"
+                    style={{ fontSize: 14 }}
+                  >
+                    {stat.value}
+                  </span>
                 </div>
               </div>
             ))}

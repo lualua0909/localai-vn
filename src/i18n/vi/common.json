@@ -11,10 +11,6 @@
         "href": "/app"
       },
       {
-        "label": "Bảng giá",
-        "href": "/bang-gia"
-      },
-      {
         "label": "Blog",
         "href": "/blog"
       }
@@ -63,10 +59,6 @@
           {
             "label": "Đăng sản phẩm",
             "href": "#"
-          },
-          {
-            "label": "Bảng giá",
-            "href": "#pricing"
           }
         ]
       },
@@ -75,40 +67,7 @@
         "links": [
           {
             "label": "Blog",
-            "href": "#"
-          },
-          {
-            "label": "Sự kiện",
-            "href": "#"
-          },
-          {
-            "label": "Discord",
-            "href": "#"
-          },
-          {
-            "label": "Newsletter",
-            "href": "#"
-          }
-        ]
-      },
-      {
-        "title": "Tài nguyên",
-        "links": [
-          {
-            "label": "Tài liệu API",
-            "href": "#"
-          },
-          {
-            "label": "Hướng dẫn",
-            "href": "#"
-          },
-          {
-            "label": "Status",
-            "href": "#"
-          },
-          {
-            "label": "Changelog",
-            "href": "#"
+            "href": "/blog"
           }
         ]
       },
@@ -118,23 +77,11 @@
           {
             "label": "Điều khoản",
             "href": "#"
-          },
-          {
-            "label": "Quyền riêng tư",
-            "href": "#"
-          },
-          {
-            "label": "Bảo mật",
-            "href": "#"
-          },
-          {
-            "label": "Cookie",
-            "href": "#"
           }
         ]
       }
     ],
-    "copyright": "© {year} LocalAI. Tất cả quyền được bảo lưu.",
+    "copyright": "© {year} LocalAI.",
     "languageLabel": "Ngôn ngữ",
     "languageOptions": [
       {

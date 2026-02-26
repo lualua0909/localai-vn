@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { AppDetail, getRelatedApps } from "@/lib/app-data";
+import type { AppDetail } from "@/lib/app-data";
+import { getRelatedApps } from "@/lib/firestore";
 import { Breadcrumb } from "./product/Breadcrumb";
 import { ProductHero } from "./product/ProductHero";
 import { ProductScreenshots } from "./product/ProductScreenshots";
@@ -17,26 +18,21 @@ interface ProductViewProps {
 export function ProductView({ app }: ProductViewProps) {
   const [upvoted, setUpvoted] = useState(false);
   const [upvoteCount, setUpvoteCount] = useState(app.score || 18);
+  const [relatedApps, setRelatedApps] = useState<AppDetail[]>([]);
+
+  useEffect(() => {
+    getRelatedApps(app.id, app.category).then(setRelatedApps);
+  }, [app.id, app.category]);
 
   const toggleUpvote = () => {
     setUpvoted((v) => !v);
     setUpvoteCount((c) => (upvoted ? c - 1 : c + 1));
   };
 
-  const relatedApps = getRelatedApps(app.id);
-
   return (
-    <div className="min-h-screen pt-20 pb-20">
+    <div className="min-h-screen pt-24 pb-24">
       <div className="container-main max-w-6xl">
-        <Breadcrumb
-          items={[
-            { label: "Trang chủ", href: "/" },
-            { label: "Sản phẩm", href: "/app" },
-            { label: app.name },
-          ]}
-        />
-
-        <div className="flex flex-col lg:flex-row gap-10">
+        <div className="flex flex-col lg:flex-row gap-12">
           {/* Left column */}
           <div className="flex-1 min-w-0">
             <ProductHero
@@ -53,10 +49,10 @@ export function ProductView({ app }: ProductViewProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-10"
+              className="mt-12"
             >
               <div
-                className="prose dark:prose-invert max-w-none text-[var(--color-text-secondary)] leading-[1.85] text-[15px]"
+                className="prose dark:prose-invert max-w-none typo-body text-[var(--color-text-secondary)]"
                 dangerouslySetInnerHTML={{ __html: app.description }}
               />
             </motion.div>

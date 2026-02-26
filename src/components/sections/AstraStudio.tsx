@@ -1,18 +1,22 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { Spotlight } from "@/components/ui/Spotlight";
 import { ArrowUpRight, Star, TrendingUp } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { GlowingEffect } from "../ui/glowing-effect";
+import { getApps } from "@/lib/firestore";
+import type { AppDetail } from "@/lib/app-data";
+import Link from "next/link";
 
 export function AstraStudio() {
   const studio = useTranslations("home").studio;
-  const handleCardClick = (product: (typeof studio.products)[number]) => {
-    // Replace with navigation when destination URLs are available
-    console.log("Product card clicked:", product.name);
-  };
+  const [products, setProducts] = useState<AppDetail[]>([]);
+
+  useEffect(() => {
+    getApps().then((apps) => setProducts(apps.slice(0, 8)));
+  }, []);
 
   return (
     <section id="featured" className="section-padding">
@@ -30,81 +34,74 @@ export function AstraStudio() {
         </ScrollReveal>
 
         <div className="mt-14 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-          {studio.products.map((product, idx) => (
-            <ScrollReveal key={product.name} delay={idx * 0.06}>
-              <motion.div
-                whileHover={{
-                  y: -2,
-                  scale: 1.01
-                }}
-                whileTap={{ scale: 0.99 }}
-                className="h-full cursor-pointer"
-                onClick={() => handleCardClick(product)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleCardClick(product);
-                  }
-                }}
-              >
-                <div className="glass-card flex h-full flex-col rounded-3xl p-6">
-                  <GlowingEffect
-                    spread={40}
-                    glow={true}
-                    disabled={false}
-                    proximity={64}
-                    inactiveZone={0.01}
-                    borderWidth={2}
-                  />
-                  <div className="mb-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img
-                        className="h-10 w-10 shrink-0 rounded-xl object-cover"
-                        src={
-                          (product as any).photoURL ||
-                          "https://placehold.co/60x60/eee/white"
-                        }
-                        alt={product.name}
-                      />
-                      <div>
-                        <h3 className="text-sm font-semibold">
-                          {product.name}
-                        </h3>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">
-                          {product.category}
-                        </span>
-                      </div>
-                    </div>
-                    <ArrowUpRight
-                      size={16}
-                      className="text-[var(--color-text-secondary)]"
+          {products.map((product, idx) => (
+            <ScrollReveal key={product.slug} delay={idx * 0.06}>
+              <Link href={`/app/${product.slug}`}>
+                <motion.div
+                  whileHover={{ y: -2, scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="h-full cursor-pointer"
+                >
+                  <div className="glass-card flex h-full flex-col rounded-3xl p-6">
+                    <GlowingEffect
+                      spread={40}
+                      glow={true}
+                      disabled={false}
+                      proximity={64}
+                      inactiveZone={0.01}
+                      borderWidth={2}
                     />
-                  </div>
-
-                  <p className="flex-1 text-sm text-[var(--color-text-secondary)]">
-                    {product.desc}
-                  </p>
-
-                  <div className="mt-4 flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                      <Star size={12} className="text-amber-500" />
-                      <span className="text-[13px] font-medium">
-                        {product.stars}
-                      </span>
+                    <div className="mb-3 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <img
+                          className="h-10 w-10 shrink-0 rounded-xl object-cover"
+                          src={
+                            product.icon ||
+                            `https://placehold.co/60x60/eee/white?text=${product.name.charAt(0)}`
+                          }
+                          alt={product.name}
+                        />
+                        <div>
+                          <h3 className="text-sm font-semibold">
+                            {product.name}
+                          </h3>
+                          <span className="text-[10px] text-[var(--color-text-secondary)]">
+                            {product.category}
+                          </span>
+                        </div>
+                      </div>
+                      <ArrowUpRight
+                        size={16}
+                        className="text-[var(--color-text-secondary)]"
+                      />
                     </div>
-                    {product.trending && (
-                      <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5">
-                        <TrendingUp size={10} className="text-emerald-500" />
-                        <span className="text-[10px] font-medium text-emerald-500">
-                          {studio.trending}
+
+                    <p className="flex-1 text-sm text-[var(--color-text-secondary)]">
+                      {product.tagline}
+                    </p>
+
+                    <div className="mt-4 flex items-center gap-3">
+                      <div className="flex items-center gap-1">
+                        <Star size={12} className="text-amber-500" />
+                        <span className="text-[13px] font-medium">
+                          {product.rating}
                         </span>
                       </div>
-                    )}
+                      {product.trending && (
+                        <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5">
+                          <TrendingUp
+                            size={10}
+                            className="text-emerald-500"
+                          />
+                          <span className="text-[10px] font-medium text-emerald-500">
+                            {studio.trending}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             </ScrollReveal>
           ))}
         </div>

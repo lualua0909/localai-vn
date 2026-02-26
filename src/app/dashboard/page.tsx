@@ -4,111 +4,173 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { useAuth } from "@/lib/useAuth";
 import { Button } from "@/components/ui/Button";
-import { LogOut, User } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 
 import { useState } from "react";
 import { ProductManager } from "@/components/dashboard/ProductManager";
-import { userRoles } from "@/hooks/useProducts";
-import { LayoutDashboard, Package, Settings } from "lucide-react";
-import { Header } from "@/components/layout/Header";
+import { UserManager } from "@/components/dashboard/UserManager";
+import { BlogManager } from "@/components/dashboard/BlogManager";
+import { FCMManager } from "@/components/dashboard/FCMManager";
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  FileText,
+  Bell,
+  LogOut,
+  Tag,
+} from "lucide-react";
 import { AppName } from "@/components/ui/appName";
+import { CategoryManager } from "@/components/dashboard/CategoryManager";
+
+type TabKey = "overview" | "products" | "users" | "blogs" | "categories" | "notifications";
 
 function DashboardContent() {
-  const { user, signOut } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
   const appCopy = useTranslations("app");
-  const [activeTab, setActiveTab] = useState<"overview" | "products">(
-    "products"
-  );
+  const [activeTab, setActiveTab] = useState<TabKey>("products");
 
-  // Demo Role Switcher
-  const [demoRole, setDemoRole] = useState<number>(1);
+  const isAdmin = userProfile ? userProfile.role <= 1 : false;
+  const roleLabel =
+    userProfile?.role === 0
+      ? "Root"
+      : userProfile?.role === 1
+        ? "Admin"
+        : "User";
+
+  const tabs: {
+    key: TabKey;
+    label: string;
+    icon: React.ReactNode;
+    adminOnly?: boolean;
+  }[] = [
+    { key: "overview", label: "Overview", icon: <LayoutDashboard size={14} /> },
+    { key: "products", label: "Products", icon: <Package size={14} /> },
+    {
+      key: "users",
+      label: "Users",
+      icon: <Users size={14} />,
+      adminOnly: true,
+    },
+    {
+      key: "blogs",
+      label: "Blogs",
+      icon: <FileText size={14} />,
+      adminOnly: true,
+    },
+    {
+      key: "categories",
+      label: "Categories",
+      icon: <Tag size={14} />,
+      adminOnly: true,
+    },
+    {
+      key: "notifications",
+      label: "FCM",
+      icon: <Bell size={14} />,
+      adminOnly: true,
+    },
+  ];
+
+  const visibleTabs = tabs.filter((t) => !t.adminOnly || isAdmin);
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] pb-20">
+    <div className="min-h-screen bg-[var(--color-bg)] pb-24">
       {/* Top bar */}
       <header className="border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl sticky top-0 z-30">
-        <div className="container-main flex h-16 items-center justify-between">
-          <div className="flex items-center gap-6">
+        <div className="container-main flex h-14 items-center justify-between">
+          <div className="flex items-center gap-8">
             <AppName />
 
-            {/* Navigation Tabs */}
-            <div className="hidden md:flex items-center gap-1 bg-[var(--color-bg-alt)]/50 p-1 rounded-lg border border-[var(--color-border)]">
-              <button
-                onClick={() => setActiveTab("overview")}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                  activeTab === "overview"
-                    ? "bg-white dark:bg-[var(--color-bg)] shadow-sm text-[var(--color-text)]"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
-                }`}
-              >
-                <LayoutDashboard size={16} />
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab("products")}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                  activeTab === "products"
-                    ? "bg-white dark:bg-[var(--color-bg)] shadow-sm text-[var(--color-text)]"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
-                }`}
-              >
-                <Package size={16} />
-                Products
-              </button>
-            </div>
+            <nav className="hidden md:flex items-center gap-1">
+              {visibleTabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg typo-caption font-semibold transition-all ${
+                    activeTab === tab.key
+                      ? "bg-[var(--color-bg-alt)] text-[var(--color-text)]"
+                      : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
+                  }`}
+                >
+                  {tab.icon}
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Demo Role Switcher */}
-            <select
-              value={demoRole}
-              onChange={(e) => setDemoRole(Number(e.target.value))}
-              className="text-xs bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-md px-2 py-1"
-            >
-              <option value={1}>View as User</option>
-              <option value={0}>View as Admin</option>
-            </select>
+            <span className="typo-caption px-2 py-1 rounded-full bg-accent/10 text-accent font-medium">
+              {roleLabel}
+            </span>
 
             <div className="flex items-center gap-3 pl-4 border-l border-[var(--color-border)]">
               <img
-                src={user?.photoURL || "https://placehold.co/60x60/eee/white"}
+                src={
+                  userProfile?.avatar ||
+                  user?.photoURL ||
+                  "https://placehold.co/60x60/eee/white"
+                }
                 alt="User"
-                className="h-8 w-8 rounded-full object-cover border border-[var(--color-border)]"
+                className="h-8 w-8 rounded-full object-cover"
               />
               <button
                 onClick={signOut}
                 className="text-[var(--color-text-secondary)] hover:text-red-500 transition-colors"
               >
-                <LogOut size={18} />
+                <LogOut size={16} />
               </button>
             </div>
           </div>
         </div>
+
+        {/* Mobile tabs */}
+        <div className="md:hidden border-t border-[var(--color-border)] overflow-x-auto">
+          <div className="flex px-4 py-2 gap-1">
+            {visibleTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg typo-caption font-medium whitespace-nowrap transition-all ${
+                  activeTab === tab.key
+                    ? "bg-[var(--color-bg-alt)] text-[var(--color-text)]"
+                    : "text-[var(--color-text-secondary)]"
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </header>
 
-      <main className="container-main py-8">
+      <main className="container-main py-10">
         {activeTab === "overview" && (
           <div className="mx-auto max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Profile card */}
-            <div className="glass-card mb-6 rounded-2xl p-6 md:p-8">
+            <div className="glass-card mb-8 rounded-2xl p-8 md:p-10">
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 <img
                   src={
-                    user?.photoURL || "https://placehold.co/100x100/eee/white"
+                    userProfile?.avatar ||
+                    user?.photoURL ||
+                    "https://placehold.co/100x100/eee/white"
                   }
                   alt="User avatar"
-                  className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover border-4 border-white dark:border-[var(--color-bg)] shadow-md"
+                  className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover"
                 />
                 <div className="text-center md:text-left">
-                  <h1 className="text-2xl font-bold">
-                    {user?.displayName || appCopy.profile.fallbackName}
+                  <h1 className="typo-h1">
+                    {user?.displayName ||
+                      userProfile?.email ||
+                      appCopy.profile.fallbackName}
                   </h1>
-                  <p className="text-[var(--color-text-secondary)] font-medium">
+                  <p className="typo-body text-[var(--color-text-secondary)] mt-1">
                     {user?.email}
                   </p>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-1 uppercase tracking-wider">
-                    Role: {demoRole === 0 ? "Admin" : "User"}
+                  <p className="typo-caption text-[var(--color-text-secondary)] mt-2 uppercase tracking-wider">
+                    Role: {roleLabel}
                   </p>
                 </div>
                 <div className="md:ml-auto">
@@ -118,59 +180,59 @@ function DashboardContent() {
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
-                {appCopy.profile.stats.map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                    <p className="text-xs text-[var(--color-text-secondary)] uppercase tracking-wide mt-1">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
+              <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[var(--color-border)] pt-10">
+                {appCopy.profile.stats.map(
+                  (stat: { value: string; label: string }) => (
+                    <div key={stat.label} className="text-center">
+                      <p className="typo-h1">{stat.value}</p>
+                      <p className="typo-caption text-[var(--color-text-secondary)] uppercase tracking-wider mt-2">
+                        {stat.label}
+                      </p>
+                    </div>
+                  )
+                )}
               </div>
             </div>
 
-            {/* Feedback */}
-            <div className="glass-card rounded-2xl p-8">
-              <h2 className="mb-2 text-lg font-semibold">
-                {appCopy.feedback.title}
-              </h2>
+            <div className="glass-card rounded-2xl p-8 md:p-10">
+              <h2 className="typo-h2 mb-4">{appCopy.feedback.title}</h2>
               <FeedbackForm uid={user?.uid} />
             </div>
           </div>
         )}
 
-        {activeTab === "products" && (
+        {activeTab === "products" && userProfile && (
           <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Inject role into ProductManager context via a wrapper or prop if possible, 
-                for now we'll rely on the mocked logic which uses a hardcoded email map, 
-                BUT I will update useProducts to accept an override role for this demo. 
-            */}
-            <ProductManagerWrapper
-              demoRole={demoRole}
-              userEmail={user?.email}
-            />
+            <ProductManager userProfile={userProfile} />
+          </div>
+        )}
+
+        {activeTab === "users" && isAdmin && (
+          <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <UserManager />
+          </div>
+        )}
+
+        {activeTab === "blogs" && isAdmin && (
+          <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <BlogManager />
+          </div>
+        )}
+
+        {activeTab === "categories" && isAdmin && (
+          <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CategoryManager />
+          </div>
+        )}
+
+        {activeTab === "notifications" && isAdmin && user && (
+          <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <FCMManager uid={user.uid} />
           </div>
         )}
       </main>
     </div>
   );
-}
-
-// Wrapper to inject the demo role into the hook's context effectively
-// We need to modify useProducts to accept role override or handle it here.
-// Since useProducts is a hook, we can't easily override its internal logic from outside without prop.
-// Let's modify ProductManager to accept `role` prop.
-function ProductManagerWrapper({
-  demoRole,
-  userEmail
-}: {
-  demoRole: number;
-  userEmail?: string | null;
-}) {
-  // We need to pass this down. I'll modify ProductManager.tsx next to accept 'roleOverride'
-  // For now, I'll assume ProductManager can handle it.
-  return <ProductManager userEmail={userEmail} roleOverride={demoRole} />;
 }
 
 export default function DashboardPage() {

@@ -33,43 +33,19 @@
     "left": {
       "eyebrow": "Yêu thích",
       "title": "Top tuần này",
-      "description": "Những ứng dụng AI được cộng đồng yêu thích nhất tuần.",
-      "items": [
-        { "name": "VietGPT", "desc": "Chatbot AI tiếng Việt thông minh", "color": "bg-blue-500", "initial": "V" },
-        { "name": "PixelAI Studio", "desc": "Tạo ảnh sản phẩm bằng AI", "color": "bg-purple-500", "initial": "P" },
-        { "name": "CodeBuddy VN", "desc": "Trợ lý lập trình AI", "color": "bg-emerald-500", "initial": "C" },
-        { "name": "EduMentor", "desc": "Gia sư AI cá nhân hoá", "color": "bg-amber-500", "initial": "E" },
-        { "name": "DataSense", "desc": "Phân tích dữ liệu tự động", "color": "bg-rose-500", "initial": "D" }
-      ]
+      "description": "Những ứng dụng AI được cộng đồng yêu thích nhất tuần."
     },
     "right": {
       "eyebrow": "Thiết yếu",
       "title": "Yêu thích tại Việt Nam",
-      "description": "Các sản phẩm AI phổ biến nhất được người Việt tin dùng.",
-      "items": [
-        { "name": "VoiceAI Việt", "desc": "Chuyển giọng nói thành văn bản", "color": "bg-cyan-500", "initial": "V" },
-        { "name": "DocuScan AI", "desc": "OCR thông minh cho tiếng Việt", "color": "bg-orange-500", "initial": "D" },
-        { "name": "MarketBot", "desc": "Tự động hoá marketing bằng AI", "color": "bg-pink-500", "initial": "M" },
-        { "name": "HealthCheck AI", "desc": "Tư vấn sức khoẻ bằng AI", "color": "bg-teal-500", "initial": "H" },
-        { "name": "FinBot", "desc": "Trợ lý tài chính thông minh", "color": "bg-indigo-500", "initial": "F" }
-      ]
+      "description": "Các sản phẩm AI phổ biến nhất được người Việt tin dùng."
     }
   },
   "studio": {
     "eyebrow": "Mới ra mắt",
     "title": "Sản phẩm mới",
     "description": "Những sản phẩm AI Việt Nam mới nhất vừa được cộng đồng đăng tải.",
-    "trending": "Trending",
-    "products": [
-      { "name": "VietGPT", "desc": "Chatbot AI tiếng Việt thông minh, hỗ trợ đa ngữ cảnh", "category": "Chatbot", "stars": 342, "trending": true, "color": "bg-blue-500" },
-      { "name": "PixelAI Studio", "desc": "Tạo ảnh sản phẩm chuyên nghiệp bằng AI trong 30 giây", "category": "Tạo ảnh", "stars": 218, "trending": true, "color": "bg-purple-500" },
-      { "name": "CodeBuddy VN", "desc": "Trợ lý lập trình AI hiểu tiếng Việt, hỗ trợ 20+ ngôn ngữ", "category": "Code Assistant", "stars": 185, "trending": false, "color": "bg-emerald-500" },
-      { "name": "EduMentor", "desc": "Gia sư AI cá nhân hoá, luyện thi đại học và IELTS", "category": "Giáo dục", "stars": 156, "trending": true, "color": "bg-amber-500" },
-      { "name": "VoiceAI Việt", "desc": "Chuyển giọng nói thành văn bản chính xác đến 98%", "category": "Giọng nói", "stars": 127, "trending": false, "color": "bg-cyan-500" },
-      { "name": "DocuScan AI", "desc": "OCR thông minh cho tiếng Việt, nhận diện chữ viết tay", "category": "Tiện ích", "stars": 98, "trending": true, "color": "bg-orange-500" },
-      { "name": "FinBot", "desc": "Trợ lý tài chính thông minh, phân tích đầu tư cá nhân", "category": "Tài chính", "stars": 89, "trending": false, "color": "bg-indigo-500" },
-      { "name": "HealthCheck AI", "desc": "Tư vấn sức khoẻ bằng AI, theo dõi chỉ số hàng ngày", "category": "Y tế", "stars": 76, "trending": false, "color": "bg-rose-500" }
-    ]
+    "trending": "Trending"
   },
   "automations": {
     "eyebrow": "Đơn giản",

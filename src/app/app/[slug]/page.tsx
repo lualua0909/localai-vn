@@ -1,43 +1,52 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getAppBySlug } from "@/lib/app-data";
+"use client";
+
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getAppBySlug } from "@/lib/firestore";
+import type { AppDetail } from "@/lib/app-data";
 import { ProductView } from "@/components/app/ProductView";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+export default function ProductPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const [app, setApp] = useState<AppDetail | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export async function generateMetadata({
-  params
-}: PageProps): Promise<Metadata> {
-  const app = getAppBySlug(params.slug);
+  useEffect(() => {
+    getAppBySlug(slug)
+      .then(setApp)
+      .finally(() => setLoading(false));
+  }, [slug]);
 
-  if (!app) {
-    return {
-      title: "App Not Found"
-    };
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        </main>
+        <Footer />
+      </>
+    );
   }
 
-  return {
-    title: `${app.name} | Unikorn`,
-    description: app.tagline,
-    openGraph: {
-      title: app.name,
-      description: app.tagline,
-      images: [app.icon]
-    }
-  };
-}
-
-export default function ProductPage({ params }: PageProps) {
-  const app = getAppBySlug(params.slug);
-
   if (!app) {
-    notFound();
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">App Not Found</h1>
+            <p className="mt-2 text-[var(--color-text-secondary)]">
+              The app you are looking for does not exist.
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
   return (

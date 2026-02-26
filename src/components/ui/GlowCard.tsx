@@ -15,7 +15,7 @@ export function GlowCard({
   className = "",
   spread = 40,
   proximity = 64,
-  borderWidth = 1.5,
+  borderWidth = 2,
 }: GlowCardProps) {
   return (
     <div className={`relative rounded-2xl ${className}`}>
@@ -27,7 +27,7 @@ export function GlowCard({
         inactiveZone={0.01}
         borderWidth={borderWidth}
       />
-      <div className="relative bg-white dark:bg-[var(--color-bg-alt)] rounded-2xl border border-[var(--color-border)] p-5">
+      <div className="relative bg-white dark:bg-[var(--color-bg-alt)] rounded-2xl shadow-md p-5">
         {children}
       </div>
     </div>

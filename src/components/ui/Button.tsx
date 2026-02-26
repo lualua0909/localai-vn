@@ -58,11 +58,17 @@ export function Button({
     );
   }
 
+  const btnProps = props as ButtonAsButton;
+
   return (
     <motion.button
       whileTap={{ scale: 0.97 }}
       className={cls}
-      {...(props as ButtonAsButton)}
+      type={btnProps.type}
+      disabled={btnProps.disabled}
+      onClick={btnProps.onClick}
+      aria-label={btnProps["aria-label"]}
+      title={btnProps.title}
     >
       {icon && <span className="shrink-0">{icon}</span>}
       {children}

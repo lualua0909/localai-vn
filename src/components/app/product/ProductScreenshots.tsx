@@ -16,7 +16,7 @@ export function ProductScreenshots({ app }: ProductScreenshotsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="mt-4 -mx-4 sm:-mx-6"
+      className="-mx-4 sm:-mx-6"
     >
       <Carousel
         items={app.screenshots.map((src, i) => (
