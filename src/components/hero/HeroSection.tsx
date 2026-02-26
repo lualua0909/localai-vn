@@ -22,11 +22,11 @@ export function HeroSection() {
       <BackgroundRippleEffect />
 
       {/* Text Hover Effect Title */}
-      <div className="container-main relative z-10 pt-32">
-        <div className="mx-auto flex h-[12rem] max-w-4xl items-center justify-center">
+      <div className="container-main pointer-events-none relative z-10 pt-32">
+        <div className="pointer-events-auto mx-auto flex h-[12rem] max-w-4xl items-center justify-center">
           <TextHoverEffect text={home.hero.title} duration={0.3} />
         </div>
-        <p className="mx-auto mt-2 max-w-xl text-center text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+        <p className="pointer-events-auto mx-auto mt-2 max-w-xl text-center text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
           {taglineLine1}
           <br />
           {taglineLine2}

@@ -42,8 +42,6 @@ const config: Config = {
         "slide-up": "slideUp 0.6s ease-out forwards",
         float: "float 6s ease-in-out infinite",
         "beam-move": "beamMove 8s linear infinite",
-        "cell-ripple":
-          "cellRipple var(--duration, 600ms) ease-out var(--delay, 0ms) both",
       },
       keyframes: {
         fadeIn: {
@@ -65,11 +63,6 @@ const config: Config = {
         scroll: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
-        },
-        cellRipple: {
-          "0%": { opacity: "0.4" },
-          "50%": { opacity: "0.8" },
-          "100%": { opacity: "0.4" },
         },
       },
     },
