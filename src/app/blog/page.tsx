@@ -8,6 +8,7 @@ import type { BlogPost } from "@/lib/blog-data";
 import { getBlogs } from "@/lib/firestore";
 import { useTranslations } from "@/lib/i18n";
 import { PostCard } from "@/components/blog/PostCard";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 function BlogContent() {
   const blog = useTranslations("blog");
@@ -44,19 +45,22 @@ function BlogContent() {
     <>
       <Header />
       {/* Header */}
-      <div className="container-main section-padding pb-0 mt-5">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {blog.hero.eyebrow}
-          </p>
-          <h1 className="text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
-            {blog.hero.title}
-          </h1>
-          <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
-            {blog.hero.description}
-          </p>
+      <section className="relative overflow-hidden">
+        <BackgroundRippleEffect />
+        <div className="container-main pointer-events-none relative z-10 section-padding pb-0 mt-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
+              {blog.hero.eyebrow}
+            </p>
+            <h1 className="text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
+              {blog.hero.title}
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+              {blog.hero.description}
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Blog Grid */}
       <div className="container-main section-padding">

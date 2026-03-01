@@ -79,6 +79,14 @@
             "href": "#"
           }
         ]
+      }, {
+        "title": "Liên hệ",
+        "links": [
+          {
+            "label": "Email: contact@localai.com",
+            "href": "mailto:contact@localai.com"
+          }
+        ]
       }
     ],
     "copyright": "© {year} LocalAI.",
