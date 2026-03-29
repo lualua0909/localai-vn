@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "eyebrow": "Khóa học trực tuyến",
+    "title": "Học AI & Công nghệ",
+    "description": "Nắm vững kỹ năng AI tiên tiến với các khóa học trực tuyến toàn diện. Học theo tốc độ của bạn với video bài giảng, bài tập trắc nghiệm và dự án thực hành."
+  },
+  "catalog": {
+    "allLevels": "Tất cả cấp độ",
+    "allCategories": "Tất cả danh mục",
+    "beginner": "Cơ bản",
+    "intermediate": "Trung cấp",
+    "advanced": "Nâng cao",
+    "free": "Miễn phí",
+    "lessons": "bài học",
+    "hours": "giờ",
+    "students": "học viên",
+    "noResults": "Không tìm thấy khóa học phù hợp.",
+    "enrolled": "Đã đăng ký"
+  },
+  "detail": {
+    "curriculum": "Chương trình học",
+    "description": "Mô tả",
+    "instructor": "Giảng viên",
+    "enrollNow": "Đăng ký ngay",
+    "enrollFree": "Đăng ký miễn phí",
+    "continueLearning": "Tiếp tục học",
+    "startLearning": "Bắt đầu học",
+    "totalLessons": "Tổng bài học",
+    "totalDuration": "Tổng thời lượng",
+    "level": "Cấp độ",
+    "enrollments": "Lượt đăng ký",
+    "freePreview": "Xem thử miễn phí",
+    "whatYouWillLearn": "Bạn sẽ học được gì",
+    "courseIncludes": "Khóa học bao gồm"
+  },
+  "player": {
+    "markComplete": "Đánh dấu hoàn thành",
+    "completed": "Đã hoàn thành",
+    "nextLesson": "Bài tiếp theo",
+    "prevLesson": "Bài trước",
+    "backToCourse": "Quay lại khóa học",
+    "progress": "Tiến độ",
+    "quizTitle": "Bài tập trắc nghiệm",
+    "submitQuiz": "Nộp bài",
+    "quizScore": "Điểm của bạn",
+    "quizPassed": "Chúc mừng! Bạn đã vượt qua!",
+    "quizFailed": "Bạn chưa đạt. Hãy thử lại!",
+    "retryQuiz": "Làm lại",
+    "selectAnswer": "Chọn câu trả lời",
+    "correct": "Đúng",
+    "incorrect": "Sai"
+  }
+}

@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
+import { getStorage as _getStorage, FirebaseStorage } from "firebase/storage";
 import {
   getMessaging as _getMessaging,
   isSupported,
@@ -39,6 +40,15 @@ export function getFirebaseDb(): Firestore {
     _db = getFirestore(getFirebaseApp());
   }
   return _db;
+}
+
+let _storage: FirebaseStorage | undefined;
+
+export function getFirebaseStorage(): FirebaseStorage {
+  if (!_storage) {
+    _storage = _getStorage(getFirebaseApp());
+  }
+  return _storage;
 }
 
 let _messaging: Messaging | null = null;

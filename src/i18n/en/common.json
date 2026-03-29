@@ -5,6 +5,7 @@
       { "label": "Home", "href": "/" },
       { "label": "Apps", "href": "/app" },
       { "label": "Pricing", "href": "/bang-gia" },
+      { "label": "Courses", "href": "/courses" },
       { "label": "Blog", "href": "/blog" }
     ],
     "signin": "Sign in"

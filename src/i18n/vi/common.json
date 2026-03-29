@@ -11,6 +11,10 @@
         "href": "/app"
       },
       {
+        "label": "Khóa học",
+        "href": "/courses"
+      },
+      {
         "label": "Blog",
         "href": "/blog"
       }

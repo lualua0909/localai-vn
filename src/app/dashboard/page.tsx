@@ -19,11 +19,13 @@ import {
   Bell,
   LogOut,
   Tag,
+  GraduationCap,
 } from "lucide-react";
 import { AppName } from "@/components/ui/appName";
 import { CategoryManager } from "@/components/dashboard/CategoryManager";
+import { CourseManager } from "@/components/dashboard/course/CourseManager";
 
-type TabKey = "overview" | "products" | "users" | "blogs" | "categories" | "notifications";
+type TabKey = "overview" | "products" | "courses" | "users" | "blogs" | "categories" | "notifications";
 
 function DashboardContent() {
   const { user, userProfile, signOut } = useAuth();
@@ -46,6 +48,12 @@ function DashboardContent() {
   }[] = [
     { key: "overview", label: "Overview", icon: <LayoutDashboard size={14} /> },
     { key: "products", label: "Products", icon: <Package size={14} /> },
+    {
+      key: "courses",
+      label: "Courses",
+      icon: <GraduationCap size={14} />,
+      adminOnly: true,
+    },
     {
       key: "users",
       label: "Users",
@@ -204,6 +212,12 @@ function DashboardContent() {
         {activeTab === "products" && userProfile && (
           <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
             <ProductManager userProfile={userProfile} />
+          </div>
+        )}
+
+        {activeTab === "courses" && isAdmin && userProfile && (
+          <div className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CourseManager userProfile={userProfile} />
           </div>
         )}
 

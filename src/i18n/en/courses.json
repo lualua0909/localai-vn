@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "eyebrow": "Online Courses",
+    "title": "Learn AI & Technology",
+    "description": "Master cutting-edge AI skills with our comprehensive online courses. Learn at your own pace with video lessons, interactive quizzes, and hands-on projects."
+  },
+  "catalog": {
+    "allLevels": "All Levels",
+    "allCategories": "All Categories",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "free": "Free",
+    "lessons": "lessons",
+    "hours": "hours",
+    "students": "students",
+    "noResults": "No courses found matching your criteria.",
+    "enrolled": "Enrolled"
+  },
+  "detail": {
+    "curriculum": "Curriculum",
+    "description": "Description",
+    "instructor": "Instructor",
+    "enrollNow": "Enroll Now",
+    "enrollFree": "Enroll for Free",
+    "continueLearning": "Continue Learning",
+    "startLearning": "Start Learning",
+    "totalLessons": "Total Lessons",
+    "totalDuration": "Total Duration",
+    "level": "Level",
+    "enrollments": "Enrollments",
+    "freePreview": "Free Preview",
+    "whatYouWillLearn": "What you will learn",
+    "courseIncludes": "This course includes"
+  },
+  "player": {
+    "markComplete": "Mark as Complete",
+    "completed": "Completed",
+    "nextLesson": "Next Lesson",
+    "prevLesson": "Previous Lesson",
+    "backToCourse": "Back to Course",
+    "progress": "Progress",
+    "quizTitle": "Quiz",
+    "submitQuiz": "Submit Answers",
+    "quizScore": "Your Score",
+    "quizPassed": "Congratulations! You passed!",
+    "quizFailed": "You didn't pass. Try again!",
+    "retryQuiz": "Retry Quiz",
+    "selectAnswer": "Select an answer",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  }
+}

@@ -12,6 +12,7 @@ import enApp from "@/i18n/en/app.json";
 import enExplore from "@/i18n/en/explore.json";
 import enFeedback from "@/i18n/en/feedback.json";
 import enMeta from "@/i18n/en/meta.json";
+import enCourses from "@/i18n/en/courses.json";
 
 import viCommon from "@/i18n/vi/common.json";
 import viHome from "@/i18n/vi/home.json";
@@ -23,6 +24,7 @@ import viApp from "@/i18n/vi/app.json";
 import viExplore from "@/i18n/vi/explore.json";
 import viFeedback from "@/i18n/vi/feedback.json";
 import viMeta from "@/i18n/vi/meta.json";
+import viCourses from "@/i18n/vi/courses.json";
 
 const storageKey = "localai-lang";
 
@@ -38,6 +40,7 @@ const translations = {
     explore: enExplore,
     feedback: enFeedback,
     meta: enMeta,
+    courses: enCourses,
   },
   vi: {
     common: viCommon,
@@ -50,6 +53,7 @@ const translations = {
     explore: viExplore,
     feedback: viFeedback,
     meta: viMeta,
+    courses: viCourses,
   },
 };
 
