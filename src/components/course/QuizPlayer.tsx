@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { QuizData } from "@/lib/course-data";
-import { useTranslations } from "@/lib/i18n";
+import { useLanguage, useTranslations } from "@/lib/i18n";
 import { CheckCircle, XCircle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -13,6 +13,7 @@ interface QuizPlayerProps {
 
 export function QuizPlayer({ quizData, onComplete }: QuizPlayerProps) {
   const t = useTranslations("courses");
+  const { language } = useLanguage();
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
@@ -52,9 +53,34 @@ export function QuizPlayer({ quizData, onComplete }: QuizPlayerProps) {
   const passed = percentage >= quizData.passingScore;
 
   return (
-    <div className="space-y-6 p-6 rounded-xl bg-[var(--color-bg-alt)]/30">
-      <h3 className="typo-h2">{t.player.quizTitle}</h3>
+    <div className="overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-card-bg)]">
+      <div className="border-b border-[var(--color-border)] bg-gradient-to-br from-accent/10 via-transparent to-transparent px-6 py-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-secondary)]">
+              Quiz
+            </p>
+            <h3 className="typo-h2 mt-1">{t.player.quizTitle}</h3>
+            <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+              {language === "vi"
+                ? `${quizData.questions.length} câu hỏi • ${quizData.passingScore}% để đạt`
+                : `${quizData.questions.length} questions • ${quizData.passingScore}% to pass`}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)]/75 px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-text-secondary)]">
+              {submitted ? t.player.quizScore : language === "vi" ? "Sẵn sàng" : "Ready"}
+            </p>
+            <p className="mt-1 text-sm font-semibold">
+              {submitted
+                ? `${score}/${quizData.questions.length} (${percentage}%)`
+                : `${Object.keys(selectedAnswers).length}/${quizData.questions.length}`}
+            </p>
+          </div>
+        </div>
+      </div>
 
+      <div className="space-y-6 p-6 sm:p-8">
       {submitted && (
         <div
           className={`p-4 rounded-xl border ${
@@ -173,6 +199,7 @@ export function QuizPlayer({ quizData, onComplete }: QuizPlayerProps) {
             {t.player.submitQuiz}
           </Button>
         )}
+      </div>
       </div>
     </div>
   );

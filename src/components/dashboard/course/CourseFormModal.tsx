@@ -1,34 +1,65 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Course, CourseSection, Lesson } from "@/lib/course-data";
+import type { Course } from "@/lib/course-data";
 import type { Category } from "@/lib/firestore";
 import { getCategories } from "@/lib/firestore";
 import { SimpleModal } from "@/components/ui/SimpleModal";
 import { Button } from "@/components/ui/Button";
-import { SectionEditor } from "./SectionEditor";
+import { SectionEditor, type SectionData } from "./SectionEditor";
 import {
   addCourse,
   updateCourse,
   addSection,
   addLesson,
+  deleteSection,
+  deleteLesson,
   getCourseSections,
   getCourseLessons,
 } from "@/lib/firestore-courses";
-import { uploadCourseFile, uploadCourseThumbnail } from "@/lib/storage";
 import { useAuth } from "@/lib/useAuth";
-
-interface SectionData {
-  section: Omit<CourseSection, "id">;
-  lessons: Omit<Lesson, "id">[];
-  pendingFiles?: File[];
-}
+import { getFirebaseAuth } from "@/lib/firebase";
+import { resolveLocalMediaUrl } from "@/lib/local-media";
+import {
+  inferVideoSourceFromUrl,
+  validateVideoSourceInput,
+} from "@/lib/lesson-assets";
 
 interface CourseFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   editingCourse?: Course | null;
-  onSaved: () => void;
+  onSaved: () => void | Promise<void>;
+}
+
+async function uploadPendingFile(
+  courseId: string,
+  file: File,
+  idToken: string,
+  kind: "lesson" | "thumbnail" | "poster" = "lesson"
+): Promise<{ path: string; url?: string; previewPath?: string; previewUrl?: string }> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("courseId", courseId);
+  formData.append("kind", kind);
+
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${idToken}` },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const data = (await res.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(data?.error || "Upload failed");
+  }
+  const { path, url, previewPath, previewUrl } = await res.json();
+  return {
+    path: path as string,
+    url: url as string | undefined,
+    previewPath: previewPath as string | undefined,
+    previewUrl: previewUrl as string | undefined,
+  };
 }
 
 export function CourseFormModal({
@@ -40,8 +71,10 @@ export function CourseFormModal({
   const { user, userProfile } = useAuth();
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [draftAssetScope, setDraftAssetScope] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -70,13 +103,20 @@ export function CourseFormModal({
   }, []);
 
   useEffect(() => {
+    if (!isOpen) return;
+    setThumbnailFile(null);
+    setDraftAssetScope(
+      editingCourse?.id ||
+        `draft-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    );
+
     if (editingCourse) {
       setFormData({
         title: editingCourse.title,
         title_vi: editingCourse.title_vi,
         description: editingCourse.description,
         description_vi: editingCourse.description_vi,
-        thumbnail: editingCourse.thumbnail,
+        thumbnail: resolveLocalMediaUrl(editingCourse.thumbnail),
         price: editingCourse.price,
         currency: editingCourse.currency,
         category: editingCourse.category,
@@ -85,7 +125,6 @@ export function CourseFormModal({
         tags: editingCourse.tags,
         tagsInput: editingCourse.tags.join(", "),
       });
-      // Load existing sections and lessons
       loadExistingContent(editingCourse.id);
     } else {
       setFormData({
@@ -109,6 +148,7 @@ export function CourseFormModal({
         },
       ]);
     }
+    setSaveError("");
     setStep(1);
   }, [editingCourse, isOpen]);
 
@@ -127,19 +167,43 @@ export function CourseFormModal({
       },
       lessons: les
         .filter((l) => l.sectionId === sec.id)
-        .map(({ id, ...rest }) => rest),
+        .map(({ id, ...rest }) => ({ ...rest, _draftId: id })),
     }));
 
-    if (sectionData.length > 0) {
-      setSections(sectionData);
-    }
+    if (sectionData.length > 0) setSections(sectionData);
   };
 
   const handleSave = async () => {
     if (!user || !userProfile) return;
     setSaving(true);
+    setSaveError("");
 
     try {
+      for (const sectionData of sections) {
+        for (const lesson of sectionData.lessons) {
+          if (lesson.type !== "video") continue;
+
+          const videoSource =
+            lesson.videoSource || inferVideoSourceFromUrl(lesson.videoUrl);
+
+          if (videoSource === "upload" || lesson._pendingFile) continue;
+
+          const validationError = validateVideoSourceInput(
+            videoSource,
+            lesson.videoUrl
+          );
+
+          if (validationError) {
+            throw new Error(
+              `${lesson.title || "Untitled lesson"}: ${validationError}`
+            );
+          }
+        }
+      }
+
+      const idToken = await getFirebaseAuth().currentUser?.getIdToken();
+      if (!idToken) throw new Error("Not authenticated");
+
       const tags = formData.tagsInput
         .split(",")
         .map((t) => t.trim())
@@ -149,16 +213,19 @@ export function CourseFormModal({
       let thumbnailUrl = formData.thumbnail;
 
       if (!courseId) {
-        // Create new course
         courseId = await addCourse({
-          slug: formData.title.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"),
+          slug: formData.title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, "")
+            .replace(/\s+/g, "-"),
           title: formData.title,
           title_vi: formData.title_vi,
           description: formData.description,
           description_vi: formData.description_vi,
           thumbnail: "",
           instructorUid: user.uid,
-          instructorName: user.displayName || userProfile.username || userProfile.email,
+          instructorName:
+            user.displayName || userProfile.username || userProfile.email,
           price: formData.price,
           currency: formData.currency,
           category: formData.category,
@@ -184,10 +251,16 @@ export function CourseFormModal({
         });
       }
 
-      // Upload thumbnail if new file
-      if (thumbnailFile && courseId) {
-        thumbnailUrl = await uploadCourseThumbnail(courseId, thumbnailFile);
-        await updateCourse(courseId, { thumbnail: thumbnailUrl });
+      // When editing, clear existing sections and lessons before re-adding
+      if (editingCourse) {
+        const [existingSecs, existingLessons] = await Promise.all([
+          getCourseSections(courseId),
+          getCourseLessons(courseId),
+        ]);
+        await Promise.all([
+          ...existingSecs.map((s) => deleteSection(courseId!, s.id)),
+          ...existingLessons.map((l) => deleteLesson(courseId!, l.id)),
+        ]);
       }
 
       // Save sections and lessons
@@ -203,29 +276,66 @@ export function CourseFormModal({
         });
 
         for (let i = 0; i < sectionData.lessons.length; i++) {
-          const lesson = sectionData.lessons[i];
+          const { _pendingFile, _pendingCaptionFile, _pendingPosterFile, ...lesson } =
+            sectionData.lessons[i];
 
-          // Upload pending files for video/pdf lessons
           let videoUrl = lesson.videoUrl;
           let pdfUrl = lesson.pdfUrl;
+          let documentUrl = lesson.documentUrl;
+          let videoSource = lesson.videoSource || inferVideoSourceFromUrl(videoUrl);
+          let videoPosterUrl = lesson.videoPosterUrl;
+          let captionUrl = lesson.captionUrl;
+          let captionLabel = lesson.captionLabel?.trim();
+          let captionLanguage = lesson.captionLanguage?.trim();
 
-          if (sectionData.pendingFiles) {
-            const pendingFile = sectionData.pendingFiles.find(
-              (f) => f.name.startsWith(lesson.title)
+          // Upload pending file to local /data storage
+          if (_pendingFile) {
+            const { path, previewPath } = await uploadPendingFile(
+              courseId,
+              _pendingFile,
+              idToken
             );
-            if (pendingFile && lesson.type === "video") {
-              videoUrl = await uploadCourseFile(
-                courseId,
-                `${sectionId}-${i}`,
-                pendingFile
-              );
-            } else if (pendingFile && lesson.type === "pdf") {
-              pdfUrl = await uploadCourseFile(
-                courseId,
-                `${sectionId}-${i}`,
-                pendingFile
-              );
+            if (lesson.type === "video") {
+              videoUrl = path;
+              videoSource = "upload";
             }
+            if (lesson.type === "pdf") {
+              documentUrl = path;
+              pdfUrl = previewPath || path;
+            }
+          }
+
+          if (
+            lesson.type === "video" &&
+            videoSource !== "youtube" &&
+            _pendingCaptionFile
+          ) {
+            const { path } = await uploadPendingFile(
+              courseId,
+              _pendingCaptionFile,
+              idToken
+            );
+            captionUrl = path;
+          }
+
+          if (
+            lesson.type === "video" &&
+            videoSource !== "youtube" &&
+            _pendingPosterFile
+          ) {
+            const { path } = await uploadPendingFile(
+              courseId,
+              _pendingPosterFile,
+              idToken,
+              "poster"
+            );
+            videoPosterUrl = path;
+          }
+
+          if (videoSource === "youtube") {
+            captionUrl = undefined;
+            captionLabel = undefined;
+            captionLanguage = undefined;
           }
 
           await addLesson(courseId, {
@@ -233,8 +343,23 @@ export function CourseFormModal({
             sectionId,
             order: totalLessons,
             sectionOrder: i,
-            videoUrl,
-            pdfUrl,
+            ...(lesson.type === "video" && videoUrl
+              ? {
+                  videoUrl,
+                  videoSource,
+                  ...(videoPosterUrl ? { videoPosterUrl } : {}),
+                  ...(captionUrl
+                    ? {
+                        captionUrl,
+                        captionLabel: captionLabel || "CC",
+                        captionLanguage: captionLanguage || "vi",
+                      }
+                    : {}),
+                }
+              : {}),
+            ...(lesson.type === "pdf" && pdfUrl
+              ? { pdfUrl, ...(documentUrl ? { documentUrl } : {}) }
+              : {}),
           });
 
           totalLessons++;
@@ -244,10 +369,22 @@ export function CourseFormModal({
 
       await updateCourse(courseId, { totalLessons, totalDuration });
 
-      onSaved();
+      if (thumbnailFile) {
+        const { url } = await uploadPendingFile(
+          courseId,
+          thumbnailFile,
+          idToken,
+          "thumbnail"
+        );
+        thumbnailUrl = url || "";
+        await updateCourse(courseId, { thumbnail: thumbnailUrl });
+      }
+
+      await onSaved();
       onClose();
     } catch (err) {
       console.error("Failed to save course:", err);
+      setSaveError(err instanceof Error ? err.message : "Failed to save course");
     } finally {
       setSaving(false);
     }
@@ -280,11 +417,7 @@ export function CourseFormModal({
               Next: Content
             </Button>
           ) : (
-            <Button
-              variant="primary"
-              onClick={handleSave}
-              disabled={saving}
-            >
+            <Button variant="primary" onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save Course"}
             </Button>
           )}
@@ -295,29 +428,21 @@ export function CourseFormModal({
         <form className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Title (EN)
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Title (EN)</label>
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className={inputClass}
                 placeholder="Course title in English"
               />
             </div>
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Tiêu đề (VI)
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Tiêu đề (VI)</label>
               <input
                 type="text"
                 value={formData.title_vi}
-                onChange={(e) =>
-                  setFormData({ ...formData, title_vi: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, title_vi: e.target.value })}
                 className={inputClass}
                 placeholder="Tiêu đề khóa học"
               />
@@ -326,27 +451,19 @@ export function CourseFormModal({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Description (EN)
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Description (EN)</label>
               <textarea
                 value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 className={`${inputClass} h-24 resize-none`}
                 placeholder="Course description"
               />
             </div>
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Mô tả (VI)
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Mô tả (VI)</label>
               <textarea
                 value={formData.description_vi}
-                onChange={(e) =>
-                  setFormData({ ...formData, description_vi: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, description_vi: e.target.value })}
                 className={`${inputClass} h-24 resize-none`}
                 placeholder="Mô tả khóa học"
               />
@@ -355,14 +472,10 @@ export function CourseFormModal({
 
           <div className="grid grid-cols-3 gap-5">
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Category
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Category</label>
               <select
                 value={formData.category}
-                onChange={(e) =>
-                  setFormData({ ...formData, category: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className={inputClass}
               >
                 <option value="">Select</option>
@@ -374,16 +487,11 @@ export function CourseFormModal({
               </select>
             </div>
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Level
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Level</label>
               <select
                 value={formData.level}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    level: e.target.value as Course["level"],
-                  })
+                  setFormData({ ...formData, level: e.target.value as Course["level"] })
                 }
                 className={inputClass}
               >
@@ -393,16 +501,11 @@ export function CourseFormModal({
               </select>
             </div>
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Status
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Status</label>
               <select
                 value={formData.status}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    status: e.target.value as Course["status"],
-                  })
+                  setFormData({ ...formData, status: e.target.value as Course["status"] })
                 }
                 className={inputClass}
               >
@@ -415,27 +518,20 @@ export function CourseFormModal({
 
           <div className="grid grid-cols-2 gap-5">
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Price
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Price</label>
               <div className="flex gap-2">
                 <input
                   type="number"
                   min={0}
                   value={formData.price}
-                  onChange={(e) =>
-                    setFormData({ ...formData, price: Number(e.target.value) })
-                  }
+                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
                   className={`${inputClass} flex-1`}
                   placeholder="0 = Free"
                 />
                 <select
                   value={formData.currency}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      currency: e.target.value as "VND" | "USD",
-                    })
+                    setFormData({ ...formData, currency: e.target.value as "VND" | "USD" })
                   }
                   className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 typo-body outline-none"
                 >
@@ -445,15 +541,11 @@ export function CourseFormModal({
               </div>
             </div>
             <div>
-              <label className="block typo-caption font-semibold mb-2">
-                Tags
-              </label>
+              <label className="block typo-caption font-semibold mb-2">Tags</label>
               <input
                 type="text"
                 value={formData.tagsInput}
-                onChange={(e) =>
-                  setFormData({ ...formData, tagsInput: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, tagsInput: e.target.value })}
                 className={inputClass}
                 placeholder="AI, Machine Learning, Python"
               />
@@ -461,9 +553,7 @@ export function CourseFormModal({
           </div>
 
           <div>
-            <label className="block typo-caption font-semibold mb-2">
-              Thumbnail
-            </label>
+            <label className="block typo-caption font-semibold mb-2">Thumbnail</label>
             <div className="flex items-center gap-4">
               <input
                 type="file"
@@ -472,10 +562,7 @@ export function CourseFormModal({
                   const file = e.target.files?.[0];
                   if (file) {
                     setThumbnailFile(file);
-                    setFormData({
-                      ...formData,
-                      thumbnail: URL.createObjectURL(file),
-                    });
+                    setFormData({ ...formData, thumbnail: URL.createObjectURL(file) });
                   }
                 }}
                 className="flex-1 typo-caption"
@@ -495,13 +582,19 @@ export function CourseFormModal({
       {step === 2 && (
         <div className="space-y-4">
           <p className="typo-body text-[var(--color-text-secondary)]">
-            Add sections and lessons. You can also import lessons from a folder.
+            Thêm sections và bài học. Có thể import từ thư mục.
           </p>
           <SectionEditor
             sections={sections}
-            courseId={editingCourse?.id}
             onChange={setSections}
+            draftNamespace={editingCourse?.id || draftAssetScope}
+            assetScope={editingCourse?.id || draftAssetScope}
           />
+          {saveError && (
+            <p className="typo-caption text-red-500 p-3 rounded-lg bg-red-500/10">
+              {saveError}
+            </p>
+          )}
         </div>
       )}
     </SimpleModal>

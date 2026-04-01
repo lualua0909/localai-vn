@@ -1,3 +1,8 @@
+@import "vidstack/styles/base.css";
+@import "vidstack/styles/defaults.css";
+@import "vidstack/styles/community-skin/video.css";
+@import "katex/dist/katex.min.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -52,18 +57,7 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family:
-      ui-sans-serif,
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "SF Pro Display",
-      "SF Pro Text",
-      "Segoe UI",
-      Roboto,
-      "Helvetica Neue",
-      Arial,
-      sans-serif;
+    font-family: var(--font-figtree), sans-serif;
   }
 
   .dark body {
@@ -137,15 +131,34 @@
   }
 
   .typo-body {
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.6;
   }
 
   .typo-caption {
     font-size: 12px;
     font-weight: 400;
     line-height: 1.5;
+  }
+
+  .course-video-shell {
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    background: #faf7f0;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(40, 31, 16, 0.06);
+  }
+
+  .dark .course-video-shell {
+    background:
+      radial-gradient(circle at top, rgba(64, 156, 255, 0.18), transparent 42%),
+      linear-gradient(180deg, rgba(11, 15, 24, 0.95), rgba(17, 24, 39, 0.9));
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.4);
+  }
+
+  .course-video-meta-chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em];
+    border: 1px solid rgba(10, 132, 255, 0.16);
+    background: rgba(10, 132, 255, 0.08);
+    color: var(--color-accent);
   }
 }
 
@@ -169,4 +182,110 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+}
+
+.course-media-player {
+  --media-font-family: var(--font-figtree), sans-serif;
+  --video-brand: var(--color-accent);
+  --video-bg: #020617;
+  --video-border-radius: 0;
+  --video-border: 0;
+  --video-controls-color: #f8fafc;
+  --video-focus-ring: 0 0 0 3px rgba(10, 132, 255, 0.45);
+  --video-captions-offset: 82px;
+  --video-mobile-captions-offset: 58px;
+  --media-tooltip-bg: rgba(2, 6, 23, 0.92);
+  --media-tooltip-border: 1px solid rgba(148, 163, 184, 0.24);
+  --media-menu-bg: rgba(2, 6, 23, 0.94);
+  --media-menu-border: 1px solid rgba(148, 163, 184, 0.16);
+  --media-menu-border-radius: 18px;
+  --media-slider-track-bg: rgba(255, 255, 255, 0.18);
+  --media-slider-track-fill-bg: linear-gradient(90deg, #0a84ff 0%, #7c3aed 100%);
+  display: block;
+  overflow: hidden;
+  background: #111;
+}
+
+.course-media-player media-outlet {
+  background: #111;
+}
+
+.course-media-player .course-media-poster,
+.course-media-player media-poster {
+  display: block;
+  inset: 0;
+}
+
+.course-media-player .course-media-poster img,
+.course-media-player media-poster img {
+  object-fit: cover;
+}
+
+.course-media-player media-community-skin[data-video] div[part="controls-group"]:nth-last-child(2),
+.course-media-player media-community-skin[data-video] div[part="controls-group"]:last-child {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.course-media-player media-community-skin[data-video] div[part="controls-group"]:nth-last-child(2) {
+  margin-inline: 12px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.78),
+    rgba(2, 6, 23, 0.88)
+  );
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.markdown-body .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.75rem 0;
+}
+
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.markdown-body img {
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+}
+
+.course-media-player media-community-skin[data-video] [data-media-button] {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.course-media-player media-community-skin[data-video] [data-media-button]:hover {
+  transform: translateY(-1px);
+}
+
+.course-media-player media-community-skin[data-video] media-time-slider {
+  --media-slider-height: 28px;
+}
+
+.course-media-player .course-media-captions,
+.course-media-player media-captions {
+  font-size: clamp(0.92rem, 1.4vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+}
+
+.course-media-player .course-media-captions [part="cue"],
+.course-media-player media-captions [part="cue"] {
+  background: rgba(2, 6, 23, 0.72);
+  border-radius: 14px;
+  padding: 0.2rem 0.65rem;
+}
+
+.transcript-cue {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }

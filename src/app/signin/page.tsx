@@ -32,7 +32,7 @@ export default function SignInPage() {
 
   // Redirect if already signed in and profile loaded
   if (!loading && user && userProfile) {
-    router.replace("/dashboard");
+    router.replace("/dashboard/user");
     return null;
   }
 
@@ -52,7 +52,7 @@ export default function SignInPage() {
           return;
         }
       }
-      router.push("/dashboard");
+      router.push("/dashboard/user");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : copy.errorDefault;
@@ -66,7 +66,7 @@ export default function SignInPage() {
     setError("");
     try {
       await signInWithGoogle();
-      router.push("/dashboard");
+      router.push("/dashboard/user");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : copy.errorDefault;
@@ -78,7 +78,7 @@ export default function SignInPage() {
     setError("");
     try {
       await signInWithGithub();
-      router.push("/dashboard");
+      router.push("/dashboard/user");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : copy.errorDefault;

@@ -16,6 +16,31 @@ import {
 } from "firebase/firestore";
 import type { Course, CourseSection, Lesson, Enrollment, QuizResult } from "./course-data";
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object") return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function stripUndefined<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => stripUndefined(item))
+      .filter((item) => item !== undefined) as T;
+  }
+
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).flatMap(([key, entry]) => {
+        if (entry === undefined) return [];
+        return [[key, stripUndefined(entry)]];
+      })
+    ) as T;
+  }
+
+  return value;
+}
+
 // ─── Course operations ───
 
 export async function getCourses(): Promise<Course[]> {
@@ -51,7 +76,7 @@ export async function getCourseBySlug(slug: string): Promise<Course | null> {
 
 export async function addCourse(course: Omit<Course, "id" | "createdAt" | "updatedAt">): Promise<string> {
   const ref = await addDoc(collection(getFirebaseDb(), "courses"), {
-    ...course,
+    ...stripUndefined(course),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -60,7 +85,7 @@ export async function addCourse(course: Omit<Course, "id" | "createdAt" | "updat
 
 export async function updateCourse(id: string, data: Partial<Course>) {
   return updateDoc(doc(getFirebaseDb(), "courses", id), {
-    ...data,
+    ...stripUndefined(data),
     updatedAt: serverTimestamp(),
   });
 }
@@ -103,7 +128,7 @@ export async function addSection(
 ): Promise<string> {
   const ref = await addDoc(
     collection(getFirebaseDb(), "courses", courseId, "sections"),
-    section
+    stripUndefined(section)
   );
   return ref.id;
 }
@@ -115,7 +140,7 @@ export async function updateSection(
 ) {
   return updateDoc(
     doc(getFirebaseDb(), "courses", courseId, "sections", sectionId),
-    data
+    stripUndefined(data)
   );
 }
 
@@ -157,7 +182,7 @@ export async function addLesson(
 ): Promise<string> {
   const ref = await addDoc(
     collection(getFirebaseDb(), "courses", courseId, "lessons"),
-    lesson
+    stripUndefined(lesson)
   );
   return ref.id;
 }
@@ -169,7 +194,7 @@ export async function updateLesson(
 ) {
   return updateDoc(
     doc(getFirebaseDb(), "courses", courseId, "lessons", lessonId),
-    data
+    stripUndefined(data)
   );
 }
 

@@ -3,16 +3,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Menu, X, Sun, Moon, Monitor } from "lucide-react";
+import { Menu, X, Sun, Moon, Monitor, LayoutDashboard, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslations } from "@/lib/i18n";
+import { useLanguage, useTranslations } from "@/lib/i18n";
+import { useAuth } from "@/lib/useAuth";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { language } = useLanguage();
   const common = useTranslations("common");
   const navLinks = common.header.navLinks;
+  const { user, userProfile, loading, signOut } = useAuth();
 
   useEffect(() => setMounted(true), []);
 
@@ -31,6 +34,11 @@ export function Header() {
   ) : (
     <Monitor size={16} />
   );
+
+  const avatar =
+    userProfile?.avatar ||
+    user?.photoURL ||
+    "https://placehold.co/80x80/eee/white";
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
@@ -63,12 +71,41 @@ export function Header() {
             {themeIcon}
           </button>
 
-          <Link
-            href="/signin"
-            className="focus-ring rounded-full bg-[var(--color-text)] px-4 py-1.5 text-[13px] font-medium text-[var(--color-bg)] transition-opacity hover:opacity-80"
-          >
-            {common.header.signin}
-          </Link>
+          {loading ? (
+            <div className="h-8 w-24 animate-pulse rounded-full bg-[var(--color-bg-alt)]" />
+          ) : user ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/user"
+                className="focus-ring inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-3 py-1.5 text-[13px] font-medium text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-text)] hover:bg-[var(--color-bg-alt)] hover:text-[var(--color-text)]"
+              >
+                <LayoutDashboard size={14} />
+                {common.header.dashboard}
+              </Link>
+              <button
+                onClick={() => void signOut()}
+                className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] transition-colors hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500"
+                aria-label={common.header.logout}
+                title={common.header.logout}
+              >
+                <LogOut size={14} />
+              </button>
+              <Link href="/dashboard/user" className="focus-ring rounded-full">
+                <img
+                  src={avatar}
+                  alt={language === "vi" ? "Tài khoản" : "Account"}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+              </Link>
+            </div>
+          ) : (
+            <Link
+              href="/signin"
+              className="focus-ring rounded-full bg-[var(--color-text)] px-4 py-1.5 text-[13px] font-medium text-[var(--color-bg)] transition-opacity hover:opacity-80"
+            >
+              {common.header.signin}
+            </Link>
+          )}
         </nav>
 
         {/* Mobile toggle */}
@@ -111,13 +148,38 @@ export function Header() {
                   {l.label}
                 </Link>
               ))}
-              <Link
-                href="/signin"
-                onClick={() => setMobileOpen(false)}
-                className="focus-ring mt-2 rounded-full bg-[var(--color-text)] px-4 py-2.5 text-center text-sm font-medium text-[var(--color-bg)]"
-              >
-                {common.header.signin}
-              </Link>
+              {loading ? (
+                <div className="mt-2 h-11 animate-pulse rounded-full bg-[var(--color-bg-alt)]" />
+              ) : user ? (
+                <div className="mt-2 flex flex-col gap-2">
+                  <Link
+                    href="/dashboard/user"
+                    onClick={() => setMobileOpen(false)}
+                    className="focus-ring flex items-center justify-center gap-2 rounded-full bg-[var(--color-text)] px-4 py-2.5 text-center text-sm font-medium text-[var(--color-bg)]"
+                  >
+                    <LayoutDashboard size={16} />
+                    {common.header.dashboard}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false);
+                      void signOut();
+                    }}
+                    className="focus-ring flex items-center justify-center gap-2 rounded-full border border-red-500/20 px-4 py-2.5 text-sm font-medium text-red-500"
+                  >
+                    <LogOut size={16} />
+                    {common.header.logout}
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/signin"
+                  onClick={() => setMobileOpen(false)}
+                  className="focus-ring mt-2 rounded-full bg-[var(--color-text)] px-4 py-2.5 text-center text-sm font-medium text-[var(--color-bg)]"
+                >
+                  {common.header.signin}
+                </Link>
+              )}
             </nav>
           </motion.div>
         )}

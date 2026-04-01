@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CourseFormModal } from "./CourseFormModal";
+import { resolveLocalMediaUrl } from "@/lib/local-media";
 
 interface CourseManagerProps {
   userProfile: UserProfile;
@@ -139,81 +140,84 @@ export function CourseManager({ userProfile }: CourseManagerProps) {
           </div>
         ) : (
           <div className="divide-y divide-[var(--color-border)]">
-            {displayedCourses.map((course) => (
-              <div
-                key={course.id}
-                className="px-6 py-5 flex items-center justify-between gap-4 group hover:bg-[var(--color-bg-alt)]/50 transition-colors"
-              >
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  {course.thumbnail ? (
-                    <img
-                      src={course.thumbnail}
-                      alt={course.title}
-                      className="w-16 h-10 rounded-lg object-cover shrink-0"
-                    />
-                  ) : (
-                    <div className="w-16 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
-                      <GraduationCap size={20} className="text-accent" />
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <h3 className="typo-body font-semibold text-[var(--color-text)] truncate">
-                      {course.title}
-                    </h3>
-                    <p className="typo-caption text-[var(--color-text-secondary)] truncate max-w-md mt-0.5">
-                      {course.title_vi || course.description}
-                    </p>
-                    <div className="flex items-center gap-3 mt-1.5">
-                      <StatusBadge status={course.status} />
-                      <LevelBadge level={course.level} />
-                      <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
-                        <BookOpen size={12} />
-                        {course.totalLessons} lessons
-                      </span>
-                      <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
-                        <Clock size={12} />
-                        {formatDuration(course.totalDuration)}
-                      </span>
-                      <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
-                        <Users size={12} />
-                        {course.enrollmentCount}
-                      </span>
-                      <span className="typo-caption font-semibold text-accent">
-                        {course.price === 0
-                          ? "Free"
-                          : `${course.price.toLocaleString()} ${course.currency}`}
-                      </span>
+            {displayedCourses.map((course) => {
+              const thumbnailSrc = resolveLocalMediaUrl(course.thumbnail);
+
+              return (
+                <div
+                  key={course.id}
+                  className="px-6 py-5 flex items-center justify-between gap-4 group hover:bg-[var(--color-bg-alt)]/50 transition-colors"
+                >
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    {thumbnailSrc ? (
+                      <img
+                        src={thumbnailSrc}
+                        alt={course.title}
+                        className="w-16 h-10 rounded-lg object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                        <GraduationCap size={20} className="text-accent" />
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h3 className="typo-body font-semibold text-[var(--color-text)] truncate">
+                        {course.title}
+                      </h3>
+                      <p className="typo-caption text-[var(--color-text-secondary)] truncate max-w-md mt-0.5">
+                        {course.title_vi || course.description}
+                      </p>
+                      <div className="flex items-center gap-3 mt-1.5">
+                        <StatusBadge status={course.status} />
+                        <LevelBadge level={course.level} />
+                        <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
+                          <BookOpen size={12} />
+                          {course.totalLessons} lessons
+                        </span>
+                        <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
+                          <Clock size={12} />
+                          {formatDuration(course.totalDuration)}
+                        </span>
+                        <span className="flex items-center gap-1 typo-caption text-[var(--color-text-secondary)]">
+                          <Users size={12} />
+                          {course.enrollmentCount}
+                        </span>
+                        <span className="typo-caption font-semibold text-accent">
+                          {course.price === 0
+                            ? "Free"
+                            : `${course.price.toLocaleString()} ${course.currency}`}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button
-                    href={`/courses/${course.slug}`}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0 rounded-full border-none hover:bg-[var(--color-bg-alt)] text-[var(--color-text-secondary)]"
-                  >
-                    <Eye size={16} />
-                  </Button>
-
-                  <button
-                    onClick={() => handleEdit(course)}
-                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-blue-500/10 text-blue-500 transition-colors"
-                  >
-                    <Edit2 size={16} />
-                  </button>
-
-                  {course.status === "draft" && (
-                    <button
-                      onClick={() => handlePublish(course.id)}
-                      className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 hover:bg-green-500/20 typo-caption font-medium transition-colors"
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      href={`/courses/${course.slug}`}
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0 rounded-full border-none hover:bg-[var(--color-bg-alt)] text-[var(--color-text-secondary)]"
                     >
-                      Publish
-                    </button>
-                  )}
+                      <Eye size={16} />
+                    </Button>
 
-                  {course.status === "published" && (
+                    <button
+                      onClick={() => handleEdit(course)}
+                      className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-blue-500/10 text-blue-500 transition-colors"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+
+                    {course.status === "draft" && (
+                      <button
+                        onClick={() => handlePublish(course.id)}
+                        className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 hover:bg-green-500/20 typo-caption font-medium transition-colors"
+                      >
+                        Publish
+                      </button>
+                    )}
+
+                    {course.status === "published" && (
                     <button
                       onClick={() => handleArchive(course.id)}
                       className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 typo-caption font-medium transition-colors"
@@ -229,8 +233,9 @@ export function CourseManager({ userProfile }: CourseManagerProps) {
                     <Trash2 size={16} />
                   </button>
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

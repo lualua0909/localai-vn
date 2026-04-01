@@ -1,7 +1,7 @@
 {
   "hero": {
     "eyebrow": "Blog",
-    "title": "News & Insights",
-    "description": "Deep dives on AI, technology, and Vietnam's startup community from the LocalAI team."
+    "title": "Daily GitHub Trending",
+    "description": "An AI-generated developer feed built from GitHub Trending, translated into concise Vietnamese tech blog posts."
   }
 }

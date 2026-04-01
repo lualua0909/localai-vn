@@ -3,6 +3,7 @@ import type { Course } from "@/lib/course-data";
 import type { UserProfile } from "@/lib/firestore";
 import {
   getCourses,
+  getCourseLessons,
   addCourse as firestoreAddCourse,
   updateCourse as firestoreUpdateCourse,
   deleteCourse as firestoreDeleteCourse,
@@ -25,7 +26,24 @@ export function useCourses(userProfile: UserProfile | null) {
     setLoading(true);
     try {
       const data = await getCourses();
-      setCourses(data);
+      const hydrated = await Promise.all(
+        data.map(async (course) => {
+          if (course.totalLessons > 0) return course;
+
+          const lessons = await getCourseLessons(course.id);
+          if (lessons.length === 0) return course;
+
+          return {
+            ...course,
+            totalLessons: lessons.length,
+            totalDuration: lessons.reduce(
+              (sum, lesson) => sum + (lesson.duration || 0),
+              0
+            ),
+          };
+        })
+      );
+      setCourses(hydrated);
     } finally {
       setLoading(false);
     }

@@ -1,15 +1,29 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import type { BlogPost } from "@/lib/blog-data";
-import { getBlogBySlug, getBlogs } from "@/lib/firestore";
 import Image from "next/image";
-import { TracingBeam } from "@/components/ui/tracing-beam";
-import { useTranslations } from "@/lib/i18n";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
 import { PostCard } from "@/components/blog/PostCard";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import type { BlogPost } from "@/lib/blog-data";
+import { useTranslations } from "@/lib/i18n";
+
+function renderInline(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold text-[var(--color-text)]">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
 
 function renderMarkdown(content: string) {
   const lines = content.split("\n");
@@ -21,7 +35,7 @@ function renderMarkdown(content: string) {
     const line = lines[i];
 
     if (line.trim() === "") {
-      i++;
+      i += 1;
       continue;
     }
 
@@ -34,7 +48,7 @@ function renderMarkdown(content: string) {
           {line.slice(3)}
         </h2>
       );
-      i++;
+      i += 1;
       continue;
     }
 
@@ -44,7 +58,7 @@ function renderMarkdown(content: string) {
           {line.slice(4)}
         </h3>
       );
-      i++;
+      i += 1;
       continue;
     }
 
@@ -52,7 +66,7 @@ function renderMarkdown(content: string) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].startsWith("> ")) {
         quoteLines.push(lines[i].slice(2));
-        i++;
+        i += 1;
       }
       elements.push(
         <blockquote
@@ -69,7 +83,7 @@ function renderMarkdown(content: string) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
         items.push(lines[i].replace(/^\d+\.\s/, ""));
-        i++;
+        i += 1;
       }
       elements.push(
         <ol key={key++} className="my-4 list-decimal space-y-2 pl-6">
@@ -87,7 +101,7 @@ function renderMarkdown(content: string) {
       const items: string[] = [];
       while (i < lines.length && lines[i].startsWith("- ")) {
         items.push(lines[i].slice(2));
-        i++;
+        i += 1;
       }
       elements.push(
         <ul key={key++} className="my-4 list-disc space-y-2 pl-6">
@@ -111,8 +125,9 @@ function renderMarkdown(content: string) {
       !/^\d+\.\s/.test(lines[i])
     ) {
       paraLines.push(lines[i]);
-      i++;
+      i += 1;
     }
+
     if (paraLines.length > 0) {
       elements.push(
         <p
@@ -128,20 +143,6 @@ function renderMarkdown(content: string) {
   return elements;
 }
 
-function renderInline(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={i} className="font-semibold text-[var(--color-text)]">
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
-    return part;
-  });
-}
-
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -152,13 +153,27 @@ export default function BlogPostPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([getBlogBySlug(slug), getBlogs()]).then(
-      ([blogPost, allBlogs]) => {
-        setPost(blogPost);
-        setRelated(allBlogs.filter((p) => p.slug !== slug).slice(0, 3));
-        setLoading(false);
-      }
-    );
+    Promise.all([
+      fetch(`/api/blogs/${slug}`, { cache: "no-store" }).then(async (response) => {
+        if (response.status === 404) {
+          return { blog: null };
+        }
+        if (!response.ok) {
+          throw new Error("Failed to fetch blog");
+        }
+        return response.json() as Promise<{ blog: BlogPost }>;
+      }),
+      fetch("/api/blogs", { cache: "no-store" }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch blogs");
+        }
+        return response.json() as Promise<{ blogs: BlogPost[] }>;
+      }),
+    ]).then(([blogPost, allBlogs]) => {
+      setPost(blogPost.blog);
+      setRelated(allBlogs.blogs.filter((p) => p.slug !== slug).slice(0, 3));
+      setLoading(false);
+    });
   }, [slug]);
 
   if (loading) {
@@ -203,11 +218,11 @@ export default function BlogPostPage() {
             <div className="mt-8 flex items-center justify-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10">
                 <span className="text-sm font-bold text-accent">
-                  {post.author.charAt(0)}
+                  {(post.author || "L").charAt(0)}
                 </span>
               </div>
               <div className="text-left">
-                <p className="text-sm font-medium">{post.author}</p>
+                <p className="text-sm font-medium">{post.author || "LocalAI Bot"}</p>
                 <p className="text-[13px] text-[var(--color-text-secondary)]">
                   {post.date} · {post.readTime}
                 </p>
@@ -218,7 +233,11 @@ export default function BlogPostPage() {
           <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-2xl">
             <div className="relative aspect-[2/1] w-full">
               <Image
-                src={post.image}
+                src={
+                  post.image ||
+                  post.coverImage ||
+                  "/api/blog-data/thumbnails/default-tech-cover.svg"
+                }
                 alt={post.title}
                 fill
                 className="object-cover"
@@ -237,12 +256,12 @@ export default function BlogPostPage() {
               <div className="glass-card flex items-center gap-5 rounded-2xl p-6">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent/10">
                   <span className="text-lg font-bold text-accent">
-                    {post.author.charAt(0)}
+                    {(post.author || "L").charAt(0)}
                   </span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold">
-                    {blogCopy.authorBy.replace("{author}", post.author)}
+                    {blogCopy.authorBy.replace("{author}", post.author || "LocalAI Bot")}
                   </p>
                   <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                     {blogCopy.authorBio}

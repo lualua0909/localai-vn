@@ -154,7 +154,7 @@ export function FolderScanner({ onImport, disabled }: FolderScannerProps) {
           {scanning ? "Scanning..." : "Select Folder"}
         </button>
         <span className="typo-caption text-[var(--color-text-secondary)]">
-          Supports: .mp4, .webm, .mov, .avi, .pdf, .txt, .md, .json
+          Supports: .mp4, .webm, .mov, .avi, .pdf, .doc, .docx, .txt, .md, .json
         </span>
       </div>
 

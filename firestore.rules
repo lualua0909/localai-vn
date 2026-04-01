@@ -1,0 +1,140 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ──────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role <= 1;
+    }
+
+    function isInstructor() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role <= 2;
+    }
+
+    function isCourseOwner(courseId) {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/courses/$(courseId)).data.instructorUid
+           == request.auth.uid;
+    }
+
+    function isCoursePublished(courseId) {
+      return get(/databases/$(database)/documents/courses/$(courseId)).data.status
+             == 'published';
+    }
+
+    // ─── Users ────────────────────────────────────────────────
+    // Chỉ đọc/sửa profile của chính mình; admin đọc được tất cả
+
+    match /users/{userId} {
+      allow read:   if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ─── Categories ───────────────────────────────────────────
+    // Public read; chỉ admin thêm/sửa/xóa
+
+    match /categories/{catId} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── Apps (Products) ──────────────────────────────────────
+    // Public read; chỉ admin thêm/sửa/xóa
+
+    match /apps/{appId} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── Blogs ────────────────────────────────────────────────
+    // Public read; chỉ admin thêm/sửa/xóa
+
+    match /blogs/{slug} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── Leads ────────────────────────────────────────────────
+    // Ai cũng tạo được (contact form); chỉ admin đọc/xóa
+
+    match /leads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ─── Feedback ─────────────────────────────────────────────
+    // User đã đăng nhập mới gửi feedback; chỉ admin đọc
+
+    match /feedback/{feedbackId} {
+      allow create: if isSignedIn();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ─── Courses ──────────────────────────────────────────────
+    // Published → public read
+    // Draft/Archived → chỉ admin hoặc instructor sở hữu
+    // Tạo mới → chỉ instructor trở lên
+    // Sửa/Xóa → admin hoặc instructor sở hữu
+
+    match /courses/{courseId} {
+      allow read: if resource.data.status == 'published'
+                  || isAdmin()
+                  || (isSignedIn() && resource.data.instructorUid == request.auth.uid);
+
+      allow create: if isInstructor();
+
+      allow update: if isAdmin()
+                    || (isSignedIn() && resource.data.instructorUid == request.auth.uid);
+
+      allow delete: if isAdmin();
+
+      // Sections — ai thấy course thì thấy sections
+      match /sections/{sectionId} {
+        allow read: if isCoursePublished(courseId)
+                    || isAdmin()
+                    || isCourseOwner(courseId);
+
+        allow write: if isAdmin() || isCourseOwner(courseId);
+      }
+
+      // Lessons — free lessons public; nội dung đầy đủ yêu cầu đăng nhập
+      // (auth + enrollment thực sự được enforce bởi AuthGuard + video proxy)
+      match /lessons/{lessonId} {
+        allow read: if resource.data.isFree == true
+                    || isSignedIn()
+                    || isAdmin()
+                    || isCourseOwner(courseId);
+
+        allow write: if isAdmin() || isCourseOwner(courseId);
+      }
+    }
+
+    // ─── Enrollments ──────────────────────────────────────────
+    // User chỉ đọc/sửa enrollment của chính mình
+    // Admin đọc/sửa tất cả
+    // Chỉ user tạo enrollment cho chính họ
+
+    match /enrollments/{enrollmentId} {
+      allow read:   if isSignedIn()
+                    && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if isSignedIn()
+                    && request.resource.data.userId == request.auth.uid;
+
+      allow update: if isSignedIn()
+                    && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow delete: if isAdmin();
+    }
+  }
+}

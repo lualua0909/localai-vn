@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { CourseSection, Lesson } from "@/lib/course-data";
+import type { CourseSection } from "@/lib/course-data";
 import {
   Plus,
   Trash2,
@@ -11,24 +11,34 @@ import {
   ArrowDown,
   FolderOpen,
 } from "lucide-react";
-import { LessonEditor } from "./LessonEditor";
+import { LessonEditor, type LocalLesson } from "./LessonEditor";
 import { FolderScanner, type ScannedLesson } from "./FolderScanner";
 
-interface SectionData {
+export interface SectionData {
   section: Omit<CourseSection, "id">;
-  lessons: Omit<Lesson, "id">[];
+  lessons: LocalLesson[];
+}
+
+function createDraftLessonId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `lesson-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 interface SectionEditorProps {
   sections: SectionData[];
-  courseId?: string;
   onChange: (sections: SectionData[]) => void;
+  draftNamespace?: string;
+  assetScope?: string;
 }
 
 export function SectionEditor({
   sections,
-  courseId,
   onChange,
+  draftNamespace = "new-course",
+  assetScope,
 }: SectionEditorProps) {
   const [expandedSections, setExpandedSections] = useState<Set<number>>(
     new Set([0])
@@ -49,27 +59,17 @@ export function SectionEditor({
     onChange([
       ...sections,
       {
-        section: {
-          title: "",
-          title_vi: "",
-          order: newIndex,
-          lessonCount: 0,
-        },
+        section: { title: "", title_vi: "", order: newIndex, lessonCount: 0 },
         lessons: [],
       },
     ]);
     setExpandedSections((prev) => new Set(prev).add(newIndex));
   };
 
-  const updateSection = (
-    index: number,
-    data: Partial<Omit<CourseSection, "id">>
-  ) => {
-    const updated = [...sections];
-    updated[index] = {
-      ...updated[index],
-      section: { ...updated[index].section, ...data },
-    };
+  const updateSection = (index: number, data: Partial<Omit<CourseSection, "id">>) => {
+    const updated = sections.map((s, i) =>
+      i === index ? { ...s, section: { ...s.section, ...data } } : s
+    );
     onChange(updated);
   };
 
@@ -82,83 +82,74 @@ export function SectionEditor({
     if (newIndex < 0 || newIndex >= sections.length) return;
     const updated = [...sections];
     [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
-    // Update order values
-    updated.forEach((s, i) => {
-      s.section.order = i;
-    });
+    updated.forEach((s, i) => { s.section.order = i; });
     onChange(updated);
   };
 
   const addLesson = (sectionIndex: number) => {
-    const updated = [...sections];
-    const sectionLessons = updated[sectionIndex].lessons;
-    sectionLessons.push({
-      sectionId: "",
-      title: "",
-      type: "video",
-      order: calculateGlobalOrder(sections, sectionIndex, sectionLessons.length),
-      sectionOrder: sectionLessons.length,
-      isFree: false,
+    const updated = sections.map((s, i) => {
+      if (i !== sectionIndex) return s;
+      const newLesson: LocalLesson = {
+        _draftId: createDraftLessonId(),
+        sectionId: "",
+        title: "",
+        type: "video",
+        videoSource: "upload",
+        order: calcGlobalOrder(sections, sectionIndex, s.lessons.length),
+        sectionOrder: s.lessons.length,
+        isFree: false,
+      };
+      return {
+        ...s,
+        lessons: [...s.lessons, newLesson],
+        section: { ...s.section, lessonCount: s.lessons.length + 1 },
+      };
     });
-    updated[sectionIndex] = {
-      ...updated[sectionIndex],
-      lessons: sectionLessons,
-      section: {
-        ...updated[sectionIndex].section,
-        lessonCount: sectionLessons.length,
-      },
-    };
     onChange(updated);
   };
 
-  const updateLesson = (
-    sectionIndex: number,
-    lessonIndex: number,
-    lesson: Omit<Lesson, "id">
-  ) => {
-    const updated = [...sections];
-    updated[sectionIndex].lessons[lessonIndex] = lesson;
+  const updateLesson = (sectionIndex: number, lessonIndex: number, lesson: LocalLesson) => {
+    const updated = sections.map((s, i) => {
+      if (i !== sectionIndex) return s;
+      const lessons = s.lessons.map((l, j) => (j === lessonIndex ? lesson : l));
+      return { ...s, lessons };
+    });
     onChange(updated);
   };
 
   const removeLesson = (sectionIndex: number, lessonIndex: number) => {
-    const updated = [...sections];
-    updated[sectionIndex].lessons.splice(lessonIndex, 1);
-    updated[sectionIndex].section.lessonCount =
-      updated[sectionIndex].lessons.length;
+    const updated = sections.map((s, i) => {
+      if (i !== sectionIndex) return s;
+      const lessons = s.lessons.filter((_, j) => j !== lessonIndex);
+      return { ...s, lessons, section: { ...s.section, lessonCount: lessons.length } };
+    });
     onChange(updated);
   };
 
   const handleFolderImport = (sectionIndex: number, scanned: ScannedLesson[]) => {
-    const updated = [...sections];
-    const existingLessons = updated[sectionIndex].lessons;
-    const startOrder = existingLessons.length;
-
-    const newLessons: Omit<Lesson, "id">[] = scanned.map((s, i) => ({
-      sectionId: "",
-      title: s.name,
-      type: s.type,
-      order: calculateGlobalOrder(sections, sectionIndex, startOrder + i),
-      sectionOrder: startOrder + i,
-      isFree: false,
-      ...(s.type === "text" && s.textContent ? { textContent: s.textContent } : {}),
-      ...(s.type === "quiz" && s.quizJson
-        ? { quizData: JSON.parse(s.quizJson) }
-        : {}),
-    }));
-
-    updated[sectionIndex].lessons = [...existingLessons, ...newLessons];
-    updated[sectionIndex].section.lessonCount =
-      updated[sectionIndex].lessons.length;
-
-    // Store files for later upload
-    (updated[sectionIndex] as SectionData & { pendingFiles?: File[] }).pendingFiles = [
-      ...((updated[sectionIndex] as SectionData & { pendingFiles?: File[] }).pendingFiles || []),
-      ...scanned
-        .filter((s) => s.type === "video" || s.type === "pdf")
-        .map((s) => s.file),
-    ];
-
+    const updated = sections.map((s, i) => {
+      if (i !== sectionIndex) return s;
+      const startOrder = s.lessons.length;
+      const newLessons: LocalLesson[] = scanned.map((sc, idx) => ({
+        _draftId: createDraftLessonId(),
+        sectionId: "",
+        title: sc.name,
+        type: sc.type,
+        order: calcGlobalOrder(sections, sectionIndex, startOrder + idx),
+        sectionOrder: startOrder + idx,
+        isFree: false,
+        ...(sc.type === "video" ? { videoSource: "upload" as const } : {}),
+        // Store file reference directly on the lesson
+        ...(sc.type === "video" || sc.type === "pdf" ? { _pendingFile: sc.file } : {}),
+        ...(sc.type === "text" && sc.textContent ? { textContent: sc.textContent } : {}),
+        ...(sc.type === "quiz" && sc.quizJson ? { quizData: JSON.parse(sc.quizJson) } : {}),
+      }));
+      return {
+        ...s,
+        lessons: [...s.lessons, ...newLessons],
+        section: { ...s.section, lessonCount: s.lessons.length + newLessons.length },
+      };
+    });
     onChange(updated);
     setShowFolderScanner(null);
   };
@@ -196,9 +187,7 @@ export function SectionEditor({
             <input
               type="text"
               value={sectionData.section.title_vi}
-              onChange={(e) =>
-                updateSection(sIndex, { title_vi: e.target.value })
-              }
+              onChange={(e) => updateSection(sIndex, { title_vi: e.target.value })}
               placeholder="Tiêu đề (VI)"
               className="flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-2 py-1.5 typo-body outline-none"
             />
@@ -239,11 +228,10 @@ export function SectionEditor({
                 <LessonEditor
                   key={lIndex}
                   lesson={lesson}
-                  courseId={courseId}
                   index={lIndex}
-                  onChange={(updated) =>
-                    updateLesson(sIndex, lIndex, updated)
-                  }
+                  draftKey={`${draftNamespace}:${lesson._draftId || `section-${sIndex}-lesson-${lIndex}`}`}
+                  assetScope={assetScope || draftNamespace}
+                  onChange={(updated) => updateLesson(sIndex, lIndex, updated)}
                   onRemove={() => removeLesson(sIndex, lIndex)}
                 />
               ))}
@@ -266,9 +254,7 @@ export function SectionEditor({
                 <button
                   type="button"
                   onClick={() =>
-                    setShowFolderScanner(
-                      showFolderScanner === sIndex ? null : sIndex
-                    )
+                    setShowFolderScanner(showFolderScanner === sIndex ? null : sIndex)
                   }
                   className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-purple-500 hover:bg-purple-500/5 typo-caption font-medium transition-colors"
                 >
@@ -293,7 +279,7 @@ export function SectionEditor({
   );
 }
 
-function calculateGlobalOrder(
+function calcGlobalOrder(
   sections: SectionData[],
   sectionIndex: number,
   lessonIndex: number

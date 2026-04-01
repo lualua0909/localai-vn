@@ -5,6 +5,7 @@ import type { Course } from "@/lib/course-data";
 import { useLanguage, useTranslations } from "@/lib/i18n";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BookOpen, Clock, Users, GraduationCap } from "lucide-react";
+import { resolveLocalMediaUrl } from "@/lib/local-media";
 
 function formatDuration(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
@@ -27,6 +28,7 @@ export function CourseCard({ course }: { course: Course }) {
     language === "vi" && course.description_vi
       ? course.description_vi
       : course.description;
+  const thumbnailSrc = resolveLocalMediaUrl(course.thumbnail);
 
   return (
     <div className="relative h-full rounded-2xl shadow-xl">
@@ -42,9 +44,9 @@ export function CourseCard({ course }: { course: Course }) {
         <article className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-[var(--color-card-bg)]">
           {/* Thumbnail */}
           <div className="relative aspect-[16/10] w-full overflow-hidden bg-accent/5">
-            {course.thumbnail ? (
+            {thumbnailSrc ? (
               <img
-                src={course.thumbnail}
+                src={thumbnailSrc}
                 alt={title}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />

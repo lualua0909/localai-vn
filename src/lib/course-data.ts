@@ -38,6 +38,7 @@ export interface CourseSection {
 // ─── Lesson ───
 
 export type LessonType = "video" | "text" | "pdf" | "quiz";
+export type VideoSource = "upload" | "youtube" | "external";
 
 export interface Lesson {
   id: string;
@@ -47,8 +48,14 @@ export interface Lesson {
   order: number;
   sectionOrder: number;
   videoUrl?: string;
+  videoSource?: VideoSource;
+  videoPosterUrl?: string;
+  captionUrl?: string;
+  captionLabel?: string;
+  captionLanguage?: string;
   textContent?: string;
   pdfUrl?: string;
+  documentUrl?: string;
   quizData?: QuizData;
   duration?: number;
   isFree: boolean;
@@ -99,6 +106,8 @@ export const LESSON_TYPE_EXTENSIONS: Record<string, LessonType> = {
   ".mov": "video",
   ".avi": "video",
   ".pdf": "pdf",
+  ".doc": "pdf",
+  ".docx": "pdf",
   ".json": "quiz",
   ".txt": "text",
   ".md": "text",

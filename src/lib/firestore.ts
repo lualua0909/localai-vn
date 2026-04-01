@@ -3,6 +3,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  getDocFromServer,
   getDocs,
   setDoc,
   updateDoc,
@@ -81,8 +82,15 @@ export async function createUserProfile(
 export async function getUserProfile(
   uid: string
 ): Promise<UserProfile | null> {
-  const snap = await getDoc(doc(getFirebaseDb(), "users", uid));
-  return snap.exists() ? (snap.data() as UserProfile) : null;
+  const ref = doc(getFirebaseDb(), "users", uid);
+
+  try {
+    const snap = await getDocFromServer(ref);
+    return snap.exists() ? (snap.data() as UserProfile) : null;
+  } catch {
+    const snap = await getDoc(ref);
+    return snap.exists() ? (snap.data() as UserProfile) : null;
+  }
 }
 
 export async function updateUserProfile(
@@ -244,9 +252,15 @@ export async function deleteCategory(id: string) {
 // ─── FCM token operations ───
 
 export async function saveFcmToken(uid: string, token: string) {
-  return updateDoc(doc(getFirebaseDb(), "users", uid), {
-    fcmTokens: arrayUnion(token),
-  });
+  if (!uid || !token) return;
+  return setDoc(
+    doc(getFirebaseDb(), "users", uid),
+    {
+      uid,
+      fcmTokens: arrayUnion(token),
+    },
+    { merge: true }
+  );
 }
 
 export async function removeFcmToken(uid: string, token: string) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -335,5 +335,9 @@ function ExploreContent() {
 }
 
 export default function ExplorePage() {
-  return <ExploreContent />;
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <ExploreContent />
+    </Suspense>
+  );
 }

@@ -83,7 +83,11 @@ function CoursesContent() {
             value={filterCategory}
             onChange={(e) => {
               setFilterCategory(e.target.value);
-              router.push("?page=1");
+              const params = new URLSearchParams(Array.from(searchParams.entries()));
+              params.set("page", "1");
+              if (e.target.value) params.set("category", e.target.value);
+              else params.delete("category");
+              router.push(`?${params.toString()}`);
             }}
             className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2 typo-body outline-none"
           >
@@ -99,7 +103,11 @@ function CoursesContent() {
             value={filterLevel}
             onChange={(e) => {
               setFilterLevel(e.target.value);
-              router.push("?page=1");
+              const params = new URLSearchParams(Array.from(searchParams.entries()));
+              params.set("page", "1");
+              if (e.target.value) params.set("level", e.target.value);
+              else params.delete("level");
+              router.push(`?${params.toString()}`);
             }}
             className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2 typo-body outline-none"
           >

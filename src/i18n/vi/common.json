@@ -16,10 +16,12 @@
       },
       {
         "label": "Blog",
-        "href": "/blog"
+        "href": "/blogs"
       }
     ],
-    "signin": "Đăng nhập"
+    "signin": "Đăng nhập",
+    "dashboard": "Dashboard",
+    "logout": "Đăng xuất"
   },
   "subnav": [
     {
@@ -71,7 +73,7 @@
         "links": [
           {
             "label": "Blog",
-            "href": "/blog"
+            "href": "/blogs"
           }
         ]
       },

@@ -95,7 +95,7 @@ export function AuthGuard({ children, requireAdmin }: AuthGuardProps) {
           <p className="text-sm text-[var(--color-text-secondary)]">
             Bạn không có quyền truy cập trang này.
           </p>
-          <Link href="/dashboard" className="text-sm text-accent hover:underline">
+          <Link href="/dashboard/user" className="text-sm text-accent hover:underline">
             Về dashboard
           </Link>
         </div>

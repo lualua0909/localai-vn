@@ -1,7 +1,7 @@
 {
   "hero": {
     "eyebrow": "Blog",
-    "title": "Tin tức & Kiến thức",
-    "description": "Khám phá những bài viết chuyên sâu về AI, công nghệ và cộng đồng startup Việt Nam từ đội ngũ LocalAI."
+    "title": "GitHub Trending Mỗi Ngày",
+    "description": "Nguồn blog công nghệ được AI tạo tự động từ GitHub Trending, giúp developer Việt nắm nhanh các repository nổi bật và cách áp dụng chúng."
   }
 }

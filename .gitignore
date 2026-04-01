@@ -30,6 +30,10 @@ yarn-error.log*
 # firebase service account keys
 *-firebase-adminsdk-*.json
 
+# data
+/blog-data
+/data
+
 # vercel
 .vercel
 

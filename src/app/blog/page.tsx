@@ -1,14 +1,14 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import type { BlogPost } from "@/lib/blog-data";
-import { getBlogs } from "@/lib/firestore";
-import { useTranslations } from "@/lib/i18n";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { PostCard } from "@/components/blog/PostCard";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import type { BlogPost } from "@/lib/blog-data";
+import { useTranslations } from "@/lib/i18n";
 
 function BlogContent() {
   const blog = useTranslations("blog");
@@ -19,14 +19,19 @@ function BlogContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getBlogs()
-      .then(setPosts)
+    fetch("/api/blogs", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Failed to load blogs");
+        }
+        return response.json() as Promise<{ blogs: BlogPost[] }>;
+      })
+      .then((data) => setPosts(data.blogs))
       .finally(() => setLoading(false));
   }, []);
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const itemsPerPage = 9;
-
   const totalPages = Math.ceil(posts.length / itemsPerPage);
   const paginatedPosts = posts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -44,10 +49,9 @@ function BlogContent() {
   return (
     <>
       <Header />
-      {/* Header */}
       <section className="relative overflow-hidden">
         <BackgroundRippleEffect />
-        <div className="container-main pointer-events-none relative z-10 section-padding pb-0 mt-5">
+        <div className="container-main pointer-events-none relative z-10 mt-5 section-padding pb-0">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
               {blog.hero.eyebrow}
@@ -62,7 +66,6 @@ function BlogContent() {
         </div>
       </section>
 
-      {/* Blog Grid */}
       <div className="container-main section-padding">
         {loading ? (
           <div className="flex items-center justify-center py-20">
@@ -76,13 +79,12 @@ function BlogContent() {
               ))}
             </ul>
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="mt-12 flex items-center justify-center gap-2">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Prev
                 </button>
@@ -106,7 +108,7 @@ function BlogContent() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Next
                 </button>
