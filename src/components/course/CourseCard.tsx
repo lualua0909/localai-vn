@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Course } from "@/lib/course-data";
 import { useLanguage, useTranslations } from "@/lib/i18n";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { GLOW_DEFAULTS } from "@/components/ui/glow-defaults";
 import { BookOpen, Clock, Users, GraduationCap } from "lucide-react";
 import { resolveLocalMediaUrl } from "@/lib/local-media";
 
@@ -31,19 +32,12 @@ export function CourseCard({ course }: { course: Course }) {
   const thumbnailSrc = resolveLocalMediaUrl(course.thumbnail);
 
   return (
-    <div className="relative h-full rounded-2xl shadow-xl">
-      <GlowingEffect
-        spread={40}
-        glow
-        disabled={false}
-        proximity={64}
-        inactiveZone={0.01}
-        borderWidth={2}
-      />
+    <div className="relative h-full rounded-2xl shadow-card">
+      <GlowingEffect {...GLOW_DEFAULTS} />
       <Link href={`/courses/${course.slug}`} className="group block h-full">
-        <article className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-[var(--color-card-bg)]">
+        <article className="content-card">
           {/* Thumbnail */}
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-accent/5">
+          <div className="content-card-thumbnail bg-accent/5">
             {thumbnailSrc ? (
               <img
                 src={thumbnailSrc}
@@ -55,15 +49,15 @@ export function CourseCard({ course }: { course: Course }) {
                 <GraduationCap size={48} className="text-accent/30" />
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="content-card-thumbnail-overlay" />
 
             {/* Badges */}
             <div className="absolute left-3 top-3 flex gap-2">
-              <span className="rounded-full bg-[var(--color-bg)]/80 px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm">
+              <span className="chip-filled">
                 {LEVEL_LABELS[language]?.[course.level] || course.level}
               </span>
               {course.price === 0 && (
-                <span className="rounded-full bg-green-500/80 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
+                <span className="chip bg-green-500/80 text-white">
                   {t.catalog.free}
                 </span>
               )}
@@ -71,25 +65,25 @@ export function CourseCard({ course }: { course: Course }) {
           </div>
 
           {/* Content */}
-          <div className="flex flex-1 flex-col p-5">
-            <h2 className="mb-2 text-base font-semibold leading-snug transition-colors group-hover:text-accent line-clamp-2">
+          <div className="content-card-body">
+            <h2 className="content-card-title">
               {title}
             </h2>
-            <p className="mb-4 flex-1 text-sm leading-relaxed text-[var(--color-text-secondary)] line-clamp-2">
+            <p className="content-card-desc line-clamp-2">
               {description}
             </p>
 
             {/* Meta */}
             <div className="flex items-center gap-4 pt-4 border-t border-[var(--color-border)]">
-              <span className="flex items-center gap-1 text-[12px] text-[var(--color-text-secondary)]">
+              <span className="meta-text flex items-center gap-1">
                 <BookOpen size={12} />
                 {course.totalLessons} {t.catalog.lessons}
               </span>
-              <span className="flex items-center gap-1 text-[12px] text-[var(--color-text-secondary)]">
+              <span className="meta-text flex items-center gap-1">
                 <Clock size={12} />
                 {formatDuration(course.totalDuration)}
               </span>
-              <span className="flex items-center gap-1 text-[12px] text-[var(--color-text-secondary)]">
+              <span className="meta-text flex items-center gap-1">
                 <Users size={12} />
                 {course.enrollmentCount}
               </span>

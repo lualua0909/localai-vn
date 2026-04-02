@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { GLOW_DEFAULTS } from "@/components/ui/glow-defaults";
 
 interface ProductHeroProps {
   app: AppDetail;
@@ -35,7 +36,7 @@ export function ProductHero({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="rounded-2xl bg-white dark:bg-[var(--color-bg-alt)] shadow-md overflow-hidden hover:shadow-xl transition-transform duration-300">
+      <div className="card-interactive bg-white dark:bg-[var(--color-bg-alt)]">
         {/* Content */}
         <div className="px-6 sm:px-8 py-8">
           {/* App icon + name */}

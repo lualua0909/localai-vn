@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { GLOW_DEFAULTS } from "@/components/ui/glow-defaults";
 import { Star, TrendingUp } from "lucide-react";
 import type { AppDetail } from "@/lib/app-data";
 
@@ -29,16 +30,9 @@ export function AppCard({ app }: { app: AppItem | AppDetail }) {
   return (
     <Link
       href={`/app/${slug}`}
-      className="glass-card border-none flex cursor-pointer items-start gap-3 rounded-2xl p-4 shadow-md transition-transform hover:scale-[1.02] relative"
+      className="card-interactive glass-card border-none flex cursor-pointer items-start gap-3 p-4 relative"
     >
-      <GlowingEffect
-        spread={40}
-        glow={true}
-        disabled={false}
-        proximity={64}
-        inactiveZone={0.01}
-        borderWidth={2}
-      />
+      <GlowingEffect {...GLOW_DEFAULTS} />
       <img
         className="h-14 w-14 shrink-0 rounded-xl object-cover"
         src={
@@ -53,12 +47,12 @@ export function AppCard({ app }: { app: AppItem | AppDetail }) {
             {app.name}
           </p>
         </div>
-        <p className="mt-0.5 text-[12px] text-[var(--color-text-secondary)] truncate">
+        <p className="mt-0.5 meta-text truncate">
           {app.category}
         </p>
         <div className="mt-1.5 flex items-center gap-4">
           <Star size={10} className="text-amber-500" />
-          <span className="text-[11px] text-[var(--color-text-secondary)]">
+          <span className="meta-text-sm">
             {app.rating} ({reviews})
           </span>
           {app.trending && (

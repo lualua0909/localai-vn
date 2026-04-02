@@ -53,13 +53,11 @@ function BlogContent() {
         <BackgroundRippleEffect />
         <div className="container-main pointer-events-none relative z-10 mt-5 section-padding pb-0">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-              {blog.hero.eyebrow}
-            </p>
+            <p className="section-eyebrow">{blog.hero.eyebrow}</p>
             <h1 className="text-hero-mobile font-bold tracking-tight sm:text-hero-desktop">
               {blog.hero.title}
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+            <p className="section-subtitle leading-relaxed sm:text-lg">
               {blog.hero.description}
             </p>
           </div>
@@ -68,8 +66,8 @@ function BlogContent() {
 
       <div className="container-main section-padding">
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+          <div className="spinner-container">
+            <div className="spinner" />
           </div>
         ) : (
           <>
@@ -80,11 +78,11 @@ function BlogContent() {
             </ul>
 
             {totalPages > 1 && (
-              <div className="mt-12 flex items-center justify-center gap-2">
+              <div className="pagination">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="pagination-btn"
                 >
                   Prev
                 </button>
@@ -94,11 +92,7 @@ function BlogContent() {
                       <button
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
-                          currentPage === page
-                            ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                            : "hover:bg-[var(--color-text)]/5 text-[var(--color-text-secondary)]"
-                        }`}
+                        className={currentPage === page ? "pagination-page-active" : "pagination-page-inactive"}
                       >
                         {page}
                       </button>
@@ -108,7 +102,7 @@ function BlogContent() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="pagination-btn"
                 >
                   Next
                 </button>

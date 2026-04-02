@@ -33,10 +33,8 @@ export function LessonPlayer({
           onEnded={onVideoEnded}
         />
       ) : (
-        <div className="aspect-video rounded-xl bg-[var(--color-bg-alt)] flex items-center justify-center">
-          <p className="typo-body text-[var(--color-text-secondary)]">
-            No video available
-          </p>
+        <div className="empty-state aspect-video rounded-xl bg-[var(--color-bg-alt)]">
+          <p className="empty-state-text">No video available</p>
         </div>
       );
 
@@ -44,10 +42,8 @@ export function LessonPlayer({
       return lesson.textContent ? (
         <TextRenderer content={lesson.textContent} />
       ) : (
-        <div className="p-6 rounded-xl bg-[var(--color-bg-alt)]">
-          <p className="typo-body text-[var(--color-text-secondary)]">
-            No content available
-          </p>
+        <div className="empty-state rounded-xl bg-[var(--color-bg-alt)]">
+          <p className="empty-state-text">No content available</p>
         </div>
       );
 
@@ -55,10 +51,8 @@ export function LessonPlayer({
       return lesson.pdfUrl ? (
         <PdfViewer url={lesson.pdfUrl} originalUrl={lesson.documentUrl} />
       ) : (
-        <div className="p-6 rounded-xl bg-[var(--color-bg-alt)]">
-          <p className="typo-body text-[var(--color-text-secondary)]">
-            No document available
-          </p>
+        <div className="empty-state rounded-xl bg-[var(--color-bg-alt)]">
+          <p className="empty-state-text">No document available</p>
         </div>
       );
 
@@ -71,10 +65,8 @@ export function LessonPlayer({
           }
         />
       ) : (
-        <div className="p-6 rounded-xl bg-[var(--color-bg-alt)]">
-          <p className="typo-body text-[var(--color-text-secondary)]">
-            No quiz available
-          </p>
+        <div className="empty-state rounded-xl bg-[var(--color-bg-alt)]">
+          <p className="empty-state-text">No quiz available</p>
         </div>
       );
 

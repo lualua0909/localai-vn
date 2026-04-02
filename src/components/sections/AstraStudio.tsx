@@ -6,6 +6,7 @@ import { ArrowUpRight, Star, TrendingUp } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { GlowingEffect } from "../ui/glowing-effect";
+import { GLOW_DEFAULTS } from "../ui/glow-defaults";
 import { getApps } from "@/lib/firestore";
 import type { AppDetail } from "@/lib/app-data";
 import Link from "next/link";
@@ -22,15 +23,9 @@ export function AstraStudio() {
     <section id="featured" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {studio.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {studio.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {studio.description}
-          </p>
+          <p className="section-eyebrow">{studio.eyebrow}</p>
+          <h2 className="section-title">{studio.title}</h2>
+          <p className="section-subtitle">{studio.description}</p>
         </ScrollReveal>
 
         <div className="mt-14 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
@@ -43,14 +38,7 @@ export function AstraStudio() {
                   className="h-full cursor-pointer"
                 >
                   <div className="glass-card flex h-full flex-col rounded-3xl p-6">
-                    <GlowingEffect
-                      spread={40}
-                      glow={true}
-                      disabled={false}
-                      proximity={64}
-                      inactiveZone={0.01}
-                      borderWidth={2}
-                    />
+                    <GlowingEffect {...GLOW_DEFAULTS} />
                     <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <img

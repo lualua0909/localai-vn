@@ -5,6 +5,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useTranslations } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { GlowingEffect } from "../ui/glowing-effect";
+import { GLOW_DEFAULTS } from "../ui/glow-defaults";
 import { getTopApps, getTrendingApps } from "@/lib/firestore";
 import type { AppDetail } from "@/lib/app-data";
 import Link from "next/link";
@@ -17,13 +18,7 @@ function AppList({ items }: { items: AppDetail[] }) {
         whileTap={{ scale: 0.99 }}
         className="relative flex cursor-pointer items-center gap-4 rounded-xl px-2 py-3.5 shadow-sm"
       >
-        <GlowingEffect
-          spread={40}
-          glow={true}
-          disabled={false}
-          proximity={64}
-          inactiveZone={0.01}
-        />
+        <GlowingEffect {...GLOW_DEFAULTS} />
         <img
           className="h-11 w-11 shrink-0 rounded-xl object-cover"
           src={

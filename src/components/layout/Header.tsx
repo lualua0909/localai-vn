@@ -57,7 +57,7 @@ export function Header() {
             <Link
               key={l.label}
               href={l.href}
-              className="focus-ring rounded-md text-[13px] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
+              className="focus-ring rounded-md nav-link"
             >
               {l.label}
             </Link>

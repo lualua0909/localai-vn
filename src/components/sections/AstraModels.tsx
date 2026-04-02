@@ -38,15 +38,9 @@ export function AstraModels() {
     <section id="categories" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {models.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {models.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {models.description}
-          </p>
+          <p className="section-eyebrow">{models.eyebrow}</p>
+          <h2 className="section-title">{models.title}</h2>
+          <p className="section-subtitle">{models.description}</p>
         </ScrollReveal>
 
         <div className="mt-14">

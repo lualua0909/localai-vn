@@ -153,27 +153,42 @@ export default function BlogPostPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      fetch(`/api/blogs/${slug}`, { cache: "no-store" }).then(async (response) => {
-        if (response.status === 404) {
-          return { blog: null };
+    let cancelled = false;
+
+    async function loadData() {
+      try {
+        const response = await fetch(`/api/blogs/${slug}`, { cache: "no-store" });
+        if (cancelled) return;
+
+        if (response.status === 404 || !response.ok) {
+          setPost(null);
+          setLoading(false);
+          return;
         }
-        if (!response.ok) {
-          throw new Error("Failed to fetch blog");
+
+        const { blog } = (await response.json()) as { blog: BlogPost };
+        if (cancelled) return;
+        setPost(blog);
+
+        // Load related posts after main post is ready
+        try {
+          const allRes = await fetch("/api/blogs", { cache: "no-store" });
+          if (!cancelled && allRes.ok) {
+            const { blogs } = (await allRes.json()) as { blogs: BlogPost[] };
+            setRelated(blogs.filter((p) => p.slug !== slug).slice(0, 3));
+          }
+        } catch {
+          // Related posts are non-critical, ignore errors
         }
-        return response.json() as Promise<{ blog: BlogPost }>;
-      }),
-      fetch("/api/blogs", { cache: "no-store" }).then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch blogs");
-        }
-        return response.json() as Promise<{ blogs: BlogPost[] }>;
-      }),
-    ]).then(([blogPost, allBlogs]) => {
-      setPost(blogPost.blog);
-      setRelated(allBlogs.blogs.filter((p) => p.slug !== slug).slice(0, 3));
-      setLoading(false);
-    });
+      } catch {
+        if (!cancelled) setPost(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadData();
+    return () => { cancelled = true; };
   }, [slug]);
 
   if (loading) {

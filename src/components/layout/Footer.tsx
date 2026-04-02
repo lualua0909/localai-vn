@@ -22,10 +22,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-[13px] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]"
-                    >
+                    <Link href={link.href} className="nav-link">
                       {link.label}
                     </Link>
                   </li>

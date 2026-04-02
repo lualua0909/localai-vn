@@ -14,15 +14,9 @@ export function PricingSection() {
       <div className="container-main">
         {/* Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {pricing.header.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {pricing.header.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {pricing.header.description}
-          </p>
+          <p className="section-eyebrow">{pricing.header.eyebrow}</p>
+          <h2 className="section-title">{pricing.header.title}</h2>
+          <p className="section-subtitle">{pricing.header.description}</p>
         </ScrollReveal>
 
         {/* Cards */}

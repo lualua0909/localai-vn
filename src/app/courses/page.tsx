@@ -89,7 +89,7 @@ function CoursesContent() {
               else params.delete("category");
               router.push(`?${params.toString()}`);
             }}
-            className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2 typo-body outline-none"
+            className="select-field"
           >
             <option value="">{t.catalog.allCategories}</option>
             {categories.map((cat) => (
@@ -109,7 +109,7 @@ function CoursesContent() {
               else params.delete("level");
               router.push(`?${params.toString()}`);
             }}
-            className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2 typo-body outline-none"
+            className="select-field"
           >
             <option value="">{t.catalog.allLevels}</option>
             <option value="beginner">{t.catalog.beginner}</option>
@@ -126,18 +126,13 @@ function CoursesContent() {
       {/* Course Grid */}
       <section className="container-main pb-16">
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+          <div className="spinner-container">
+            <div className="spinner" />
           </div>
         ) : paginatedCourses.length === 0 ? (
-          <div className="text-center py-20">
-            <GraduationCap
-              size={48}
-              className="mx-auto text-[var(--color-text-secondary)] mb-4"
-            />
-            <p className="typo-body text-[var(--color-text-secondary)]">
-              {t.catalog.noResults}
-            </p>
+          <div className="empty-state">
+            <GraduationCap size={48} className="empty-state-icon" />
+            <p className="empty-state-text">{t.catalog.noResults}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -149,11 +144,11 @@ function CoursesContent() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-12">
+          <div className="pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="px-4 py-2 rounded-xl border border-[var(--color-border)] typo-body disabled:opacity-30 hover:bg-[var(--color-bg-alt)] transition-colors"
+              className="pagination-btn"
             >
               &larr;
             </button>
@@ -161,11 +156,7 @@ function CoursesContent() {
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`w-10 h-10 rounded-xl typo-body font-medium transition-colors ${
-                  page === currentPage
-                    ? "bg-accent text-white"
-                    : "border border-[var(--color-border)] hover:bg-[var(--color-bg-alt)]"
-                }`}
+                className={page === currentPage ? "pagination-page-active" : "pagination-page-inactive"}
               >
                 {page}
               </button>
@@ -173,7 +164,7 @@ function CoursesContent() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="px-4 py-2 rounded-xl border border-[var(--color-border)] typo-body disabled:opacity-30 hover:bg-[var(--color-bg-alt)] transition-colors"
+              className="pagination-btn"
             >
               &rarr;
             </button>

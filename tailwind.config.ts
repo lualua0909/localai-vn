@@ -26,6 +26,17 @@ const config: Config = {
         "2xl": "1rem",
         "3xl": "1.5rem",
       },
+      boxShadow: {
+        soft: "0 2px 8px rgba(0, 0, 0, 0.04)",
+        card: "0 4px 16px rgba(0, 0, 0, 0.06)",
+        elevated: "0 12px 40px rgba(0, 0, 0, 0.1)",
+        "card-hover": "0 8px 30px rgba(0, 0, 0, 0.1)",
+      },
+      transitionDuration: {
+        fast: "150ms",
+        normal: "200ms",
+        slow: "300ms",
+      },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",
         "slide-up": "slideUp 0.6s ease-out forwards",

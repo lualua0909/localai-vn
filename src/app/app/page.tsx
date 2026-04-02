@@ -243,11 +243,7 @@ function ExploreContent() {
             <div className="scrollbar-hide mb-6 flex gap-2 overflow-x-auto">
               <button
                 onClick={() => handleCategoryChange(null)}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                  !activeCategory
-                    ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                    : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
-                }`}
+                className={!activeCategory ? "filter-pill-active" : "filter-pill-inactive"}
               >
                 {t.filterAll}
               </button>
@@ -257,11 +253,7 @@ function ExploreContent() {
                   onClick={() =>
                     handleCategoryChange(activeCategory === cat.name ? null : cat.name)
                   }
-                  className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                    activeCategory === cat.name
-                      ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                      : "bg-[var(--color-text)]/5 text-[var(--color-text-secondary)] hover:bg-[var(--color-text)]/10"
-                  }`}
+                  className={activeCategory === cat.name ? "filter-pill-active" : "filter-pill-inactive"}
                 >
                   {language === "en" ? cat.label_en : cat.label_vi}
                 </button>
@@ -270,8 +262,8 @@ function ExploreContent() {
 
             {/* App grid */}
             {loadingApps ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+              <div className="spinner-container">
+                <div className="spinner" />
               </div>
             ) : (
               <>
@@ -289,11 +281,11 @@ function ExploreContent() {
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
-                  <div className="mt-10 flex items-center justify-center gap-2">
+                  <div className="pagination mt-10">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="pagination-btn"
                     >
                       Prev
                     </button>
@@ -305,11 +297,7 @@ function ExploreContent() {
                         <button
                           key={page}
                           onClick={() => handlePageChange(page)}
-                          className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
-                            currentPage === page
-                              ? "bg-[var(--color-text)] text-[var(--color-bg)]"
-                              : "hover:bg-[var(--color-text)]/5 text-[var(--color-text-secondary)]"
-                          }`}
+                          className={currentPage === page ? "pagination-page-active" : "pagination-page-inactive"}
                         >
                           {page}
                         </button>
@@ -318,7 +306,7 @@ function ExploreContent() {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--color-text)]/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="pagination-btn"
                     >
                       Next
                     </button>

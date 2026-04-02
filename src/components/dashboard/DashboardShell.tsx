@@ -80,7 +80,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] pb-24">
-      <header className="sticky top-0 z-30 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
+      <header className="sticky-header">
         <div className="container-main flex h-14 items-center justify-between">
           <div className="flex items-center gap-8">
             <AppName />

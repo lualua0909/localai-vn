@@ -160,6 +160,204 @@
     background: rgba(10, 132, 255, 0.08);
     color: var(--color-accent);
   }
+
+  /* ─── Reusable Component System ─── */
+
+  /* Section header: eyebrow + title + subtitle */
+  .section-eyebrow {
+    @apply mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent;
+  }
+
+  .section-title {
+    @apply text-section-title font-bold tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply mt-4 text-base text-[var(--color-text-secondary)];
+  }
+
+  /* Card system */
+  .card-base {
+    @apply relative overflow-hidden rounded-2xl bg-[var(--color-card-bg)];
+  }
+
+  .card-elevated {
+    @apply card-base shadow-card;
+  }
+
+  .card-interactive {
+    @apply card-base shadow-card transition-all duration-normal;
+  }
+
+  .card-interactive:hover {
+    @apply shadow-card-hover -translate-y-0.5;
+  }
+
+  /* Content card (blog, course) shared pattern */
+  .content-card {
+    @apply relative flex h-full flex-col overflow-hidden rounded-2xl bg-[var(--color-card-bg)];
+  }
+
+  .content-card-body {
+    @apply flex flex-1 flex-col p-5;
+  }
+
+  .content-card-title {
+    @apply mb-2 text-base font-semibold leading-snug transition-colors duration-fast group-hover:text-accent line-clamp-2;
+  }
+
+  .content-card-desc {
+    @apply mb-4 flex-1 text-sm leading-relaxed text-[var(--color-text-secondary)];
+  }
+
+  .content-card-thumbnail {
+    @apply relative aspect-[16/10] w-full overflow-hidden;
+  }
+
+  .content-card-thumbnail-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/20 to-transparent;
+  }
+
+  .content-card-thumbnail img {
+    @apply h-full w-full object-cover transition-transform duration-500 group-hover:scale-105;
+  }
+
+  /* Chip/pill for categories and tags */
+  .chip {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm;
+  }
+
+  .chip-filled {
+    @apply chip;
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  }
+
+  .chip-outline {
+    @apply inline-flex items-center rounded-full border border-[rgba(17,17,17,0.12)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em];
+  }
+
+  /* Category filter pill */
+  .filter-pill {
+    @apply shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-fast;
+  }
+
+  .filter-pill-active {
+    @apply filter-pill bg-[var(--color-text)] text-[var(--color-bg)];
+  }
+
+  .filter-pill-inactive {
+    @apply filter-pill text-[var(--color-text-secondary)];
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  }
+
+  .filter-pill-inactive:hover {
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  /* Navigation link */
+  .nav-link {
+    @apply text-[13px] text-[var(--color-text-secondary)] transition-colors duration-fast hover:text-[var(--color-text)];
+  }
+
+  /* Form input */
+  .input-field {
+    @apply focus-ring w-full rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-3 text-sm outline-none transition-all duration-normal;
+  }
+
+  .input-field:hover {
+    @apply border-black/20 bg-black/[0.03];
+  }
+
+  :is(.dark) .input-field:hover {
+    @apply border-white/20 bg-white/[0.03];
+  }
+
+  .input-field::placeholder {
+    color: color-mix(in srgb, var(--color-text-secondary) 50%, transparent);
+  }
+
+  /* Social auth button */
+  .social-btn {
+    @apply focus-ring flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] px-4 py-3 text-sm font-medium transition-all duration-normal active:scale-[0.98];
+  }
+
+  .social-btn:hover {
+    @apply border-black/20 bg-black/5 shadow-soft;
+  }
+
+  :is(.dark) .social-btn:hover {
+    @apply border-white/20 bg-white/5;
+  }
+
+  /* Select/dropdown */
+  .select-field {
+    @apply rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2 outline-none transition-colors duration-fast;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent;
+  }
+
+  .spinner-container {
+    @apply flex items-center justify-center py-20;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply py-20 text-center;
+  }
+
+  .empty-state-icon {
+    @apply mx-auto mb-4 text-[var(--color-text-secondary)];
+  }
+
+  .empty-state-text {
+    @apply text-sm text-[var(--color-text-secondary)];
+  }
+
+  /* Pagination */
+  .pagination {
+    @apply flex items-center justify-center gap-2 mt-12;
+  }
+
+  .pagination-btn {
+    @apply rounded-xl border border-[var(--color-border)] px-4 py-2 text-sm font-medium transition-colors duration-fast hover:bg-[var(--color-bg-alt)] disabled:opacity-30;
+  }
+
+  .pagination-page {
+    @apply w-10 h-10 rounded-xl text-sm font-medium transition-colors duration-fast;
+  }
+
+  .pagination-page-active {
+    @apply pagination-page bg-accent text-white;
+  }
+
+  .pagination-page-inactive {
+    @apply pagination-page border border-[var(--color-border)] hover:bg-[var(--color-bg-alt)];
+  }
+
+  /* Meta text (small secondary info) */
+  .meta-text {
+    @apply text-[12px] text-[var(--color-text-secondary)];
+  }
+
+  .meta-text-sm {
+    @apply text-[11px] text-[var(--color-text-secondary)];
+  }
+
+  /* Sticky header bar (shared by Header + DashboardShell) */
+  .sticky-header {
+    @apply sticky top-0 z-30 border-b border-[var(--color-border)] backdrop-blur-xl;
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  }
+
+  /* Divider */
+  .divider {
+    @apply h-px w-full bg-[var(--color-border)];
+  }
+
+  /* GlowingEffect default props wrapper — use in JS, not CSS */
 }
 
 @keyframes cellRipple {

@@ -28,15 +28,9 @@ export function AstraSecurity() {
     <section id="community" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {security.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {security.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {security.description}
-          </p>
+          <p className="section-eyebrow">{security.eyebrow}</p>
+          <h2 className="section-title">{security.title}</h2>
+          <p className="section-subtitle">{security.description}</p>
         </ScrollReveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2">

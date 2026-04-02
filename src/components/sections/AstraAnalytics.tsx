@@ -11,15 +11,9 @@ export function AstraAnalytics() {
     <section id="stats" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {analytics.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {analytics.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {analytics.description}
-          </p>
+          <p className="section-eyebrow">{analytics.eyebrow}</p>
+          <h2 className="section-title">{analytics.title}</h2>
+          <p className="section-subtitle">{analytics.description}</p>
         </ScrollReveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

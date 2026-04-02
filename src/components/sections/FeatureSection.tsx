@@ -34,17 +34,13 @@ export function FeatureSection({
         {/* Text */}
         <div>
           <ScrollReveal>
-            <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-              {eyebrow}
-            </p>
+            <p className="section-eyebrow">{eyebrow}</p>
           </ScrollReveal>
           <ScrollReveal delay={0.08}>
-            <h2 className="text-section-title font-bold tracking-tight">
-              {title}
-            </h2>
+            <h2 className="section-title">{title}</h2>
           </ScrollReveal>
           <ScrollReveal delay={0.16}>
-            <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+            <p className="section-subtitle max-w-md leading-relaxed sm:text-lg">
               {subtitle}
             </p>
           </ScrollReveal>

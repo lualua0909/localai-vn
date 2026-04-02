@@ -151,7 +151,7 @@ export default function SignInPage() {
               {/* Google */}
               <button
                 onClick={handleGoogleAuth}
-                className="focus-ring mt-6 flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] px-4 py-3 text-sm font-medium transition-all hover:border-black/20 hover:bg-black/5 hover:shadow-sm active:scale-[0.98] dark:hover:border-white/20 dark:hover:bg-white/5"
+                className="social-btn mt-6"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24">
                   <path
@@ -175,7 +175,7 @@ export default function SignInPage() {
               </button>
               <button
                 onClick={handleGithubAuth}
-                className="focus-ring mt-3 flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] px-4 py-3 text-sm font-medium transition-all hover:border-black/20 hover:bg-black/5 hover:shadow-sm active:scale-[0.98] dark:hover:border-white/20 dark:hover:bg-white/5"
+                className="social-btn mt-3"
               >
                 <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0C3.58 0 0 3.64 0 8.13c0 3.59 2.29 6.64 5.47 7.72.4.08.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.44-2.53-.5-2.69-.96-.09-.23-.48-.96-.82-1.15-.28-.15-.68-.52-.01-.53.63-.01 1.08.59 1.23.84.72 1.21 1.87.87 2.33.66.07-.54.28-.87.51-1.07-1.78-.2-3.64-.9-3.64-3.98 0-.88.31-1.6.82-2.16-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.05 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.16 0 3.09-1.87 3.78-3.65 3.98.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.044 8.044 0 0 0 16 8.13C16 3.64 12.42 0 8 0Z" />
@@ -208,7 +208,7 @@ export default function SignInPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="focus-ring w-full rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-3 text-sm outline-none transition-all hover:border-black/20 hover:bg-black/[0.03] dark:hover:border-white/20 dark:hover:bg-white/[0.03] placeholder:text-[var(--color-text-secondary)]/50"
+                    className="input-field"
                   />
                 </div>
                 <div>
@@ -226,7 +226,7 @@ export default function SignInPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={copy.form.passwordPlaceholder}
-                    className="focus-ring w-full rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-3 text-sm outline-none transition-all hover:border-black/20 hover:bg-black/[0.03] dark:hover:border-white/20 dark:hover:bg-white/[0.03] placeholder:text-[var(--color-text-secondary)]/50"
+                    className="input-field"
                   />
                 </div>
 

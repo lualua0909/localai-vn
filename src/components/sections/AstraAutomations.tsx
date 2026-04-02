@@ -26,15 +26,9 @@ export function AstraAutomations() {
     <section id="how-it-works" className="section-padding">
       <div className="container-main">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-[13px] font-semibold uppercase tracking-wider text-accent">
-            {automations.eyebrow}
-          </p>
-          <h2 className="text-section-title font-bold tracking-tight">
-            {automations.title}
-          </h2>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)]">
-            {automations.description}
-          </p>
+          <p className="section-eyebrow">{automations.eyebrow}</p>
+          <h2 className="section-title">{automations.title}</h2>
+          <p className="section-subtitle">{automations.description}</p>
         </ScrollReveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-3">
