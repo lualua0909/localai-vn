@@ -2,7 +2,10 @@ import "server-only";
 
 import { getErrorType, toLlmError } from "@/lib/llm/errors";
 import { logEvent } from "@/lib/llm/logger";
-import { getRankedOpenRouterFreeModels } from "@/lib/llm/openrouter";
+import {
+  getBlogWriterModels,
+  getRankedOpenRouterFreeModels,
+} from "@/lib/llm/openrouter";
 import { callGemini, callOpenAI, callOpenRouter } from "@/lib/llm/providers";
 import { withRetry } from "@/lib/llm/retry";
 import type {
@@ -21,6 +24,11 @@ type RouteResult = {
   response: ChatResponse;
   attempts: ProviderAttempt[];
 };
+
+function getRequestFeature(request: ChatRequest): string {
+  const feature = request.metadata?.feature;
+  return typeof feature === "string" ? feature : "unknown";
+}
 
 function nowMs() {
   return Date.now();
@@ -112,27 +120,52 @@ async function runOpenRouterStage(input: {
   config: NonNullable<ProviderConfig["openrouter"]>;
 }) {
   const startedAt = nowMs();
-  const discovered = await getRankedOpenRouterFreeModels({
-    requestId: input.requestId,
-    config: input.config,
-  });
+  const feature = getRequestFeature(input.request);
+  const isBlogWriter = feature === "blog_writer";
 
-  const queue = [...discovered];
-  if (
-    input.config.defaultModel &&
-    !queue.some((item) => item.id === input.config.defaultModel)
-  ) {
-    queue.push({
-      id: input.config.defaultModel,
-      contextLength: 0,
-      tokenLimit: 0,
-      latency: Number.MAX_SAFE_INTEGER,
+  let resolvedQueue: Array<{ id: string }>;
+  if (isBlogWriter) {
+    resolvedQueue = getBlogWriterModels().map((id) => ({ id }));
+  } else {
+    const discovered = await getRankedOpenRouterFreeModels({
+      requestId: input.requestId,
+      config: input.config,
     });
+    const dynamicQueue = [...discovered];
+    if (
+      input.config.defaultModel &&
+      !dynamicQueue.some((item) => item.id === input.config.defaultModel)
+    ) {
+      dynamicQueue.push({
+        id: input.config.defaultModel,
+        contextLength: 0,
+        tokenLimit: 0,
+        latency: Number.MAX_SAFE_INTEGER,
+      });
+    }
+    resolvedQueue = dynamicQueue.map((item) => ({ id: item.id }));
   }
 
   let lastError: unknown = new Error("OpenRouter stage failed");
 
-  for (const candidate of queue) {
+  for (let index = 0; index < resolvedQueue.length; index += 1) {
+    const candidate = resolvedQueue[index];
+    const attemptNumber = index + 1;
+    const candidateStartedAt = nowMs();
+
+    if (isBlogWriter) {
+      logEvent({
+        event: "LLM_OPENROUTER_MODEL_ATTEMPT",
+        requestId: input.requestId,
+        feature: "blog_writer",
+        provider: "openrouter",
+        model: candidate.id,
+        attempt_number: attemptNumber,
+        latency: 0,
+        status: "started",
+      });
+    }
+
     try {
       const result = await withRetry({
         requestId: input.requestId,
@@ -149,6 +182,19 @@ async function runOpenRouterStage(input: {
           }),
       });
 
+      if (isBlogWriter) {
+        logEvent({
+          event: "LLM_OPENROUTER_MODEL_SUCCESS",
+          requestId: input.requestId,
+          feature: "blog_writer",
+          provider: "openrouter",
+          model: candidate.id,
+          attempt_number: attemptNumber,
+          latency: nowMs() - candidateStartedAt,
+          status: "success",
+        });
+      }
+
       return {
         response: {
           ...result.value,
@@ -160,6 +206,23 @@ async function runOpenRouterStage(input: {
     } catch (error) {
       lastError = error;
       const retryCount = (error as { retryCount?: number }).retryCount ?? 3;
+
+      if (isBlogWriter) {
+        logEvent({
+          event: "LLM_OPENROUTER_MODEL_FAILED",
+          requestId: input.requestId,
+          feature: "blog_writer",
+          provider: "openrouter",
+          model: candidate.id,
+          attempt_number: attemptNumber,
+          latency: nowMs() - candidateStartedAt,
+          status: "failed",
+          errorType: getErrorType(error),
+          error_message:
+            error instanceof Error ? error.message : "OpenRouter model failed",
+        });
+      }
+
       logEvent({
         event: "LLM_PROVIDER_FAILED",
         requestId: input.requestId,
@@ -172,6 +235,24 @@ async function runOpenRouterStage(input: {
         errorType: getErrorType(error),
       });
     }
+  }
+
+  if (isBlogWriter) {
+    logEvent({
+      event: "LLM_OPENROUTER_ALL_MODELS_FAILED",
+      requestId: input.requestId,
+      feature: "blog_writer",
+      provider: "openrouter",
+      model: resolvedQueue[resolvedQueue.length - 1]?.id,
+      attempt_number: resolvedQueue.length,
+      latency: nowMs() - startedAt,
+      status: "failed",
+      error_message:
+        lastError instanceof Error
+          ? lastError.message
+          : "All blog writer OpenRouter models failed",
+      errorType: getErrorType(lastError),
+    });
   }
 
   throw lastError;

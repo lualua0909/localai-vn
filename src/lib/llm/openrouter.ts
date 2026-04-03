@@ -15,6 +15,7 @@ import type {
 
 const OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models";
 const FREE_MODEL_CACHE_TTL_MS = 10 * 60 * 1000;
+const BLOG_WRITER_MODELS_ENV = "OPENROUTER_BLOG_WRITER_MODELS";
 
 type CachedFreeModels = {
   expiresAt: number;
@@ -22,6 +23,39 @@ type CachedFreeModels = {
 };
 
 let freeModelsCache: CachedFreeModels | null = null;
+
+function isValidModelId(model: string): boolean {
+  return /^[a-zA-Z0-9._:/-]+$/.test(model);
+}
+
+export function getBlogWriterModels(): string[] {
+  const raw = process.env[BLOG_WRITER_MODELS_ENV];
+  if (!raw) {
+    throw new InvalidResponseError(
+      `${BLOG_WRITER_MODELS_ENV} is not configured for blog_writer fallback`,
+    );
+  }
+
+  const models = raw
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (models.length === 0) {
+    throw new InvalidResponseError(
+      `${BLOG_WRITER_MODELS_ENV} does not contain any model ids`,
+    );
+  }
+
+  const invalid = models.filter((model) => !isValidModelId(model));
+  if (invalid.length > 0) {
+    throw new InvalidResponseError(
+      `${BLOG_WRITER_MODELS_ENV} contains invalid model ids: ${invalid.join(", ")}`,
+    );
+  }
+
+  return Array.from(new Set(models));
+}
 
 function parsePrice(value: number | string | undefined): number {
   if (typeof value === "number") {

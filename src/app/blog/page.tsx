@@ -7,6 +7,7 @@ import { PostCard } from "@/components/blog/PostCard";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { BlogListLoader } from "@/components/loading";
 import type { BlogPost } from "@/lib/blog-data";
 import { useTranslations } from "@/lib/i18n";
 
@@ -66,9 +67,7 @@ function BlogContent() {
 
       <div className="container-main section-padding">
         {loading ? (
-          <div className="spinner-container">
-            <div className="spinner" />
-          </div>
+          <BlogListLoader count={6} />
         ) : (
           <>
             <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

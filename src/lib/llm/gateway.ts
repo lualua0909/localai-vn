@@ -19,12 +19,16 @@ function createRequestId(): string {
   return `llm_${Date.now()}_${random}`;
 }
 
+export function createLlmRequestId(): string {
+  return createRequestId();
+}
+
 async function chat(request: ChatRequest): Promise<LlmGatewayResponse> {
   if (!Array.isArray(request.messages) || request.messages.length === 0) {
     throw new Error("llm.chat requires at least one message");
   }
 
-  const requestId = createRequestId();
+  const requestId = request.requestId || createRequestId();
   const config = loadProviderConfigFromEnv();
   const routed = await routeChatRequest({
     requestId,

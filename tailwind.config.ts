@@ -42,6 +42,13 @@ const config: Config = {
         "slide-up": "slideUp 0.6s ease-out forwards",
         float: "float 6s ease-in-out infinite",
         "beam-move": "beamMove 8s linear infinite",
+        shimmer: "shimmer 2s ease-in-out infinite",
+        "pulse-soft": "pulseSoft 2s cubic-bezier(0.4,0,0.6,1) infinite",
+        "fade-in-up": "fadeInUp 0.5s ease-out both",
+        "scale-in": "scaleIn 0.3s ease-out both",
+        "typing-cursor": "typingCursor 1s steps(1) infinite",
+        "progress-indeterminate": "progressIndeterminate 1.5s ease-in-out infinite",
+        "dot-pulse": "dotPulse 1.4s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -63,6 +70,35 @@ const config: Config = {
         scroll: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
+        },
+        shimmer: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        pulseSoft: {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.7" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        typingCursor: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+        progressIndeterminate: {
+          "0%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        dotPulse: {
+          "0%, 80%, 100%": { opacity: "0.3", transform: "scale(0.8)" },
+          "40%": { opacity: "1", transform: "scale(1)" },
         },
       },
     },

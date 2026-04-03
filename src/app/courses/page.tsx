@@ -9,6 +9,7 @@ import { getPublishedCourses } from "@/lib/firestore-courses";
 import { getCategories, type Category } from "@/lib/firestore";
 import { useTranslations, useLanguage } from "@/lib/i18n";
 import { CourseCard } from "@/components/course/CourseCard";
+import { CourseGridLoader } from "@/components/loading";
 import { GraduationCap } from "lucide-react";
 
 function CoursesContent() {
@@ -126,9 +127,7 @@ function CoursesContent() {
       {/* Course Grid */}
       <section className="container-main pb-16">
         {loading ? (
-          <div className="spinner-container">
-            <div className="spinner" />
-          </div>
+          <CourseGridLoader count={6} />
         ) : paginatedCourses.length === 0 ? (
           <div className="empty-state">
             <GraduationCap size={48} className="empty-state-icon" />

@@ -4,7 +4,6 @@ import { join, extname, basename } from "path";
 
 import { verifyAdminRequest } from "@/lib/server/admin-auth";
 import { slugify } from "@/lib/blog-data";
-
 const BLOG_DATA_DIR = join(process.cwd(), "blog-data");
 const ALLOWED_EXTENSIONS = new Set([
   ".jpg",
@@ -32,14 +31,17 @@ export async function POST(request: NextRequest) {
     const slug = (formData.get("slug") as string | null) || "manual-blog";
 
     if (!file) {
-      return NextResponse.json({ ok: false, error: "Missing file" }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: "Missing file" },
+        { status: 400 },
+      );
     }
 
     const ext = extname(file.name).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       return NextResponse.json(
         { ok: false, error: "Unsupported image type" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
         ok: false,
         error: error instanceof Error ? error.message : "Upload cover failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

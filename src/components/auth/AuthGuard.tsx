@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { ProgressCircle } from "@/components/loading";
 import Link from "next/link";
 
 interface AuthGuardProps {
@@ -17,7 +18,7 @@ export function AuthGuard({ children, requireAdmin }: AuthGuardProps) {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        <ProgressCircle size={24} strokeWidth={2} />
       </div>
     );
   }
@@ -64,7 +65,7 @@ export function AuthGuard({ children, requireAdmin }: AuthGuardProps) {
   if (!userProfile) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        <ProgressCircle size={24} strokeWidth={2} />
       </div>
     );
   }

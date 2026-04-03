@@ -9,7 +9,7 @@ function getAdminApp(): App {
   if (!_adminApp) {
     if (getApps().length === 0) {
       const serviceAccount = JSON.parse(
-        process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT || "{}"
+        process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT || "{}",
       );
       _adminApp = initializeApp({
         credential: cert(serviceAccount),

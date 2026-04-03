@@ -11,6 +11,7 @@ export type ChatMessage = {
 
 export type ChatRequest = {
   messages: ChatMessage[];
+  requestId?: string;
   temperature?: number;
   maxTokens?: number;
   timeoutMs?: number;
@@ -80,7 +81,11 @@ export type LogEventName =
   | "LLM_RETRY_ATTEMPT"
   | "LLM_PROVIDER_FAILED"
   | "LLM_FALLBACK_TRIGGERED"
-  | "LLM_OPENROUTER_FREE_MODEL_SELECTED";
+  | "LLM_OPENROUTER_FREE_MODEL_SELECTED"
+  | "LLM_OPENROUTER_MODEL_ATTEMPT"
+  | "LLM_OPENROUTER_MODEL_FAILED"
+  | "LLM_OPENROUTER_MODEL_SUCCESS"
+  | "LLM_OPENROUTER_ALL_MODELS_FAILED";
 
 export type LogEvent = {
   event: LogEventName;
@@ -92,6 +97,9 @@ export type LogEvent = {
   latency?: number;
   status?: "success" | "failed" | "started";
   errorType?: string;
+  feature?: string;
+  attempt_number?: number;
+  error_message?: string;
   requestId: string;
   metadata?: Record<string, string | number | boolean | null>;
 };

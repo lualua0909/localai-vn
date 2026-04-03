@@ -2,6 +2,10 @@ import "server-only";
 
 import type { LogEvent } from "@/lib/llm/types";
 
+type RequestLogListener = (event: LogEvent) => void;
+
+const requestListeners = new Map<string, Set<RequestLogListener>>();
+
 function sanitizeMetadata(metadata?: Record<string, unknown>) {
   if (!metadata) {
     return undefined;
@@ -47,4 +51,35 @@ export function logEvent(event: Omit<LogEvent, "timestamp">): void {
   };
 
   console.log(JSON.stringify(payload));
+
+  const listeners = requestListeners.get(payload.requestId);
+  if (!listeners) {
+    return;
+  }
+
+  for (const listener of Array.from(listeners)) {
+    listener(payload);
+  }
+}
+
+export function subscribeToLlmRequest(
+  requestId: string,
+  listener: RequestLogListener,
+): () => void {
+  const listeners =
+    requestListeners.get(requestId) ?? new Set<RequestLogListener>();
+  listeners.add(listener);
+  requestListeners.set(requestId, listeners);
+
+  return () => {
+    const current = requestListeners.get(requestId);
+    if (!current) {
+      return;
+    }
+
+    current.delete(listener);
+    if (current.size === 0) {
+      requestListeners.delete(requestId);
+    }
+  };
 }

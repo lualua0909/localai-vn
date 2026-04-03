@@ -8,6 +8,7 @@ import { PostCard } from "@/components/blog/PostCard";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import { BlogArticleLoader } from "@/components/loading";
 import type { BlogPost } from "@/lib/blog-data";
 import { useTranslations } from "@/lib/i18n";
 
@@ -195,8 +196,8 @@ export default function BlogPostPage() {
     return (
       <>
         <Header />
-        <main className="flex min-h-screen items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        <main className="container-main section-padding">
+          <BlogArticleLoader />
         </main>
         <Footer />
       </>

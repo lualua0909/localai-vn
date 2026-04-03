@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { DashboardTableLoader } from "@/components/loading";
 import type { BlogPost } from "@/lib/blog-data";
 import type { TrendingPeriod } from "@/lib/blog-data";
 import { addBlog, updateBlog, deleteBlog } from "@/lib/firestore";
@@ -536,11 +537,7 @@ export function BlogManager() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
-      </div>
-    );
+    return <DashboardTableLoader rows={5} />;
   }
 
   return (

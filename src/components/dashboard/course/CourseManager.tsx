@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DashboardTableLoader } from "@/components/loading";
 import type { Course } from "@/lib/course-data";
 import type { UserProfile } from "@/lib/firestore";
 import { useCourses } from "@/hooks/useCourses";
@@ -98,11 +99,7 @@ export function CourseManager({ userProfile }: CourseManagerProps) {
   const displayedCourses = isAdmin ? courses : myCourses;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
-      </div>
-    );
+    return <DashboardTableLoader rows={4} />;
   }
 
   return (

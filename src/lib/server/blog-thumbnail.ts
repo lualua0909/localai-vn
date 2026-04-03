@@ -5,8 +5,10 @@ import { join } from "path";
 
 import type { ReadmeAnalysis, TrendingRepository } from "@/lib/blog-data";
 import { slugify } from "@/lib/blog-data";
-import { llm } from "@/lib/llm/gateway";
+import { createLlmRequestId, llm } from "@/lib/llm/gateway";
 import type { LlmProvider } from "@/lib/llm/gateway";
+import { subscribeToLlmRequest } from "@/lib/llm/logger";
+import type { LogEvent } from "@/lib/llm/types";
 import { buildThumbnailPromptMessages } from "@/lib/prompts/thumbnailPrompt";
 
 const BLOG_DATA_DIR = join(process.cwd(), "blog-data");
@@ -42,6 +44,20 @@ type ThumbnailPromptPayload = {
   styleKeywords?: string[];
   visualCue?: string;
 };
+
+function getConfiguredThumbnailProviders(): ThumbnailProvider[] {
+  const providers: ThumbnailProvider[] = [];
+  if (process.env.OPENAI_API_KEY) {
+    providers.push("openai");
+  }
+  if (process.env.GEMINI_API_KEY) {
+    providers.push("gemini");
+  }
+  if (process.env.OPENROUTER_API_KEY) {
+    providers.push("openrouter");
+  }
+  return providers.length > 0 ? providers : ["openai"];
+}
 
 function parseJson<T>(payload: string): T {
   const start = payload.indexOf("{");
@@ -156,25 +172,98 @@ export async function generateBlogThumbnail(
     analysis: input.analysis,
     title,
   });
+  const providers = getConfiguredThumbnailProviders();
+  const total = providers.length;
+  const requestId = createLlmRequestId();
+  const started = new Set<string>();
+  const completed = new Set<string>();
 
-  callbacks?.onAttemptStart?.({
-    index: 0,
-    total: 1,
-    provider: "openai",
-    model: process.env.OPENAI_BLOG_WRITER_MODEL || "gpt-4.1",
-    label: `openai:${process.env.OPENAI_BLOG_WRITER_MODEL || "gpt-4.1"}`,
+  const getIndex = (provider?: ThumbnailProvider) => {
+    if (!provider) {
+      return 0;
+    }
+    const found = providers.indexOf(provider);
+    return found >= 0 ? found : 0;
+  };
+
+  const ensureStart = (provider: ThumbnailProvider, model: string) => {
+    const label = `${provider}:${model}`;
+    if (started.has(label)) {
+      return;
+    }
+    started.add(label);
+    callbacks?.onAttemptStart?.({
+      index: getIndex(provider),
+      total,
+      provider,
+      model,
+      label,
+    });
+  };
+
+  const unsubscribe = subscribeToLlmRequest(requestId, (event: LogEvent) => {
+    if (!event.provider || !event.model) {
+      return;
+    }
+
+    const label = `${event.provider}:${event.model}`;
+
+    if (event.event === "LLM_RETRY_ATTEMPT") {
+      ensureStart(event.provider, event.model);
+      return;
+    }
+
+    if (event.event === "LLM_PROVIDER_FAILED") {
+      ensureStart(event.provider, event.model);
+      if (completed.has(label)) {
+        return;
+      }
+      completed.add(label);
+      callbacks?.onAttemptComplete?.({
+        index: getIndex(event.provider),
+        total,
+        provider: event.provider,
+        model: event.model,
+        label,
+        ok: false,
+        error: event.errorType || "unknown",
+      });
+      return;
+    }
+
+    if (event.event === "LLM_REQUEST_SUCCESS") {
+      ensureStart(event.provider, event.model);
+      if (completed.has(label)) {
+        return;
+      }
+      completed.add(label);
+      callbacks?.onAttemptComplete?.({
+        index: getIndex(event.provider),
+        total,
+        provider: event.provider,
+        model: event.model,
+        label,
+        ok: true,
+      });
+    }
   });
 
-  const response = await llm.chat({
-    messages: promptSpec.messages,
-    temperature: 0.3,
-    maxTokens: 500,
-    metadata: {
-      feature: "thumbnail-prompt",
-      repo: input.repository.repoFullName,
-      language: input.repository.language,
-    },
-  });
+  let response;
+  try {
+    response = await llm.chat({
+      requestId,
+      messages: promptSpec.messages,
+      temperature: 0.3,
+      maxTokens: 500,
+      metadata: {
+        feature: "thumbnail-prompt",
+        repo: input.repository.repoFullName,
+        language: input.repository.language,
+      },
+    });
+  } finally {
+    unsubscribe();
+  }
 
   const payload = parseJson<ThumbnailPromptPayload>(response.response.content);
   if (!payload.imagePrompt?.trim()) {
@@ -191,6 +280,9 @@ export async function generateBlogThumbnail(
   }));
 
   for (let index = 0; index < attempts.length; index += 1) {
+    if (completed.has(attempts[index].label)) {
+      continue;
+    }
     callbacks?.onAttemptComplete?.({
       index,
       total: attempts.length,

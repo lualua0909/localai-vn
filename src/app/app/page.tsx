@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { AppCard } from "@/components/app/AppCard";
+import { AppGridLoader } from "@/components/loading";
 import { getApps, getCategories } from "@/lib/firestore";
 import type { Category } from "@/lib/firestore";
 import { useLanguage } from "@/lib/i18n";
@@ -262,9 +263,7 @@ function ExploreContent() {
 
             {/* App grid */}
             {loadingApps ? (
-              <div className="spinner-container">
-                <div className="spinner" />
-              </div>
+              <AppGridLoader count={8} />
             ) : (
               <>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { DashboardTableLoader } from "@/components/loading";
 import type { AppDetail } from "@/lib/app-data";
 import { getCategories, type Category, type UserProfile } from "@/lib/firestore";
 import { useProducts, ProductFormData } from "@/hooks/useProducts";
@@ -71,11 +72,7 @@ export function ProductManager({ userProfile }: ProductManagerProps) {
   const displayedProducts = isAdmin ? products : myProducts;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
-      </div>
-    );
+    return <DashboardTableLoader rows={4} />;
   }
 
   return (

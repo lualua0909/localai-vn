@@ -21,7 +21,15 @@ const ALLOWED_EXTENSIONS = {
     ".vtt",
     ".srt",
   ]),
-  "content-image": new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif", ".svg"]),
+  "content-image": new Set([
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".gif",
+    ".avif",
+    ".svg",
+  ]),
   poster: new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"]),
   thumbnail: new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"]),
 } as const;
@@ -72,7 +80,10 @@ async function tryConvertOfficeToPdf(filePath: string): Promise<string | null> {
           filePath,
         ]);
 
-        const defaultPdfPath = join(outputDir, `${basename(filePath, ext)}.pdf`);
+        const defaultPdfPath = join(
+          outputDir,
+          `${basename(filePath, ext)}.pdf`,
+        );
         if (existsSync(defaultPdfPath)) {
           if (defaultPdfPath !== previewPath) {
             const content = await readFile(defaultPdfPath);
@@ -92,7 +103,7 @@ async function tryConvertOfficeToPdf(filePath: string): Promise<string | null> {
         {
           encoding: "buffer",
           maxBuffer: 20 * 1024 * 1024,
-        }
+        },
       );
 
       if (stdout && Buffer.isBuffer(stdout) && stdout.length > 0) {
@@ -126,12 +137,12 @@ export async function POST(req: NextRequest) {
         ? "content-image"
         : rawKind === "poster"
           ? "poster"
-        : "lesson";
+          : "lesson";
 
   if (!file || !courseId) {
     return NextResponse.json(
       { error: "Missing file or courseId" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -142,7 +153,10 @@ export async function POST(req: NextRequest) {
 
   const ext = extname(file.name).toLowerCase();
   if (!ALLOWED_EXTENSIONS[kind].has(ext)) {
-    return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Unsupported file type" },
+      { status: 400 },
+    );
   }
 
   const base = sanitizeFilename(basename(file.name, ext));
@@ -153,11 +167,11 @@ export async function POST(req: NextRequest) {
       ? `courses/${courseId}/thumbnail/${filename}`
       : kind === "poster"
         ? `courses/${courseId}/poster/${filename}`
-      : kind === "content-image"
-        ? courseId.startsWith("draft-")
-          ? `drafts/${courseId}/content/${filename}`
-          : `courses/${courseId}/content/${filename}`
-        : `courses/${courseId}/${filename}`;
+        : kind === "content-image"
+          ? courseId.startsWith("draft-")
+            ? `drafts/${courseId}/content/${filename}`
+            : `courses/${courseId}/content/${filename}`
+          : `courses/${courseId}/${filename}`;
   const filePath = join(DATA_DIR, relativePath);
 
   // Guard against path traversal
@@ -178,10 +192,11 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     path: relativePath,
     previewPath: previewRelativePath,
-    previewUrl: previewRelativePath ? `/api/media/${previewRelativePath}` : undefined,
+    previewUrl: previewRelativePath
+      ? `/api/media/${previewRelativePath}`
+      : undefined,
     url:
-      kind === "thumbnail" || kind === "content-image"
-        || kind === "poster"
+      kind === "thumbnail" || kind === "content-image" || kind === "poster"
         ? `/api/media/${relativePath}`
         : undefined,
   });
